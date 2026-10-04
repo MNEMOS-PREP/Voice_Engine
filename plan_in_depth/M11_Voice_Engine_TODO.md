@@ -1,5 +1,9 @@
 # M11 — TODO · Voice & Conversation Engine
 
+> **Completion: 0%** — 0 of 22 functional requirements met. **No code yet** — the `Voice_Engine` repo holds only this plan. Since 2026-10-05 M06 carries an interim browser voice in both directions (§1b); it is M06's code and is not counted here. The spec has a Revision 2 (§0 of the spec): browser-first and free. The requirement count is the spec's own, so this is a measure of scope ahead rather than of progress behind.
+>
+> _Method: `(met + ½ × partial) ÷ total`, counted from the spec, 2026-08-28. One measure applied the same way to all nineteen modules so they compare; it counts requirements, not screens or gates._
+
 Task list for taking **M11 — Voice & Conversation Engine** to 100% of [M11_Voice_Engine.md](M11_Voice_Engine.md).
 
 > **This is the branch that holds the plan.** The `todo` branch carries the
@@ -17,6 +21,30 @@ Legend: ✅ done · 🟡 partly done · ⬜ not started
 
 ---
 
+### 2026-10-05 — Revision 2: browser-first and free; M06 speaks
+
+- ✅ **Research (2026-10-04):** a sweep of ~480 GitHub repositories — faces,
+  TTS, ASR, turn-taking, voice-agent frameworks, AI interviewers — plus README
+  and licence checks on the candidates. The verdicts are §0 below; the
+  decisions are the spec's new §0 (Revision 2) and §15.6.
+- ✅ **M06 ships the first slice** (`voice-core.ts`, `voice.ts`, `ui/Face.tsx`):
+  each line of record read aloud in the persona's `voice_id`; the face's mouth
+  moves on each word; the voice stops when the mic opens, the answer is sent or
+  the session pauses; one button turns it off. Verified in a headless Edge:
+  Meera (`en-IN-female-warm`) → "Microsoft Neerja Online (Natural) - English
+  (India)" at 0.97; first audio ~1.1 s after the line lands (the online voice's
+  fetch); word boundaries reported. The persona card now carries `voice_id`,
+  validated at load.
+- ⬜ Everything below is still M11's: streaming the first clause, a VAD-driven
+  barge-in, server ASR with word timestamps, Kokoro for browsers without a
+  neural voice, audio-driven lip-sync, and the latency ledger.
+- **Hardware note:** the development laptop's Intel Arc A370M (4 GB) has no
+  driver installed (Windows problem code 28). Once installed it runs Intel's
+  OpenVINO notebooks for Kokoro, Whisper, Wav2Lip, Parler-TTS and Qwen3-TTS/ASR —
+  useful for the device matrix (day 14). No CUDA either way.
+
+---
+
 ## 0. Ideas and scouting
 
 Things worth building that did not come from the spec — usually from reading
@@ -27,7 +55,35 @@ platform's contracts — character offsets, per-fact provenance, permanent
 evidence — are more demanding than general-purpose tools assume, so integration
 usually costs more than reimplementing the one idea we actually wanted.
 
-_Nothing scouted for this module yet._
+**2026-10-05 — the free field, by component.** Adopt = in the Revision 2
+build; evaluate = measured against the alternatives before choosing; avoid =
+licence or hardware rules it out.
+
+| Component | What it is | Licence | Runs on | Verdict |
+|---|---|---|---|---|
+| Browser speech synthesis | Edge: neural en-IN voices (Neerja, Prabhat) + Indian languages; Windows Heera/Ravi; macOS Veena/Rishi | browser API | browser | **Adopted** (M06, 2026-10-05) |
+| Kokoro-82M via `kokoro-js` / HeadTTS | TTS with word timestamps and visemes; RTF 0.27 on WebGPU, 1.45 on WASM | Apache-2.0 / MIT | browser | Adopt as tier 1 — American English only, 90–330 MB download, so opt-in |
+| Pocket TTS (Kyutai) | 100M-param TTS, ~200 ms to first audio, ~6× real time on 2 CPU cores | MIT code; voices licensed one by one | CPU server | Evaluate against Kokoro |
+| KittenTTS | tiny CPU TTS (15–80M ONNX) | Apache-2.0 code; KittenTTS 2 weights under a community licence | CPU | Watch the licence |
+| Piper | fast local TTS | now `piper1-gpl`, GPL-3.0 | CPU | Replaced by Kokoro |
+| Indic Parler-TTS (AI4Bharat) | Indian-language TTS, 880M | Apache-2.0 | Arc (OpenVINO) or GPU | Evaluate for Indian-English voices |
+| Veena (Maya Research) | Hindi, Hinglish and English TTS | Apache-2.0 | GPU | Server-only option |
+| Groq Orpheus | managed streaming TTS, American voices | paid, $22 per 1M chars | API | Tier 2, behind a flag |
+| Silero VAD + `ricky0123/vad` | voice activity detection in the browser | MIT / ISC | browser | Adopt |
+| Smart Turn v3.2 (Pipecat) | semantic end-of-turn, 8 MB, ~10–65 ms CPU, 23 languages | BSD-2 (code and weights) | CPU | Adopt — replaces training our own |
+| TEN VAD | VAD | Apache-2.0 + Agora non-compete | — | Avoid |
+| Groq `whisper-large-v3-turbo` | ASR; free tier 2,000 requests/day | free tier, then $0.04/hour | API | Adopt as primary |
+| `faster-whisper`, `whisper.cpp`, WhisperX | local ASR; word alignment | MIT, MIT, BSD-2 | CPU (GPU for large-v3 live) | Fallback; WhisperX for M12 |
+| Moonshine | low-latency streaming ASR | MIT (streaming and English models) | CPU | Evaluate |
+| Vosk `en-in` | offline Indian-English ASR, 36 MB / 1 GB | Apache-2.0 | CPU | Evaluate — WER 36–49 on NPTEL |
+| Oriserve Whisper-Hindi2Hinglish-Apex | Whisper fine-tuned for Indian-accented English | open | CPU/GPU | Evaluate on Svarah |
+| Pipecat / LiveKit Agents | voice-agent orchestration, interruptions | BSD-2 / Apache-2.0 | server | Borrow techniques; LiveKit's SFU for M14 |
+| DeepInterview | an open AI interviewer (LiveKit + Kokoro + Whisper, fully local option) | Apache-2.0 | — | Reference; its crossfaded video-loop avatar |
+| LAM + gsplat renderer + `wav2arkit` | realistic 3D head from one photo, lip-synced in the browser | Apache-2.0 / MIT / Apache-2.0 | browser | Face option B (spec §15.6) |
+| TalkingHead + HeadAudio | stylised 3D head, lip-sync from audio | MIT | browser | Face option C |
+| MuseTalk, LiveTalking, Ditto, LatentSync | photoreal real-time lip-sync | various | NVIDIA GPU | Out on our hardware |
+| Duix | avatar toolkit | custom licence | — | Avoid |
+| Wav2Lip | lip-sync (an OpenVINO notebook exists) | research only | Arc (OpenVINO) | Avoid for the product |
 
 ---
 
@@ -38,6 +94,17 @@ _Nothing scouted for this module yet._
 | Status | **Not started.** No code exists — no backend, no frontend, no tests. |
 | Spec | Written, and the source of every row below. |
 | Scope | 22 functional requirements (18 of them P0), 9 acceptance metrics (4 release-blocking), 15 edge cases. |
+
+### 1b. What M06 already carries (interim — counted in M06, not here)
+
+| FR | What M06 does since 2026-10-05 | |
+|---|---|---|
+| FR-11.3 | Browser recognition in en-IN: final phrases into the answer box; no word timestamps | 🟡 interim |
+| FR-11.7 | The line read aloud after it lands, a sentence at a time — not a streamed first clause | 🟡 interim |
+| FR-11.8 | The voice stops when the mic button is pressed — no VAD, not measured | 🟡 interim |
+| FR-11.13 | "Repeat the question" says it again, interrupting | 🟡 interim |
+| FR-11.18 | The room is text-first: every spoken line is on screen | ✅ in M06 |
+| FR-11.21 | One voice per persona from its `voice_id`, paced by its manner; Edge has two neural en-IN voices, so personas of a kind share one | 🟡 interim |
 
 Everything below is ⬜ because nothing is built. That is the honest state and
 it is worth writing down rather than leaving three sections saying
@@ -141,6 +208,11 @@ Spec §5 declares 7 types. None exist.
 Not gaps in this module. Each needs a module that is not built or not wired
 yet, and each is listed so it is not mistaken for an oversight.
 
+**M06 carries M11's interim voice** (§1b). When M11 starts it takes
+`voice-core.ts` and `voice.ts` as its client baseline; when a second module
+needs them (M14's GD room), they graduate to Platform_Core rather than being
+copied — the rule M01's client states for verbs core does not carry.
+
 The spec names **M12, M13, M14, M18**. Until those are wired, anything
 depending on them is blocked rather than unstarted, and the distinction
 matters: one is work waiting to be done and the other is work that cannot
@@ -167,3 +239,24 @@ When work begins, the order that has worked on M01 and M02:
 5. **A golden corpus before the third extraction fix**, not after. On M02 it
    found four real bugs within an hour of existing.
 
+### Revision 2 build order (2026-10-05)
+
+Replaces the spec's Revision 1 order (§14), which starts at the media worker
+Revision 2 removes. Days are the spec's unit — a focused day each.
+
+| Day | Task |
+|---|---|
+| 1 | Repo scaffold — `module.json`, ports from PORTS.txt, identity — and M06's `voice-core.ts` / `voice.ts` as the client baseline |
+| 2 | The latency ledger (`TurnTiming`) in the browser from day one; measure M06's browser voice honestly: first audio after a line lands, stop time after the mic |
+| 3 | Browser VAD (Silero via `ricky0123/vad`): the student starting to speak stops playback client-side, and the server is told to cancel |
+| 4 | ASR route on Groq `whisper-large-v3-turbo` with word timestamps (confirm the API returns word granularity); browser recognition stays as the no-key fallback |
+| 5 | Smart Turn v3.2 for semantic endpointing, with the adaptive VAD threshold (FR-11.4, FR-11.5); checked on 200 labelled endings of real answers |
+| 6 | Accent WER on the Svarah benchmark across the ASR candidates (AC-11.4); choose by the number |
+| 7 | TTS tier 1: Kokoro via HeadTTS, opt-in and cached; clause-level streaming (FR-11.7); the `voice_id` → per-tier voice map; the lexicon (EC-11.11) grown from `voice-core.ts`'s table |
+| 8 | TTS tier 2 behind a flag: Groq Orpheus streaming; first-audio p95 against tiers 0 and 1 |
+| 9 | `heard_up_to_ms` truncation (FR-11.9), repeat from cache (FR-11.13), clarification on low confidence (FR-11.15, FR-11.16) |
+| 10 | Mic check with a live transcription round trip and a noise floor (FR-11.2); echo detection (EC-11.8) |
+| 11 | Calibrated silence, backchannels and note-taking pauses from the persona files (FR-11.10 to FR-11.12) |
+| 12 | Per-turn audio stored with consent, aligned to the transcript clock (FR-11.19); the push-to-talk ladder (FR-11.17) |
+| 13 | The face — only if chosen (spec §15.6): lip-sync from the audio itself (HeadAudio or `wav2arkit`) |
+| 14 | Latency harness (nightly), device matrix including the Arc through OpenVINO, network chaos |

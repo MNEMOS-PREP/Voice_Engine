@@ -5,6 +5,57 @@
 
 ---
 
+## 0. Revision 2 (2026-10-05) — browser-first, and free
+
+Revision 1 (below, unchanged) assumed a media worker with a GPU, a managed
+voice API as the primary voice, and a completeness classifier we would label
+and train ourselves. Three things changed that:
+
+- **The constraint is now explicit: free, no paid API required.** The platform
+  is a final-year project run on students' own laptops and the team's — the
+  development laptop has an Intel Arc A370M (4 GB, no CUDA) beside its Iris Xe.
+- **The browsers already do half the job.** Microsoft Edge ships neural
+  Indian-English voices in its built-in speech synthesis — "Microsoft Neerja /
+  Prabhat Online (Natural) - English (India)", plus Hindi, Bengali, Gujarati and
+  Kannada — free, verified in a headless Edge on 2026-10-04 (321 voices).
+  Windows has its own Indian-English voices (Heera, Ravi) that Chrome lists
+  too; Safari on a Mac has Veena and Rishi.
+- **The open-source field moved.** A sweep of ~480 GitHub repositories on
+  2026-10-04 (faces, TTS, ASR, voice-agent frameworks, AI interviewers) found
+  free, licensed, maintained answers to the parts Revision 1 planned to build or
+  buy — listed with their licences in the TODO's §0.
+
+**M06 already carries the first slice (2026-10-05).** The interviewer reads each
+line of record aloud in the voice its persona file names (`voice_id`,
+`en-IN-female-warm`), the drawn face's mouth moves with each word, the voice
+stops when the mic opens, and the browser's own recognition (en-IN) takes the
+spoken answer. M11 absorbs that code when it starts; it is the baseline every
+latency number below has to beat.
+
+### What Revision 2 changes
+
+| § | Revision 1 | Revision 2 | Why |
+|---|---|---|---|
+| 6.1 Transport | WebRTC to a media worker from day 1 | VAD and playback **in the browser**; utterance audio to the server over a WebSocket. WebRTC (an SFU — LiveKit, Apache-2.0) when M14's multi-party GD needs it | No GPU server; a barge-in stop that never crosses the network |
+| 6.2/6.3 Endpointing | Silero VAD + a completeness classifier we label (2,000 endings) and train | Silero VAD in the browser (`ricky0123/vad`, ISC) + **Smart Turn v3.2** (Pipecat, BSD-2 code and weights, 8 MB, ~10–65 ms on a CPU, 23 languages incl. English and Hindi) | Trained and open; day 8 becomes "evaluate on our answers", not "train" |
+| 6.6 TTS | Managed primary, Piper fallback | **Tiers:** (0) browser voices — shipping; (1) Kokoro-82M (Apache-2.0) in the browser via `kokoro-js` / HeadTTS (MIT; word timestamps and visemes), opt-in because the model is a 90–330 MB download; (2) managed streaming for latency — Groq Orpheus on the keys we hold ($22 per 1M chars), Cartesia / Deepgram if first-audio time demands | Free first; Piper moved to `piper1-gpl` (GPL-3.0); managed voices have no Indian-English voice, so tier 0 stays the Indian one |
+| 6.7 ASR | Streaming `faster-whisper` large-v3 on the media worker | Browser recognition (en-IN) as the interim; **Groq `whisper-large-v3-turbo`** as primary (free tier: 2,000 requests/day, 7,200 audio-seconds/hour; then $0.04/hour); `faster-whisper` / `whisper.cpp` locally as the fallback; WhisperX alignment offline for M12's word timings | large-v3 in real time needs a GPU we do not have; Groq's free tier covers a cohort's practice |
+| 6.7 Accent | "Accent-robust ASR" | **Measured, not assumed:** WER by accent group on the Svarah benchmark (9.6 h of Indian-accented English, 117 speakers) for browser en-IN, Groq Whisper, local Whisper, Oriserve's Indian-English Whisper fine-tune and Vosk `en-in` (Apache-2.0; WER 36–49 on NPTEL, likely weakest). AC-11.4 picks the winner | AC-11.4 is a gate; a choice made by reputation would fail it silently |
+| 14 Build order | 14 days from the media worker up | The TODO's §7 order, starting from what M06 ships | Day 1 of Revision 1 is the part Revision 2 removes |
+| 15.1 | Managed vs self-hosted — open | Resolved: tiers above | |
+| 15.6 | — | **A face for the interviewer** — the user's decision; options below | M06's open question 1 sends it here for the mechanics |
+
+**Unchanged:** every functional requirement, every gate, the latency ledger,
+one voice per persona, **no cloning of real people**, voices disclosed as AI on
+the consent screen, captions always on.
+
+**One finding for M12 and M17, recorded here because it comes from the voice
+path:** recognisers delete filler words (M12's Trap 1) — the browser's does too,
+so M06's live filler count is a floor, not a measure. Verbatim transcription is
+M12's to choose; this sweep did not cover it.
+
+---
+
 ## 1. In one paragraph
 
 Interviews are spoken, and spoken interaction is a timing problem before it is an AI problem. This module owns the full duplex loop: capture audio, decide when the candidate has finished speaking, transcribe with word-level timestamps, get a response streaming out of the model, speak it in a distinct persona voice, and — critically — stop talking within 350 ms when the candidate starts. It also owns the deliberate *non*-speech: the calibrated silence after an answer, the note-taking pause, the backchannel "mm-hm". Get the timing right and the interview feels real. Get it wrong by 500 ms and it feels like a phone call to a call centre.
@@ -447,6 +498,9 @@ GET  /v1/voice/{session_id}/timings    TurnTiming[] (internal metrics)
 
 ## 14. Build order
 
+> **Superseded by Revision 2 (§0).** The order now starts from what M06 ships;
+> it is in the TODO's §7. Kept below as Revision 1's.
+
 | Day | Task |
 |---|---|
 | 1 | WebRTC transport, media worker, audio in/out round trip |
@@ -469,7 +523,15 @@ GET  /v1/voice/{session_id}/timings    TurnTiming[] (internal metrics)
 ## 15. Open decisions
 
 1. **Managed TTS vs self-hosted from the start?** Managed is dramatically better for latency and prosody; self-hosted is free. Recommendation: **managed primary, Piper fallback**, revisit if TTS cost exceeds 15% of session cost.
+   **Resolved 2026-10-05 (§0):** browser voices first (free, and the only Indian-English neural voices available), Kokoro in the browser as an opt-in second tier, managed streaming behind a flag. Piper is out: it moved to `piper1-gpl` (GPL-3.0).
 2. **Do we contest barge-in in Final Boss?** It's realistic and uncomfortable. Proposal: ship it behind a flag, test with 10 students, keep only if the "felt realistic" score doesn't drop.
 3. **Vernacular interviewing (full Hindi/Tamil rounds)** — out of Year-1 scope, but code-switch tolerance ships. Confirm with the placement cell whether a fully vernacular HR round would be used.
 4. **Store full session audio by default?** Needed for M12 re-processing and evidence. Proposal: **yes for 180 days with explicit consent**, opt-out available, and the report explains what audio enables.
 5. **Diarisation always-on cost** — pyannote on every session is real compute. Proposal: on for proctored mode always, on for practice only when a second-speaker heuristic fires.
+6. **A face for the interviewer?** M06's open question 1 recommended "a simple animated presence indicator, not a face" — an uncanny 3D face is worse than none, and a real photo raises whose face it is — with "revisit if a student panel disagrees". The user asked on 2026-10-04 for realistic faces and voices. Options found on 2026-10-04, all free:
+   - **A. The drawn face, talking** — shipping in M06 since 2026-10-05: a ring while speaking, the mouth opening on each word. The spec's recommendation.
+   - **B. A realistic 3D head from one photo, in the browser.** LAM (Alibaba, Apache-2.0, SIGGRAPH 2025) builds it; `@myned-ai/gsplat-flame-avatar-renderer` (MIT) plays it in WebGL at 30 fps with 52 ARKit blendshapes and the eyes held on the student; `wav2arkit` (Apache-2.0, onnxruntime-web on the CPU) drives the lips from any audio. No server GPU; making each head needs a GPU once (LAM's online demo or a free notebook). `gsplat-talkinghead` (MIT) shows the whole chain.
+   - **C. Stylised 3D** — TalkingHead (MIT) with HeadAudio; avatars from Avaturn, MPFB (CC0), VRoid or RocketBox (Ready Player Me shut down on 2026-01-31).
+   - **D. Pre-rendered idle and speaking clips, crossfaded** (DeepInterview, Apache-2.0): real-looking at zero runtime cost; the lips only roughly match.
+   - **E. Photoreal real-time lip-sync** (MuseTalk, LiveTalking, Ditto, LatentSync) needs an NVIDIA GPU server.
+   Recommendation: keep A; put B beside A in front of a few students — the spec's own condition for changing its mind. Faces are AI-generated portraits, never a real person's, and labelled as AI.
