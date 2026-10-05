@@ -1,0 +1,41 @@
+{
+  "voice": "indictts_017689.wav",
+  "results": [
+    {
+      "dtype": "q4",
+      "file": "onnx_turbo_q4_indictts_017689_question_spoken.wav",
+      "tokens": 344,
+      "tokens_per_s": 27.2,
+      "first_token_s": 1.7,
+      "lm_s": 12.64,
+      "decode_s": 6.54,
+      "audio_s": 13.88,
+      "took_s": 19.18,
+      "rtf": 1.38
+    },
+    {
+      "dtype": "q8",
+      "file": "onnx_turbo_q8_indictts_017689_question_spoken.wav",
+      "tokens": 325,
+      "tokens_per_s": 2.0,
+      "first_token_s": 2.16,
+      "lm_s": 162.08,
+      "decode_s": 6.47,
+      "audio_s": 13.12,
+      "took_s": 168.54,
+      "rtf": 12.85
+    },
+    {
+      "dtype": "fp32",
+      "file": "onnx_turbo_fp32_indictts_017689_question_spoken.wav",
+      "tokens": 285,
+      "tokens_per_s": 17.6,
+      "first_token_s": 1.73,
+      "lm_s": 16.21,
+      "decode_s": 5.66,
+      "audio_s": 11.52,
+      "took_s": 21.87,
+      "rtf": 1.9
+    }
+  ]
+}

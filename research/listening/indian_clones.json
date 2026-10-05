@@ -1,0 +1,166 @@
+{
+  "clips": [
+    {
+      "file": "chatterbox_clone_indictts017689_greeting_neutral.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 1 (higher, 180 Hz) \u00b7 IndicTTS 017689",
+      "line": "greeting_neutral",
+      "text": "Hi! Thanks for making the time. So, we'll keep this pretty relaxed, okay? Let's start with something easy.",
+      "audio_s": 6.8,
+      "took_s": 29.51,
+      "rtf": 4.34
+    },
+    {
+      "file": "chatterbox_clone_indictts017689_question_spoken.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 1 (higher, 180 Hz) \u00b7 IndicTTS 017689",
+      "line": "question_spoken",
+      "text": "Okay, so. Say two keys land in the same bucket. How would a hash map deal with that? And, um, what does it cost you?",
+      "audio_s": 8.8,
+      "took_s": 39.23,
+      "rtf": 4.46
+    },
+    {
+      "file": "chatterbox_clone_indictts017689_followup_sounds.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 1 (higher, 180 Hz) \u00b7 IndicTTS 017689",
+      "line": "followup_sounds",
+      "text": "[chuckle] Right, chaining, the classic. Okay. And if one bucket just keeps getting longer, what happens to your lookups?",
+      "audio_s": 8.0,
+      "took_s": 37.3,
+      "rtf": 4.66
+    },
+    {
+      "file": "chatterbox_clone_indictts027797_greeting_neutral.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 2 (higher, 225 Hz) \u00b7 IndicTTS 027797",
+      "line": "greeting_neutral",
+      "text": "Hi! Thanks for making the time. So, we'll keep this pretty relaxed, okay? Let's start with something easy.",
+      "audio_s": 6.84,
+      "took_s": 35.19,
+      "rtf": 5.14
+    },
+    {
+      "file": "chatterbox_clone_indictts027797_question_spoken.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 2 (higher, 225 Hz) \u00b7 IndicTTS 027797",
+      "line": "question_spoken",
+      "text": "Okay, so. Say two keys land in the same bucket. How would a hash map deal with that? And, um, what does it cost you?",
+      "audio_s": 8.44,
+      "took_s": 39.32,
+      "rtf": 4.66
+    },
+    {
+      "file": "chatterbox_clone_indictts027797_followup_sounds.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 2 (higher, 225 Hz) \u00b7 IndicTTS 027797",
+      "line": "followup_sounds",
+      "text": "[chuckle] Right, chaining, the classic. Okay. And if one bucket just keeps getting longer, what happens to your lookups?",
+      "audio_s": 9.32,
+      "took_s": 40.59,
+      "rtf": 4.36
+    },
+    {
+      "file": "chatterbox_clone_indictts123823_greeting_neutral.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 3 (higher, 230 Hz) \u00b7 IndicTTS 123823",
+      "line": "greeting_neutral",
+      "text": "Hi! Thanks for making the time. So, we'll keep this pretty relaxed, okay? Let's start with something easy.",
+      "audio_s": 6.68,
+      "took_s": 34.25,
+      "rtf": 5.13
+    },
+    {
+      "file": "chatterbox_clone_indictts123823_question_spoken.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 3 (higher, 230 Hz) \u00b7 IndicTTS 123823",
+      "line": "question_spoken",
+      "text": "Okay, so. Say two keys land in the same bucket. How would a hash map deal with that? And, um, what does it cost you?",
+      "audio_s": 7.96,
+      "took_s": 40.59,
+      "rtf": 5.1
+    },
+    {
+      "file": "chatterbox_clone_indictts123823_followup_sounds.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 3 (higher, 230 Hz) \u00b7 IndicTTS 123823",
+      "line": "followup_sounds",
+      "text": "[chuckle] Right, chaining, the classic. Okay. And if one bucket just keeps getting longer, what happens to your lookups?",
+      "audio_s": 7.56,
+      "took_s": 34.3,
+      "rtf": 4.54
+    },
+    {
+      "file": "chatterbox_clone_indictts063175_greeting_neutral.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 4 (lower, 105 Hz) \u00b7 IndicTTS 063175",
+      "line": "greeting_neutral",
+      "text": "Hi! Thanks for making the time. So, we'll keep this pretty relaxed, okay? Let's start with something easy.",
+      "audio_s": 6.64,
+      "took_s": 32.6,
+      "rtf": 4.91
+    },
+    {
+      "file": "chatterbox_clone_indictts063175_question_spoken.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 4 (lower, 105 Hz) \u00b7 IndicTTS 063175",
+      "line": "question_spoken",
+      "text": "Okay, so. Say two keys land in the same bucket. How would a hash map deal with that? And, um, what does it cost you?",
+      "audio_s": 7.92,
+      "took_s": 39.24,
+      "rtf": 4.95
+    },
+    {
+      "file": "chatterbox_clone_indictts063175_followup_sounds.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 4 (lower, 105 Hz) \u00b7 IndicTTS 063175",
+      "line": "followup_sounds",
+      "text": "[chuckle] Right, chaining, the classic. Okay. And if one bucket just keeps getting longer, what happens to your lookups?",
+      "audio_s": 7.96,
+      "took_s": 36.74,
+      "rtf": 4.62
+    },
+    {
+      "file": "chatterbox_clone_indictts022743_greeting_neutral.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 5 (lower, 111 Hz) \u00b7 IndicTTS 022743",
+      "line": "greeting_neutral",
+      "text": "Hi! Thanks for making the time. So, we'll keep this pretty relaxed, okay? Let's start with something easy.",
+      "audio_s": 6.6,
+      "took_s": 33.5,
+      "rtf": 5.08
+    },
+    {
+      "file": "chatterbox_clone_indictts022743_question_spoken.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 5 (lower, 111 Hz) \u00b7 IndicTTS 022743",
+      "line": "question_spoken",
+      "text": "Okay, so. Say two keys land in the same bucket. How would a hash map deal with that? And, um, what does it cost you?",
+      "audio_s": 7.64,
+      "took_s": 41.4,
+      "rtf": 5.42
+    },
+    {
+      "file": "chatterbox_clone_indictts022743_followup_sounds.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 5 (lower, 111 Hz) \u00b7 IndicTTS 022743",
+      "line": "followup_sounds",
+      "text": "[chuckle] Right, chaining, the classic. Okay. And if one bucket just keeps getting longer, what happens to your lookups?",
+      "audio_s": 8.36,
+      "took_s": 37.62,
+      "rtf": 4.5
+    },
+    {
+      "file": "chatterbox_clone_indictts103607_greeting_neutral.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 6 (lower, 120 Hz) \u00b7 IndicTTS 103607",
+      "line": "greeting_neutral",
+      "text": "Hi! Thanks for making the time. So, we'll keep this pretty relaxed, okay? Let's start with something easy.",
+      "audio_s": 7.28,
+      "took_s": 32.79,
+      "rtf": 4.5
+    },
+    {
+      "file": "chatterbox_clone_indictts103607_question_spoken.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 6 (lower, 120 Hz) \u00b7 IndicTTS 103607",
+      "line": "question_spoken",
+      "text": "Okay, so. Say two keys land in the same bucket. How would a hash map deal with that? And, um, what does it cost you?",
+      "audio_s": 8.84,
+      "took_s": 38.67,
+      "rtf": 4.37
+    },
+    {
+      "file": "chatterbox_clone_indictts103607_followup_sounds.wav",
+      "label": "Chatterbox Turbo \u00b7 Indian voice 6 (lower, 120 Hz) \u00b7 IndicTTS 103607",
+      "line": "followup_sounds",
+      "text": "[chuckle] Right, chaining, the classic. Okay. And if one bucket just keeps getting longer, what happens to your lookups?",
+      "audio_s": 8.56,
+      "took_s": 39.28,
+      "rtf": 4.59
+    }
+  ]
+}

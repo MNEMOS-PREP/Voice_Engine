@@ -14,8 +14,10 @@ import difflib
 import json
 import pathlib
 import re
-import uuid
+import time
+import urllib.error
 import urllib.request
+import uuid
 
 HERE = pathlib.Path(__file__).resolve().parent
 KEYS = HERE.parents[2] / "keys.txt"
@@ -46,8 +48,16 @@ def transcribe(key: str, path: pathlib.Path) -> str:
             "User-Agent": "mnemos-voice-engine/0.1",
         },
     )
-    with urllib.request.urlopen(request, timeout=120) as response:
-        return json.loads(response.read())["text"]
+    for attempt in range(6):
+        try:
+            with urllib.request.urlopen(request, timeout=120) as response:
+                return json.loads(response.read())["text"]
+        except urllib.error.HTTPError as exc:
+            # The free tier allows a few requests a minute: wait as told.
+            if exc.code != 429 or attempt == 5:
+                raise
+            time.sleep(float(exc.headers.get("retry-after") or 15) + 1)
+    raise RuntimeError("unreachable")
 
 
 def words(text: str) -> list[str]:
@@ -58,19 +68,27 @@ def words(text: str) -> list[str]:
 def main() -> None:
     key = groq_key()
     clips = []
-    for manifest in ("chatterbox.json", "chatterbox_clone.json", "samples.json", "gemini.json"):
+    for manifest in ("chatterbox.json", "chatterbox_clone.json", "indian_clones.json", "samples.json", "gemini.json"):
         path = HERE / manifest
         if path.exists():
             clips += [c for c in json.loads(path.read_text(encoding="utf-8"))["clips"] if (HERE / c["file"]).exists()]
+    # Clips already read back are kept: a re-run only checks what is new, and
+    # the file is written after every clip, so a stop loses nothing.
+    out = HERE / "words.json"
+    done = {r["file"]: r for r in json.loads(out.read_text(encoding="utf-8"))} if out.exists() else {}
     results = []
     for clip in clips:
+        if clip["file"] in done:
+            results.append(done[clip["file"]])
+            continue
         heard = transcribe(key, HERE / clip["file"])
         want, got = words(clip["text"]), words(heard)
         ratio = difflib.SequenceMatcher(a=want, b=got).ratio()
         results.append({"file": clip["file"], "match": round(ratio, 3), "heard": heard.strip()})
         flag = "" if ratio >= 0.9 else "   <-- check"
-        print(f"{ratio:5.2f}  {clip['file']}{flag}\n       heard: {heard.strip()}")
-    (HERE / "words.json").write_text(json.dumps(results, indent=2), encoding="utf-8")
+        print(f"{ratio:5.2f}  {clip['file']}{flag}\n       heard: {heard.strip()}", flush=True)
+        out.write_text(json.dumps(results, indent=2), encoding="utf-8")
+    out.write_text(json.dumps(results, indent=2), encoding="utf-8")
 
 
 if __name__ == "__main__":

@@ -45,14 +45,37 @@ def load(name: str) -> list[dict]:
 
 def source_of(clip: dict) -> str:
     stem = clip["file"].removesuffix(".wav")
+    if clip.get("label") and stem.endswith("_" + clip["line"]):
+        return stem[: -len(clip["line"]) - 1]  # one voice, across its lines
     for key in sorted(SOURCE_LABEL, key=len, reverse=True):
         if stem.startswith(key):
             return key
     return stem.split("_")[0]
 
 
+def accent_of(clip: dict) -> str:
+    """The roster wants mostly Indian voices and some foreign ones."""
+    return "indian" if "indictts" in clip["file"] else "foreign"
+
+
+def onnx_clips() -> list[dict]:
+    """The fast ONNX build's clips, so its quality can be heard, not assumed."""
+    path = HERE / "onnx_speed.json"
+    if not path.exists():
+        return []
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return [
+        {**r, "line": "question_spoken", "text": "Okay, so. Say two keys land in the same bucket. How would a hash map deal with that? And, um, what does it cost you?",
+         "label": f"Chatterbox Turbo, ONNX build ({r['dtype']}) · same Indian voice as voice 1 · {r['tokens_per_s']} tokens/s"}
+        for r in data["results"] if (HERE / r["file"]).exists()
+    ]
+
+
 def main() -> None:
-    clips = load("chatterbox.json") + load("chatterbox_clone.json") + load("samples.json") + load("gemini.json")
+    clips = (
+        load("chatterbox.json") + load("chatterbox_clone.json") + load("indian_clones.json")
+        + onnx_clips() + load("samples.json") + load("gemini.json")
+    )
     lines = json.loads((HERE / "lines.json").read_text(encoding="utf-8")) if (HERE / "lines.json").exists() else {}
     data = [
         {
@@ -60,7 +83,8 @@ def main() -> None:
             "line": c["line"],
             "text": c["text"],
             "source": source_of(c),
-            "label": SOURCE_LABEL.get(source_of(c), source_of(c)),
+            "label": c.get("label") or SOURCE_LABEL.get(source_of(c), source_of(c)),
+            "accent": accent_of(c),
             "rtf": c.get("rtf"),
             "audio_s": c.get("audio_s"),
             "took_s": c.get("took_s"),
@@ -115,10 +139,14 @@ TEMPLATE = r"""<!doctype html>
     <button id="blind" class="primary">Blind test: shuffle and hide names</button>
     <button id="reveal" hidden>Reveal names</button>
     <span class="meta" id="mode">Names shown</span>
+    <label class="meta">Voices
+      <select id="accent"><option value="all">All</option><option value="indian">Indian</option><option value="foreign">Foreign</option></select>
+    </label>
   </div>
   <div id="sections"></div>
   <div class="tally" id="tally"></div>
-  <p class="note">The cloned voices are DailyTalk's two speakers (Lee et al., ICASSP 2023; CC BY-SA 4.0), recorded for conversational speech-synthesis research, cloned here from about 12 seconds of their own conversation. Research only: a dataset licence is not a speaker's consent to become a product voice. Chatterbox marks every clip with an inaudible watermark.</p>
+  <p class="note">The Indian voices are six speakers of IndicTTS (SMT Lab, IIT Madras; CC BY 4.0), English recorded by native speakers of Indian languages for speech synthesis, cloned from about 15 seconds each; chosen as the most different of the 21 distinct voices sampled. "Higher" and "lower" describe the pitch of each voice, nothing more.</p>
+  <p class="note">The foreign cloned voices are DailyTalk's two speakers (Lee et al., ICASSP 2023; CC BY-SA 4.0), recorded for conversational speech-synthesis research, cloned here from about 12 seconds of their own conversation. Research only: a dataset licence is not a speaker's consent to become a product voice. Chatterbox marks every clip with an inaudible watermark.</p>
   <p class="note">"Written" lines are what the interviewer writes today; "spoken" lines say the same thing the way people talk. Comparing the two shows how much is the voice and how much is the wording. Under each clip: how long this laptop's CPU took to make it. Every clip plays at normal speed; a voice that takes longer to make than to play cannot answer live without a faster computer.</p>
 </main>
 <script type="application/json" id="data">__DATA__</script>
@@ -126,6 +154,7 @@ TEMPLATE = r"""<!doctype html>
 const DATA = JSON.parse(document.getElementById("data").textContent);
 const LINE_LABEL = __LINE_LABEL__;
 let blind = false;
+let accent = "all";
 const votes = {};
 
 function group(lineId) { return lineId.split("_")[0]; }
@@ -143,12 +172,14 @@ function render() {
   const groups = [...new Set(DATA.clips.map(c => group(c.line)))];
   for (const g of groups) {
     const sec = document.createElement("section");
-    const lines = [...new Set(DATA.clips.filter(c => group(c.line) === g).map(c => c.line))];
+    const lines = [...new Set(DATA.clips.filter(c => group(c.line) === g && (accent === "all" || c.accent === accent)).map(c => c.line))];
+    if (!lines.length) continue;
     sec.innerHTML = `<h2>${LINE_LABEL[g] || g}</h2>`;
     for (const lineId of lines) {
-      const clips = DATA.clips.filter(c => c.line === lineId);
+      const clips = DATA.clips.filter(c => c.line === lineId && (accent === "all" || c.accent === accent));
+      if (!clips.length) continue;
       const text = clips[0].text;
-      const style = lineId.endsWith("_written") ? "written, as today" : lineId.endsWith("_sounds") ? "spoken, with a human sound" : "spoken";
+      const style = lineId.endsWith("_written") ? "written, as today" : lineId.endsWith("_sounds") ? "spoken, with a human sound" : lineId.endsWith("_neutral") ? "spoken, no name" : "spoken";
       const block = document.createElement("div");
       block.innerHTML = `<p class="text"><span class="pill">${style}</span> “${text}”</p>`;
       const list = blind ? shuffle([{ today: true, text }, ...clips]) : [{ today: true, text }, ...clips];
@@ -185,6 +216,7 @@ function tally() {
     : "";
 }
 
+document.getElementById("accent").onchange = (e) => { accent = e.target.value; render(); tally(); };
 document.getElementById("blind").onclick = () => { blind = true; document.getElementById("reveal").hidden = false; document.getElementById("blind").hidden = true; document.getElementById("mode").textContent = "Blind: names hidden, order shuffled"; render(); };
 document.getElementById("reveal").onclick = () => { blind = false; document.getElementById("reveal").hidden = true; document.getElementById("blind").hidden = false; document.getElementById("mode").textContent = "Names shown"; render(); tally(); };
 render();

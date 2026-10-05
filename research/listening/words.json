@@ -58,5 +58,95 @@
     "file": "chatterbox_clone_dailytalk1_followup_sounds.wav",
     "match": 1.0,
     "heard": "Right, chaining, the classic. Okay, and if one bucket just keeps getting longer, what happens to your lookups?"
+  },
+  {
+    "file": "chatterbox_clone_indictts017689_greeting_neutral.wav",
+    "match": 1.0,
+    "heard": "Hi, thanks for making the time. So we'll keep this pretty relaxed, okay? Let's start with something easy."
+  },
+  {
+    "file": "chatterbox_clone_indictts017689_question_spoken.wav",
+    "match": 0.939,
+    "heard": "Okay, so say two keys land in the same bucket, how would a hush map deal with that? And what does it cost you?"
+  },
+  {
+    "file": "chatterbox_clone_indictts017689_followup_sounds.wav",
+    "match": 0.919,
+    "heard": "Right, chaining, the classic. Okay, and if one bucket just keeps getting longer, what happens to your look-ups?"
+  },
+  {
+    "file": "chatterbox_clone_indictts027797_greeting_neutral.wav",
+    "match": 1.0,
+    "heard": "Hi, thanks for making the time. So we'll keep this pretty relaxed, okay? Let's start with something easy."
+  },
+  {
+    "file": "chatterbox_clone_indictts027797_question_spoken.wav",
+    "match": 0.98,
+    "heard": "Okay, so, say two keys land in the same bucket, how would a hash map deal with that and what does it cost you?"
+  },
+  {
+    "file": "chatterbox_clone_indictts027797_followup_sounds.wav",
+    "match": 1.0,
+    "heard": "Right chaining, the classic? Okay. And if one bucket just keeps getting longer, what happens to your lookups?"
+  },
+  {
+    "file": "chatterbox_clone_indictts123823_greeting_neutral.wav",
+    "match": 0.944,
+    "heard": "Hi, thanks for making the time. So we keep this pretty relaxed, okay? Let's start with something easy."
+  },
+  {
+    "file": "chatterbox_clone_indictts123823_question_spoken.wav",
+    "match": 1.0,
+    "heard": "Okay, so, say two keys land in the same bucket. How would a hash map deal with that? And um, what does it cost you?"
+  },
+  {
+    "file": "chatterbox_clone_indictts123823_followup_sounds.wav",
+    "match": 0.889,
+    "heard": "net shaining, the classic. Okay, and if one bucket just keeps getting longer, what happens to your lookups?"
+  },
+  {
+    "file": "chatterbox_clone_indictts063175_greeting_neutral.wav",
+    "match": 1.0,
+    "heard": "Hi, thanks for making the time. So, we'll keep this pretty relaxed, okay? Let's start with something easy."
+  },
+  {
+    "file": "chatterbox_clone_indictts063175_question_spoken.wav",
+    "match": 0.917,
+    "heard": "Okay, so, say two keys land in the same bucket. How would a HashMap deal with that? And what does it cost you?"
+  },
+  {
+    "file": "chatterbox_clone_indictts063175_followup_sounds.wav",
+    "match": 0.944,
+    "heard": "Right? Chaining, the plastic? Okay. And if one bucket just keeps getting longer, what happens to your lookups?"
+  },
+  {
+    "file": "chatterbox_clone_indictts022743_greeting_neutral.wav",
+    "match": 1.0,
+    "heard": "Hi, thanks for making the time. So we'll keep this pretty relaxed, okay? Let's start with something easy."
+  },
+  {
+    "file": "chatterbox_clone_indictts022743_question_spoken.wav",
+    "match": 0.98,
+    "heard": "Okay, so say two keys land in the same bucket, how would a hash map deal with that and what does it cost you?"
+  },
+  {
+    "file": "chatterbox_clone_indictts022743_followup_sounds.wav",
+    "match": 1.0,
+    "heard": "Right? Chaining, the classic. Okay? And if one bucket just keeps getting longer, what happens to your lookups?"
+  },
+  {
+    "file": "chatterbox_clone_indictts103607_greeting_neutral.wav",
+    "match": 1.0,
+    "heard": "Hi, thanks for making the time. So we'll keep this pretty relaxed, okay? Let's start with something easy."
+  },
+  {
+    "file": "chatterbox_clone_indictts103607_question_spoken.wav",
+    "match": 1.0,
+    "heard": "Okay, so, say two keys land in the same bucket. How would a hash map deal with that? And, um, what does it cost you?"
+  },
+  {
+    "file": "chatterbox_clone_indictts103607_followup_sounds.wav",
+    "match": 1.0,
+    "heard": "Right, chaining, the classic. Okay, and if one bucket just keeps getting longer, what happens to your lookups?"
   }
 ]
