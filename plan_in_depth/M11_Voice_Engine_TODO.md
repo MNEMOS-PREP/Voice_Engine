@@ -1,6 +1,6 @@
 # M11 — TODO · Voice & Conversation Engine
 
-> **Completion: 0%** — 0 of 22 functional requirements met. **No code yet** — the `Voice_Engine` repo holds only this plan. Since 2026-10-05 M06 carries an interim browser voice in both directions (§1b); it is M06's code and is not counted here. The spec has a Revision 2 (§0 of the spec): browser-first and free. The requirement count is the spec's own, so this is a measure of scope ahead rather than of progress behind.
+> **Completion: 9%** — 0 of 22 functional requirements met, 4 partly (FR-11.7, 11.8, 11.13, 11.21). **Day 1 of 14 (Revision 2) done, 2026-10-05:** the repo's frame and the voice check; the browser voice client moved from M06 to `@ai/core` v0.14.0 as M11's code, so the four FRs it partly meets are counted here now (§1b). The spec has a Revision 2 (§0 of the spec): browser-first and free. The requirement count is the spec's own, so this is a measure of scope ahead rather than of progress behind.
 >
 > _Method: `(met + ½ × partial) ÷ total`, counted from the spec, 2026-08-28. One measure applied the same way to all nineteen modules so they compare; it counts requirements, not screens or gates._
 
@@ -18,6 +18,44 @@ Task list for taking **M11 — Voice & Conversation Engine** to 100% of [M11_Voi
 - **Repo:** `Voice_Engine`
 
 Legend: ✅ done · 🟡 partly done · ⬜ not started
+
+---
+
+### 2026-10-05 — Day 1: the frame, and the voice client becomes M11's
+
+- ✅ **The voice client moved to core** (Platform_Core `da448d5`, tag
+  **v0.14.0**): `useInterviewerVoice` and `pickVoice` / `speakable` /
+  `splitSentences` / `parseVoiceId` / `rateFor` / `kindOf`, with their 11
+  tests (`npm test` in Platform_Core). M11's code, kept in core because M06's
+  room and M11's voice check both use it and M14 will — §6's "graduate when a
+  second module needs it", which day 1 triggered. M06 imports it from there
+  (M06 `b3b401a`, core bumped in both package files and the lockfile).
+- ✅ **The repo's frame** (Voice_Engine `77511e4`, `main`): `module.json`
+  (M06 optional, with a sentence), ports 8111 / 5211 (8211 reserved for the
+  WebSocket), the launcher (`start_voice.bat`, `start.bat`, `scripts/`), the
+  identity guard on the router before any route, Platform_Core's stranger
+  check from the first commit, and a gate that reads Platform_Shell's live
+  proxy table to hold `/v1/voice` to M11. 6 tests, ruff clean, clean `tsc`.
+- ✅ **The voice check, `/voice`**: every M06 interviewer, read from M06's
+  persona files (`/v1/interviews/personas` now carries `voice_id` and the
+  opening line — M06 `b3b401a`), each with the browser voice chosen for it and
+  a Play button; the interview voice's on/off switch; "Arjun, Vikram,
+  Dr. Raghavan and Kabir share Prabhat's voice; Meera, Sunita and Priya share
+  Neerja's" — FR-11.21 measured in the browser, not assumed; when M06 is down,
+  one sample voice under M06's own sentence.
+- ✅ **Mounted in the shell** (Platform_Shell `f64d03e`): `/v1/voice` → :8111,
+  source aliased, Tailwind scans it, reached from Settings → Voice and Ctrl K
+  "Hear your interviewers". `start.bat` starts M11 and the HOME card checks it.
+- **Checked live** in headless Edge through the shell: 326 voices; each
+  interviewer gets Neerja or Prabhat (natural) by kind, at its manner's pace
+  (Meera 0.97); Play speaks the greeting and the button turns to Stop at once
+  (an online voice takes ~1 s to start); the degraded path renders. The M06
+  room, now on core's hook, says its opening whole and the follow-up after an
+  answer — the same speak/cancel trace as before the move.
+- **Found on the way, fixed first** (M06 `ddd6fa5`): StrictMode's dev-only
+  remount ran the room's unmount `cancel()`, which silenced every first
+  question. The cancel now waits a tick and runs only if the room is gone.
+- **Next: day 2**, the latency ledger.
 
 ---
 
@@ -91,22 +129,22 @@ licence or hardware rules it out.
 
 | | |
 |---|---|
-| Status | **Not started.** No code exists — no backend, no frontend, no tests. |
+| Status | **Day 1 of 14 (Revision 2).** The frame and one screen (`/voice`); no voice route yet. The browser voice client is M11's code in `@ai/core` (v0.14.0). |
 | Spec | Written, and the source of every row below. |
 | Scope | 22 functional requirements (18 of them P0), 9 acceptance metrics (4 release-blocking), 15 edge cases. |
 
-### 1b. What M06 already carries (interim — counted in M06, not here)
+### 1b. What the voice client already does (M11's, in `@ai/core` since v0.14.0)
 
-| FR | What M06 does since 2026-10-05 | |
+| FR | What the browser voice does since 2026-10-05 (built in M06, M11's since day 1) | |
 |---|---|---|
-| FR-11.3 | Browser recognition in en-IN: final phrases into the answer box; no word timestamps | 🟡 interim |
+| FR-11.3 | Browser recognition in en-IN: final phrases into the answer box; no word timestamps — still M06's `speech.ts`, not counted here | 🟡 interim (M06) |
 | FR-11.7 | The line read aloud after it lands, a sentence at a time — not a streamed first clause | 🟡 interim |
 | FR-11.8 | The voice stops when the mic button is pressed — no VAD, not measured | 🟡 interim |
 | FR-11.13 | "Repeat the question" says it again, interrupting | 🟡 interim |
-| FR-11.18 | The room is text-first: every spoken line is on screen | ✅ in M06 |
+| FR-11.18 | The room is text-first: every spoken line is on screen — M06's room, not counted here | ✅ in M06 |
 | FR-11.21 | One voice per persona from its `voice_id`, paced by its manner; Edge has two neural en-IN voices, so personas of a kind share one | 🟡 interim |
 
-Everything below is ⬜ because nothing is built. That is the honest state and
+Everything else below is ⬜. That is the honest state and
 it is worth writing down rather than leaving three sections saying
 _To fill in._ — the point of this list is that the next session can start from
 it instead of re-reading a six-hundred-line spec.
@@ -125,13 +163,13 @@ Spec §4, verbatim. This is the authoritative list.
 | FR-11.4 | ⬜ VAD-based endpointing with a per-speaker adaptive threshold | P0 |
 | FR-11.5 | ⬜ Semantic endpointing to avoid cutting incomplete utterances | P0 |
 | FR-11.6 | ⬜ Speculative LLM prefill on stabilised partial transcripts | P1 |
-| FR-11.7 | ⬜ Streaming TTS with clause-level first chunk | P0 |
-| FR-11.8 | ⬜ Barge-in: full stop of LLM + TTS + playback within 350 ms | P0 |
+| FR-11.7 | 🟡 Streaming TTS with clause-level first chunk — a sentence at a time, not streamed (§1b) | P0 |
+| FR-11.8 | 🟡 Barge-in: full stop of LLM + TTS + playback within 350 ms — playback stops when the mic opens; no VAD, not measured (§1b) | P0 |
 | FR-11.9 | ⬜ Truncate the interviewer turn at `heard_up_to_ms` on barge-in | P0 |
 | FR-11.10 | ⬜ Calibrated silence per persona/mode with no UI change | P0 |
 | FR-11.11 | ⬜ Backchannels on a separate bus, disabled in Final Boss | P1 |
 | FR-11.12 | ⬜ Note-taking pauses | P1 |
-| FR-11.13 | ⬜ Repeat-last-utterance from cache | P0 |
+| FR-11.13 | 🟡 Repeat-last-utterance from cache — said again, interrupting; re-synthesised, not cached audio (§1b) | P0 |
 | FR-11.14 | ⬜ Mid-turn modality switch preserving the partial transcript | P0 |
 | FR-11.15 | ⬜ Low-confidence spans marked and excluded from evidence citation | P0 |
 | FR-11.16 | ⬜ Natural clarification behaviour on low ASR confidence | P1 |
@@ -139,7 +177,7 @@ Spec §4, verbatim. This is the authoritative list.
 | FR-11.18 | ⬜ Live captions always on | P0 |
 | FR-11.19 | ⬜ Per-turn audio stored, aligned to the transcript clock | P0 |
 | FR-11.20 | ⬜ p95 end-of-speech → first audio byte < 1.2 s | P0 |
-| FR-11.21 | ⬜ Distinct voice per persona; no cloning of real people | P0 |
+| FR-11.21 | 🟡 Distinct voice per persona; no cloning of real people — one voice per `voice_id`, paced by manner; Edge's two en-IN voices are shared, and `/voice` says so | P0 |
 | FR-11.22 | ⬜ Code-switch tolerance without penalty | P0 |
 
 ---
@@ -208,10 +246,10 @@ Spec §5 declares 7 types. None exist.
 Not gaps in this module. Each needs a module that is not built or not wired
 yet, and each is listed so it is not mistaken for an oversight.
 
-**M06 carries M11's interim voice** (§1b). When M11 starts it takes
-`voice-core.ts` and `voice.ts` as its client baseline; when a second module
-needs them (M14's GD room), they graduate to Platform_Core rather than being
-copied — the rule M01's client states for verbs core does not carry.
+**The voice client is in `@ai/core`** (v0.14.0, day 1) — M11's code, there
+because M06 and M11 both use it and M14 will. Changes to it are planned here and
+released as core versions; each consumer bumps its pin when ready. M06's
+`speech.ts` (browser recognition) stays M06's until day 4's ASR route.
 
 The spec names **M12, M13, M14, M18**. Until those are wired, anything
 depending on them is blocked rather than unstarted, and the distinction
@@ -246,7 +284,7 @@ Revision 2 removes. Days are the spec's unit — a focused day each.
 
 | Day | Task |
 |---|---|
-| 1 | Repo scaffold — `module.json`, ports from PORTS.txt, identity — and M06's `voice-core.ts` / `voice.ts` as the client baseline |
+| 1 | ✅ Repo scaffold — `module.json`, ports from PORTS.txt, identity — and M06's `voice-core.ts` / `voice.ts` as the client baseline (moved to `@ai/core` v0.14.0; the voice check at `/voice`) |
 | 2 | The latency ledger (`TurnTiming`) in the browser from day one; measure M06's browser voice honestly: first audio after a line lands, stop time after the mic |
 | 3 | Browser VAD (Silero via `ricky0123/vad`): the student starting to speak stops playback client-side, and the server is told to cancel |
 | 4 | ASR route on Groq `whisper-large-v3-turbo` with word timestamps (confirm the API returns word granularity); browser recognition stays as the no-key fallback |
