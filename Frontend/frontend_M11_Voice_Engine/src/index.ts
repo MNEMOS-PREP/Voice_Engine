@@ -9,5 +9,5 @@
 export { m11Routes } from "./routes";
 export { VoiceCheck } from "./components/VoiceCheck";
 export { LatencyLedger } from "./components/LatencyLedger";
-export { m11Keys, useDeps, useInterviewers, useTimingSummary } from "./api";
-export type { Interviewer, StageSummary, TimingSummary } from "./types";
+export { m11Keys, useCast, useDeps, useEngine, useInterviewers, useTimingSummary } from "./api";
+export type { CastInfo, CastVoice, EngineState, Interviewer, StageSummary, TimingSummary } from "./types";

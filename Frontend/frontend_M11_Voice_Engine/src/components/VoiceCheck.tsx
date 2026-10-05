@@ -13,6 +13,10 @@
  *
  * The microphone half of the check (spec §2.3: a real transcription round
  * trip and a noise floor) is day 10.
+ *
+ * 2026-10-06: where M11's own voice is ready, each interviewer plays in the
+ * Chatterbox voice the team cast for them (`voices/cast.json`) — what students
+ * will hear — and the page credits every voice as its licence asks.
  */
 
 import { useEffect, useMemo, useState } from "react";
@@ -31,8 +35,8 @@ import {
   useSession,
 } from "@ai/core";
 
-import { useDeps, useInterviewers } from "../api";
-import type { Interviewer } from "../types";
+import { useCast, useDeps, useEngine, useInterviewers } from "../api";
+import type { CastVoice, Interviewer } from "../types";
 import { LatencyLedger } from "./LatencyLedger";
 
 /** Played when M06 cannot say who the interviewers are. */
@@ -119,19 +123,29 @@ function SpeakerIcon({ playing }: { playing: boolean }) {
   );
 }
 
-function InterviewerRow({ who, chosen }: { who: Interviewer; chosen: SpeechSynthesisVoice | null }) {
-  const voice = useInterviewerVoice(who.voice_id);
-  // An online voice takes about a second to start. The press is answered at
-  // once — the button turns to Stop — rather than looking ignored until then.
+function InterviewerRow({
+  who,
+  chosen,
+  cast,
+}: {
+  who: Interviewer;
+  chosen: SpeechSynthesisVoice | null;
+  /** The M11 voice cast for this interviewer, when M11's voice is ready. */
+  cast: CastVoice | null;
+}) {
+  const voice = useInterviewerVoice(who.voice_id, { personaId: who.id, server: cast !== null });
+  // An online voice takes about a second to start, and M11's a few more on
+  // this laptop the first time a line is said. The press is answered at once —
+  // the button turns to Stop — rather than looking ignored until then.
   const [pending, setPending] = useState(false);
   useEffect(() => {
     if (voice.speakingKey !== null) setPending(false);
   }, [voice.speakingKey]);
   useEffect(() => {
     if (!pending) return;
-    const timer = window.setTimeout(() => setPending(false), 5000);
+    const timer = window.setTimeout(() => setPending(false), cast ? 60_000 : 5000);
     return () => window.clearTimeout(timer);
-  }, [pending]);
+  }, [pending, cast]);
   const speaking = pending || voice.speakingKey !== null;
   const play = () => {
     if (speaking) {
@@ -161,7 +175,11 @@ function InterviewerRow({ who, chosen }: { who: Interviewer; chosen: SpeechSynth
           {who.name}
           {who.title && <span className="font-normal text-ink-soft"> · {who.title}</span>}
         </span>
-        <span className="block truncate text-xs text-ink-faint">{describe(who.voice_id, chosen)}</span>
+        <span className="block truncate text-xs text-ink-faint">
+          {cast
+            ? `${cast.label} · ${cast.accent === "indian" ? "Indian English" : "a foreign accent"} · made by M11`
+            : describe(who.voice_id, chosen)}
+        </span>
       </span>
       <Button size="sm" variant="secondary" onClick={play} aria-pressed={speaking} aria-label={speaking ? `Stop ${who.name}` : `Hear ${who.name}`}>
         <SpeakerIcon playing={speaking} />
@@ -199,6 +217,15 @@ export function VoiceCheck() {
   const { voices, settled } = useBrowserVoices();
   const switchboard = useInterviewerVoice(null);
   const staff = isStaff(useSession());
+  const engine = useEngine();
+  const castInfo = useCast();
+  const serverReady = engine.data?.state === "ready";
+  const castFor = (who: Interviewer): CastVoice | null => {
+    if (!serverReady || !castInfo.data) return null;
+    const key = castInfo.data.cast[who.id] ?? castInfo.data.default;
+    return castInfo.data.voices.find((v) => v.key === key) ?? null;
+  };
+  const credits = [...new Map((castInfo.data?.voices ?? []).map((v) => [v.credit, v.licence])).entries()];
 
   const people = interviewers.data?.length ? interviewers.data : interviewers.isError ? [SAMPLE] : [];
   const chosen = useMemo(() => voicesByPerson(people, voices), [people, voices]);
@@ -255,6 +282,13 @@ export function VoiceCheck() {
                 ? "On — the interviewer reads each question aloud."
                 : "Off — questions appear on screen only. The buttons below still play."}
             </p>
+            <p className="mt-2 text-xs text-ink-faint">
+              {serverReady
+                ? "Each interviewer speaks in their own voice, made by the voice service. A line it has not said before takes a few seconds the first time."
+                : engine.data?.state === "loading"
+                  ? "The interviewers' own voices are warming up — this browser's voice speaks until they are ready."
+                  : "The interviewers' own voices are not running, so this browser's voice speaks for them."}
+            </p>
             {settled && voices.length > 0 && !natural && (
               <p className="mt-2 text-xs text-ink-faint">
                 The most natural Indian-English voices (Neerja and Prabhat) come with Microsoft Edge.
@@ -283,12 +317,18 @@ export function VoiceCheck() {
             ) : (
               <ul className="divide-y divide-line">
                 {people.map((who) => (
-                  <InterviewerRow key={who.id} who={who} chosen={chosen.get(who.id) ?? null} />
+                  <InterviewerRow key={who.id} who={who} chosen={chosen.get(who.id) ?? null} cast={castFor(who)} />
                 ))}
               </ul>
             )}
-            {shared && (
+            {shared && !serverReady && (
               <p className="mt-3 border-t border-line pt-3 text-xs leading-relaxed text-ink-faint">{shared}</p>
+            )}
+            {serverReady && credits.length > 0 && (
+              <p className="mt-3 border-t border-line pt-3 text-xs leading-relaxed text-ink-faint">
+                AI voices, made with Chatterbox (Resemble AI, MIT). Voices from{" "}
+                {credits.map(([credit, licence]) => `${credit} (${licence})`).join(" · ")}.
+              </p>
             )}
           </Card>
         </div>

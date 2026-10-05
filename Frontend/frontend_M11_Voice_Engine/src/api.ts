@@ -11,13 +11,35 @@ import { useQuery } from "@tanstack/react-query";
 
 import { api, type DependencyStatus } from "@ai/core";
 
-import type { Interviewer, TimingSummary } from "./types";
+import type { CastInfo, EngineState, Interviewer, TimingSummary } from "./types";
 
 export const m11Keys = {
   deps: ["m11", "deps"] as const,
   interviewers: ["m11", "interviewers"] as const,
   summary: (days: number) => ["m11", "timings", "summary", days] as const,
+  engine: ["m11", "engine"] as const,
+  cast: ["m11", "cast"] as const,
 };
+
+/** Whether M11's voice is ready — polled while it warms up, then left alone. */
+export function useEngine() {
+  return useQuery({
+    queryKey: m11Keys.engine,
+    queryFn: () => api.get<EngineState>("/v1/voice/engine"),
+    refetchInterval: (query) => (query.state.data?.state === "loading" ? 3000 : false),
+    retry: false,
+  });
+}
+
+/** Who speaks for whom, and each voice's credit. */
+export function useCast() {
+  return useQuery({
+    queryKey: m11Keys.cast,
+    queryFn: () => api.get<CastInfo>("/v1/voice/cast"),
+    staleTime: Infinity,
+    retry: false,
+  });
+}
 
 export function useDeps() {
   return useQuery({

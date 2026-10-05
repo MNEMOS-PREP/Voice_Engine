@@ -16,6 +16,34 @@ export interface Interviewer {
   greeting: string;
 }
 
+/** Whether M11's own voice can speak (`GET /v1/voice/engine`). */
+export interface EngineState {
+  state: "off" | "loading" | "ready" | "failed";
+  reason: string;
+  precision: string;
+  model: string;
+}
+
+/** One of M11's voices and where it comes from (`GET /v1/voice/cast`). */
+export interface CastVoice {
+  key: string;
+  label: string;
+  accent: "indian" | "foreign";
+  register: "higher" | "lower";
+  pitch_hz: number;
+  source: string;
+  licence: string;
+  credit: string;
+}
+
+/** Who speaks for whom. */
+export interface CastInfo {
+  default: string;
+  /** M06 persona id → voice key. */
+  cast: Record<string, string>;
+  voices: CastVoice[];
+}
+
 /** One stage of the latency ledger across the cohort (`GET /v1/voice/timings/summary`). */
 export interface StageSummary {
   name: string;
