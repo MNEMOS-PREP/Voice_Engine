@@ -1,0 +1,149 @@
+[
+  {
+    "file": "indictts_002527.wav",
+    "pitch_hz": 242,
+    "register": "higher",
+    "seconds": 28.5,
+    "picked": false
+  },
+  {
+    "file": "indictts_012635.wav",
+    "pitch_hz": 138,
+    "register": "lower",
+    "seconds": 30.5,
+    "picked": false
+  },
+  {
+    "file": "indictts_017689.wav",
+    "pitch_hz": 180,
+    "register": "higher",
+    "seconds": 15.5,
+    "picked": true
+  },
+  {
+    "file": "indictts_022743.wav",
+    "pitch_hz": 111,
+    "register": "lower",
+    "seconds": 33.0,
+    "picked": true
+  },
+  {
+    "file": "indictts_027797.wav",
+    "pitch_hz": 225,
+    "register": "higher",
+    "seconds": 20.3,
+    "picked": true
+  },
+  {
+    "file": "indictts_032851.wav",
+    "pitch_hz": 229,
+    "register": "higher",
+    "seconds": 31.8,
+    "picked": false
+  },
+  {
+    "file": "indictts_103607.wav",
+    "pitch_hz": 120,
+    "register": "lower",
+    "seconds": 27.0,
+    "picked": true
+  },
+  {
+    "file": "indictts_048013.wav",
+    "pitch_hz": 222,
+    "register": "higher",
+    "seconds": 28.8,
+    "picked": false
+  },
+  {
+    "file": "indictts_053067.wav",
+    "pitch_hz": 111,
+    "register": "lower",
+    "seconds": 17.5,
+    "picked": false
+  },
+  {
+    "file": "indictts_058121.wav",
+    "pitch_hz": 255,
+    "register": "higher",
+    "seconds": 23.5,
+    "picked": false
+  },
+  {
+    "file": "indictts_063175.wav",
+    "pitch_hz": 105,
+    "register": "lower",
+    "seconds": 29.1,
+    "picked": true
+  },
+  {
+    "file": "indictts_083391.wav",
+    "pitch_hz": 206,
+    "register": "higher",
+    "seconds": 16.4,
+    "picked": false
+  },
+  {
+    "file": "indictts_093499.wav",
+    "pitch_hz": 122,
+    "register": "lower",
+    "seconds": 15.4,
+    "picked": false
+  },
+  {
+    "file": "indictts_098553.wav",
+    "pitch_hz": 225,
+    "register": "higher",
+    "seconds": 24.4,
+    "picked": false
+  },
+  {
+    "file": "indictts_108661.wav",
+    "pitch_hz": 226,
+    "register": "higher",
+    "seconds": 31.3,
+    "picked": false
+  },
+  {
+    "file": "indictts_113715.wav",
+    "pitch_hz": 135,
+    "register": "lower",
+    "seconds": 22.8,
+    "picked": false
+  },
+  {
+    "file": "indictts_123823.wav",
+    "pitch_hz": 230,
+    "register": "higher",
+    "seconds": 34.7,
+    "picked": true
+  },
+  {
+    "file": "indictts_128877.wav",
+    "pitch_hz": 126,
+    "register": "lower",
+    "seconds": 23.4,
+    "picked": false
+  },
+  {
+    "file": "indictts_133931.wav",
+    "pitch_hz": 200,
+    "register": "higher",
+    "seconds": 33.5,
+    "picked": false
+  },
+  {
+    "file": "indictts_144039.wav",
+    "pitch_hz": 93,
+    "register": "lower",
+    "seconds": 18.2,
+    "picked": false
+  },
+  {
+    "file": "indictts_149093.wav",
+    "pitch_hz": 163,
+    "register": "between",
+    "seconds": 57.5,
+    "picked": false
+  }
+]
