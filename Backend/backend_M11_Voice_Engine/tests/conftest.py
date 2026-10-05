@@ -43,6 +43,19 @@ def upstream_up(monkeypatch):
 
 
 @pytest.fixture(autouse=True)
+def no_voice_model(monkeypatch, tmp_path):
+    """The real voice model is 2.5 GB and loads in a thread: no test starts it.
+    Lines a test does make are cached under its own temporary folder."""
+    from backend_M11_Voice_Engine import tts
+
+    monkeypatch.setenv("M11_TTS", "off")
+    monkeypatch.setattr(tts, "CACHE_DIR", tmp_path / "tts_cache")
+    tts.set_engine(None)
+    yield
+    tts.set_engine(None)
+
+
+@pytest.fixture(autouse=True)
 def _service_secret(monkeypatch):
     """A known platform secret, so no test reads or writes the developer's
     machine secret under their home directory (Platform_Core v0.12.0)."""

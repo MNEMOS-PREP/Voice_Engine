@@ -23,6 +23,17 @@ dev = [
     "httpx>=0.27",
     "ruff>=0.6",
 ]
+# The interviewer's voice on the server (tts.py): Chatterbox Turbo's ONNX
+# export — no PyTorch. Optional: without it the module runs, /v1/voice/engine
+# says "off", and the browser's own voice speaks instead. The model (~2.5 GB)
+# downloads from Hugging Face on first load.
+tts = [
+    "numpy>=1.26",
+    "onnxruntime>=1.18",
+    "soundfile>=0.12",
+    "tokenizers>=0.19",
+    "huggingface_hub>=0.23",
+]
 
 [tool.setuptools.packages.find]
 # This repo holds ONE module. Shared wiring comes from the `ai-core` package.

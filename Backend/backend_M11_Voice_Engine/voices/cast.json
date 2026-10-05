@@ -1,0 +1,86 @@
+{
+  "_comment": [
+    "Who speaks for whom. Chosen by the team in a blind listening test on",
+    "2026-10-06 (research/listening): Chatterbox Turbo voices, a mix of Indian",
+    "and foreign accents, mostly Indian. `cast` maps an M06 persona id to a",
+    "voice; a persona not listed here is matched by its own voice_id (accent",
+    "from the locale, register from the kind), then falls back to `default`.",
+    "Every voice carries its source, licence and the credit its licence asks for.",
+    "2026-10-06: foreign voices picked by the team - the Chatterbox voice and DailyTalk speaker 0."
+  ],
+  "default": "chatterbox-default",
+  "cast": {
+    "friendly_recruiter": "indictts-123823",
+    "hr_generalist": "indictts-017689",
+    "bar_raiser": "indictts-022743",
+    "professor": "indictts-103607",
+    "impatient_senior": "indictts-063175",
+    "methodical_engineer": "chatterbox-default",
+    "startup_founder": "dailytalk-0"
+  },
+  "voices": {
+    "indictts-123823": {
+      "label": "Indian voice 3",
+      "accent": "indian",
+      "register": "higher",
+      "pitch_hz": 230,
+      "source": "IndicTTS English (SPRINGLab/IndicTTS-English, offset 123823)",
+      "licence": "CC BY 4.0",
+      "credit": "IndicTTS, SMT Lab, IIT Madras"
+    },
+    "indictts-017689": {
+      "label": "Indian voice 1",
+      "accent": "indian",
+      "register": "higher",
+      "pitch_hz": 180,
+      "source": "IndicTTS English (SPRINGLab/IndicTTS-English, offset 17689)",
+      "licence": "CC BY 4.0",
+      "credit": "IndicTTS, SMT Lab, IIT Madras"
+    },
+    "indictts-022743": {
+      "label": "Indian voice 5",
+      "accent": "indian",
+      "register": "lower",
+      "pitch_hz": 111,
+      "source": "IndicTTS English (SPRINGLab/IndicTTS-English, offset 22743)",
+      "licence": "CC BY 4.0",
+      "credit": "IndicTTS, SMT Lab, IIT Madras"
+    },
+    "indictts-103607": {
+      "label": "Indian voice 6",
+      "accent": "indian",
+      "register": "lower",
+      "pitch_hz": 120,
+      "source": "IndicTTS English (SPRINGLab/IndicTTS-English, offset 103607)",
+      "licence": "CC BY 4.0",
+      "credit": "IndicTTS, SMT Lab, IIT Madras"
+    },
+    "indictts-063175": {
+      "label": "Indian voice 4",
+      "accent": "indian",
+      "register": "lower",
+      "pitch_hz": 105,
+      "source": "IndicTTS English (SPRINGLab/IndicTTS-English, offset 63175)",
+      "licence": "CC BY 4.0",
+      "credit": "IndicTTS, SMT Lab, IIT Madras"
+    },
+    "dailytalk-0": {
+      "label": "Conversational voice A",
+      "accent": "foreign",
+      "register": "lower",
+      "pitch_hz": 132,
+      "source": "DailyTalk speaker 0 (via DynamicSuperb/DialogueActClassification_DailyTalk)",
+      "licence": "CC BY-SA 4.0, academic use",
+      "credit": "DailyTalk, Lee et al., ICASSP 2023"
+    },
+    "chatterbox-default": {
+      "label": "Chatterbox voice",
+      "accent": "foreign",
+      "register": "higher",
+      "pitch_hz": 236,
+      "source": "Chatterbox Turbo's built-in voice, re-referenced from its own output",
+      "licence": "MIT",
+      "credit": "Chatterbox, Resemble AI"
+    }
+  }
+}

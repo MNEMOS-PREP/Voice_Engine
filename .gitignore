@@ -27,6 +27,9 @@ keys.txt
 # definition.
 .run/
 
+# The server voice's line cache (tts.py): regenerated on demand.
+.tts_cache/
+
 # ── Interview data ───────────────────────────────────────────────────────
 # Transcripts, session exports and any audio from a session are a real
 # student's words. Local dev databases are already covered by *.db above; this

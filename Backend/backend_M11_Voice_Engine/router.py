@@ -20,11 +20,11 @@ from ai_core.dependencies import DependencyStatus
 from ai_core.guard import require_role
 from ai_core.identity import Principal, Role
 from ai_core.timeutil import utcnow
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
 
-from . import ledger
+from . import ledger, tts
 from .access import enforce_access
 from .dependencies import deps
 from .models import LineTiming
@@ -55,7 +55,8 @@ class LineTimingIn(BaseModel):
 
     id: uuid.UUID
     key: str = Field(min_length=1, max_length=200)
-    tier: Literal["browser"] = "browser"
+    #: Which voice spoke it: the browser's own, or this module's (tts.py).
+    tier: Literal["browser", "server"] = "browser"
     voice_name: str | None = Field(default=None, max_length=200)
     rate: float | None = Field(default=None, ge=0.1, le=10)
     line_chars: int = Field(ge=0, le=50_000)
@@ -176,6 +177,105 @@ def timings_summary(
         no_audio=summary.no_audio,
         stops=summary.stops,
         voices=summary.voices,
+    )
+
+
+# ─────────────────────────────────────────────────────────────────────────
+#  The interviewer's voice, made here (tts.py; TODO §0, 2026-10-06)
+# ─────────────────────────────────────────────────────────────────────────
+
+
+class EngineOut(BaseModel):
+    #: "off" (not installed or turned off) · "loading" · "ready" · "failed".
+    state: Literal["off", "loading", "ready", "failed"]
+    reason: str
+    precision: str
+    model: str
+
+
+class VoiceOut(BaseModel):
+    key: str
+    label: str
+    accent: str
+    register: str
+    pitch_hz: int
+    source: str
+    licence: str
+    credit: str
+
+
+class CastOut(BaseModel):
+    default: str
+    #: M06 persona id → voice key.
+    cast: dict[str, str]
+    voices: list[VoiceOut]
+
+
+class SpeakIn(BaseModel):
+    """One sentence to say. The browser splits a line into sentences
+    (`splitSentences`), so the first is heard while the next is made."""
+
+    text: str = Field(min_length=1, max_length=400)
+    persona_id: str | None = Field(default=None, max_length=64)
+    voice_id: str | None = Field(default=None, max_length=40)
+    #: A voice by its key — the voice check plays a specific one.
+    voice: str | None = Field(default=None, max_length=64)
+
+
+@router.get("/voice/engine", response_model=EngineOut, tags=["voice"])
+def voice_engine() -> EngineOut:
+    """Whether the server voice can speak — a room asks once, and uses it for
+    the whole interview or not at all, so the voice never changes mid-way."""
+    e = tts.engine()
+    e.start()  # idempotent: the first question wakes it if boot did not
+    return EngineOut(state=e.state, reason=e.reason, precision=e.precision, model=tts.MODEL_ID)
+
+
+@router.get("/voice/cast", response_model=CastOut, tags=["voice"])
+def voice_cast() -> CastOut:
+    """Who speaks for whom, and where each voice comes from."""
+    cast = tts.engine().cast
+    return CastOut(
+        default=cast.default,
+        cast=cast.cast,
+        voices=[
+            VoiceOut(**{k: getattr(v, k) for k in VoiceOut.model_fields})
+            for v in cast.voices.values()
+        ],
+    )
+
+
+@router.post(
+    "/voice/speak",
+    tags=["voice"],
+    response_class=Response,
+    responses={200: {"content": {"audio/wav": {}}, "description": "16-bit PCM WAV, 24 kHz"}},
+)
+def speak(body: SpeakIn, principal: Principal | None = Depends(enforce_access)) -> Response:
+    """One sentence, in the voice cast for the interviewer. 503 when the server
+    voice cannot speak — the browser's own voice says the line instead."""
+    if principal is None:
+        # Synthesis is the heaviest thing this module does; not for anybody.
+        raise HTTPException(status_code=401, detail="Not signed in.")
+    e = tts.engine()
+    voice = e.cast.resolve(persona_id=body.persona_id, voice_id=body.voice_id, voice=body.voice)
+    try:
+        audio, cached, ms = e.speak(body.text, voice)
+    except tts.EngineUnavailable as exc:
+        raise HTTPException(
+            status_code=503, detail=f"The interviewer's voice is not ready: {exc}"
+        ) from None
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+    return Response(
+        content=audio,
+        media_type="audio/wav",
+        headers={
+            "X-Voice": voice.key,
+            "X-Cache": "hit" if cached else "miss",
+            "X-Synth-Ms": str(ms),
+            "Cache-Control": "private, max-age=86400",
+        },
     )
 
 

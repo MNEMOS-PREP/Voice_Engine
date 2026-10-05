@@ -20,7 +20,7 @@ from ai_core.schema_repair import ensure_schema
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from . import MODULE_ID
+from . import MODULE_ID, tts
 from .router import router
 
 log = logging.getLogger("uvicorn.error")
@@ -34,6 +34,9 @@ async def lifespan(_app: FastAPI):
     create_all()
     for change in ensure_schema(engine):
         log.info("schema: added missing column %s", change)
+    # The voice model loads in the background (~20 s once downloaded); the
+    # module answers meanwhile, and /v1/voice/engine says "loading".
+    tts.engine().start()
     log.info("M11 ready")
     yield
 
