@@ -1,0 +1,12 @@
+/**
+ * M11 — Voice & Conversation Engine · public surface.
+ *
+ * The interviewer's voice itself is not exported here: it is `@ai/core`'s
+ * `useInterviewerVoice` (v0.14.0), M11's code kept in core because more than
+ * one module speaks. What this package adds is M11's own screens.
+ */
+
+export { m11Routes } from "./routes";
+export { VoiceCheck } from "./components/VoiceCheck";
+export { m11Keys, useDeps, useInterviewers } from "./api";
+export type { Interviewer } from "./types";

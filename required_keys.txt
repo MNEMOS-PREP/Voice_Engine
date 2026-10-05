@@ -1,0 +1,24 @@
+===============================================================================
+  M11 - VOICE & CONVERSATION ENGINE   -   REQUIRED KEYS
+===============================================================================
+
+  None yet. The module boots, the whole test suite passes and the voice check
+  plays with nothing set: the interviewer's voice is the browser's own speech
+  (spec Revision 2, tier 0), which needs no key and sends nothing anywhere.
+
+  Copy this file to keys.txt (gitignored) when a key below is read.
+
+-------------------------------------------------------------------------------
+  SERVER SPEECH RECOGNITION (spec 6.7, build order day 4)
+-------------------------------------------------------------------------------
+
+  NOT READ YET.
+
+  GROQ_API_KEYS     One or more Groq keys, comma-separated - the same keys
+                    M06 already reads from ..\keys.txt.
+
+                    With it: answers are transcribed by whisper-large-v3-turbo
+                    with word timestamps (free tier: 2,000 requests a day).
+
+                    Without it: the browser's own recognition (en-IN) takes the
+                    spoken answer, as M06 does today - no word timestamps.

@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-interviewer-backend"
+version = "0.1.0"
+description = "AI Interviewer / placement preparation platform — M11 Voice & Conversation Engine"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.115",
+    "sqlmodel>=0.0.22",
+    "uvicorn[standard]>=0.30",
+    # Shared platform foundation, PINNED BY TAG: tracking main is how you get a
+    # surprise breakage on a Tuesday. v0.14.0 is where the voice client moved
+    # into core; the Python half is the identity guard and the stranger tests.
+    "ai-core @ git+https://github.com/MNEMOS-PREP/Platform_Core@v0.14.0#subdirectory=python",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "httpx>=0.27",
+    "ruff>=0.6",
+]
+
+[tool.setuptools.packages.find]
+# This repo holds ONE module. Shared wiring comes from the `ai-core` package.
+include = ["backend_*"]
+namespaces = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+# `N` (pep8-naming) is deliberately NOT selected: the package is named
+# backend_M11_Voice_Engine to match plan_in_depth/ and Frontend/.
+
+[tool.ruff.lint.per-file-ignores]
+# `Depends(...)` / `Query(...)` in argument defaults is the canonical FastAPI
+# idiom, not the mutable-default bug B008 exists to catch.
+"**/router.py" = ["B008"]
+"**/access.py" = ["B008"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["backend_M11_Voice_Engine"]
+markers = [
+    "gate: release-blocking acceptance gate (spec §13)",
+]

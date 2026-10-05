@@ -1,0 +1,14 @@
+/*
+  CRITICAL - do not split this import out. Tailwind v4 generates utilities
+  from `@theme` only for files inside the entry that imports Tailwind;
+  importing core's stylesheet separately emits the custom properties but never
+  the utilities built from them (M06's theme.css has the long version).
+*/
+@import "@ai/core/styles.css";
+
+/*
+  M11 - Voice & Conversation Engine. No design layer of its own yet: the
+  voice check is a settings-like page and uses core's vocabulary as it is.
+  The live voice surface (captions, the listening state) will use core's
+  `--color-session-*` palette, as M06's room does.
+*/

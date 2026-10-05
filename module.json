@@ -1,0 +1,53 @@
+{
+  "module": "M11",
+  "name": "Voice & Conversation Engine",
+  "spec": "plan_in_depth/M11_Voice_Engine.md",
+  "repo": "https://github.com/MNEMOS-PREP/Voice_Engine",
+  "owner": "E2",
+  "phase": "3",
+  "ports": {
+    "backend": 8111,
+    "frontend": 5211
+  },
+  "core": {
+    "repo": "https://github.com/MNEMOS-PREP/Platform_Core",
+    "version": "v0.14.0"
+  },
+
+  "_comment_core": [
+    "The browser half of the voice - useInterviewerVoice and the functions",
+    "that choose and shape a voice - is M11's code living in @ai/core since",
+    "v0.14.0, because more than one module speaks (M06 now, M14 next). This",
+    "repo holds the server half and M11's own screens."
+  ],
+
+  "_comment_depends_on": [
+    "Nothing here is required to START, and nothing is marked required: true.",
+    "Voice is never the only way through an interview: every spoken line is on",
+    "screen (FR-11.18), so an M11 outage costs sound, never a session.",
+    "`on_missing` is shown to a student: write a sentence they can act on.",
+    "Override any base_url without editing this file: M06_BASE_URL=http://..."
+  ],
+  "depends_on": [
+    {
+      "module": "M06",
+      "name": "Mock Interview Engine",
+      "repo": "https://github.com/MNEMOS-PREP/Mock_Interview_Engine",
+      "reason": "the interviewers M11 gives a voice to - each persona's voice_id and opening line - and the interviews the latency ledger is kept for",
+      "on_missing": "The interviewers aren't available right now, so the voice check plays one sample voice instead of each of theirs.",
+      "base_url": "http://127.0.0.1:8106",
+      "health_path": "/health",
+      "required": false
+    }
+  ],
+
+  "_comment_feeds": [
+    "These consume M11. They are NOT dependencies - M11 never blocks on them."
+  ],
+  "feeds": [
+    { "module": "M06", "takes": "the interviewer's voice in the browser (@ai/core), and later streamed speech and word-timed transcripts" },
+    { "module": "M12", "takes": "per-turn audio aligned to the transcript clock, once stored with consent (FR-11.19)" },
+    { "module": "M13", "takes": "low-confidence spans to exclude from evidence citation (FR-11.15)" },
+    { "module": "M14", "takes": "the same voice client, for the discussion room" }
+  ]
+}

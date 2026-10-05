@@ -1,0 +1,50 @@
+===============================================================================
+  M11 - VOICE & CONVERSATION ENGINE - DEPENDENCIES
+  Repo: https://github.com/MNEMOS-PREP/Voice_Engine
+  Spec: plan_in_depth/M11_Voice_Engine.md   (Revision 2)
+  Last updated: 2026-10-05
+===============================================================================
+
+This repo holds ONE module. It clones, installs and runs on its own - you do
+not need the other 18 to work on it.
+
+The machine-readable version of this file is `module.json`. The backend reads
+it at startup to probe upstreams; if you edit one, edit both.
+
+
+WHAT THIS MODULE NEEDS (upstream)
+-------------------------------------------------------------------------------
+Nothing here is required to START, and nothing is marked `required: true`.
+Every spoken line is also on screen (FR-11.18), so voice is never the only
+way through an interview, and an outage here costs sound, never a session.
+
+  MODULE  WHAT WE USE IT FOR              IF MISSING
+  ------  -----------------------------   ---------------------------------
+  M06     the interviewers M11 voices -   The voice check plays one sample
+          each persona's voice_id and     voice instead of each
+          opening line - and the          interviewer's.
+          interviews the latency ledger
+          is kept for
+
+
+WHAT IT SHARES WITH CORE
+-------------------------------------------------------------------------------
+@ai/core v0.14.0 carries the browser half of the voice (src/voice/): M11's
+code, kept in core because M06's room and M14's discussion room speak too.
+
+
+WHO USES THIS MODULE (downstream)
+-------------------------------------------------------------------------------
+  M06   the interviewer's voice in the room (through @ai/core)
+  M12   per-turn audio aligned to the transcript clock, once stored (FR-11.19)
+  M13   low-confidence spans to exclude from evidence citation (FR-11.15)
+  M14   the same voice client, for the discussion room
+
+
+RUNNING IT
+-------------------------------------------------------------------------------
+  start.bat            this module and any sibling checked out next door
+  start_voice.bat      this module only
+  start.bat check      prerequisites, launch nothing
+
+  Ports (PORTS.txt):   API 8111, web 5211, WebSocket 8211 (reserved)
