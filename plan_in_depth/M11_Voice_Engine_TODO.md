@@ -1,6 +1,6 @@
 # M11 — TODO · Voice & Conversation Engine
 
-> **Completion: 9%** — 0 of 22 functional requirements met, 4 partly (FR-11.7, 11.8, 11.13, 11.21). **Day 1 of 14 (Revision 2) done, 2026-10-05:** the repo's frame and the voice check; the browser voice client moved from M06 to `@ai/core` v0.14.0 as M11's code, so the four FRs it partly meets are counted here now (§1b). The spec has a Revision 2 (§0 of the spec): browser-first and free. The requirement count is the spec's own, so this is a measure of scope ahead rather than of progress behind.
+> **Completion: 9%** — 0 of 22 functional requirements met, 4 partly (FR-11.7, 11.8, 11.13, 11.21). **Days 1–2 of 14 (Revision 2) done, 2026-10-05:** the repo's frame, the voice check and the latency ledger; the browser voice client moved from M06 to `@ai/core` v0.14.0 as M11's code, so the four FRs it partly meets are counted here now (§1b). The spec has a Revision 2 (§0 of the spec): browser-first and free. The requirement count is the spec's own, so this is a measure of scope ahead rather than of progress behind.
 >
 > _Method: `(met + ½ × partial) ÷ total`, counted from the spec, 2026-08-28. One measure applied the same way to all nineteen modules so they compare; it counts requirements, not screens or gates._
 
@@ -20,6 +20,34 @@ Task list for taking **M11 — Voice & Conversation Engine** to 100% of [M11_Voi
 Legend: ✅ done · 🟡 partly done · ⬜ not started
 
 ---
+
+### 2026-10-05 — Day 2: the latency ledger, and the first honest numbers
+
+- ✅ **The browser records every spoken line** (Platform_Core `6791beb`, tag
+  **v0.15.0**): landed, first audio, ended, or stop asked / stopped and why
+  (mic, send, pause, end, repeat, off, leave; `barge_in` reserved for day 3),
+  and how much was heard — through the word covering that point (§6.5). Rooms
+  mark `answer_sent` and `first_token`. 7 tests (`npm test`).
+- ✅ **M11 keeps them** (Voice_Engine `1f8ffe1`): `m11_line_timing`, marks not
+  durations; `ledger.py` derives §11's stages on read and holds the targets;
+  `POST/GET /v1/voice/{session_id}/timings` (idempotent on the browser's line
+  id; the student who posts an interview's first line owns it; Platform_Core's
+  stranger check pointed at `session_id`); `GET /v1/voice/timings/summary`
+  staff-only, shown to staff on `/voice`. 23 tests; upstream probes stubbed
+  so no test opens a socket.
+- ✅ **M06 wired** (M06 `404647e`): the room passes its interview id, says why
+  it stops the voice, marks the answer and the first token.
+- **First numbers, live** (headless Edge, Neerja online voice, real model,
+  6 lines in 4 interviews): answer sent → first audio p50 **1.11 s**, p95
+  **1.41 s** (AC-11.1's 1.2 s — over); first token p50 718 ms / p95 957 ms;
+  line on screen → first audio ~0.3 s, but **2–3 s for a page's first line**
+  (the online voice's cold start); stop asked → stopped **6–9 ms**.
+- **A false alarm, checked:** after End mid-line the browser was still
+  "speaking" — the session's closing line ("That's time…"), said on purpose.
+  The stop itself took 10 ms.
+- **Next: day 3**, browser VAD barge-in — but see §0's entry of this evening:
+  the voice's realism is now the open question, and its answer may reorder
+  the days after it.
 
 ### 2026-10-05 — Day 1: the frame, and the voice client becomes M11's
 
@@ -92,6 +120,57 @@ The rule we keep arriving at: borrow a **technique**, not a **component**. The
 platform's contracts — character offsets, per-fact provenance, permanent
 evidence — are more demanding than general-purpose tools assume, so integration
 usually costs more than reimplementing the one idea we actually wanted.
+
+**2026-10-05 (evening) — "it sounds like an AI": what makes a voice human.**
+The user's verdict on the browser voice, and the question it opened: not the
+accent — whether it sounds like a person. Researched the same evening; the
+listening test is in `research/listening/` (Voice_Engine).
+
+- **What listeners hear as human** (the research): turns follow each other
+  after ~200 ms on average across 10 languages (Stivers et al., PNAS 2009);
+  natural talk carries ~6 disfluencies per 100 words, and "uh" / "um" are
+  signals of a short / long delay, not noise (Clark & Fox Tree 2002); filled
+  pauses raise perceived authenticity and audible breaths beat silent pauses
+  for naturalness and recall (Székely et al. 2019, 2020); listeners say
+  "mm-hm" on a low-pitch cue, ~700 ms after it (Ward & Tsukahara 2000).
+- **The deciding result — Sesame's CSM:** blind raters could not tell its
+  single lines from real recordings (≈ 50/50), but with 90 s of conversation
+  around them they consistently picked the human. The gap left is
+  conversational behaviour — timing, pauses, interruptions, emphasis — not
+  timbre. So: voice AND behaviour, or the uncanny valley.
+- **Why ours sounds like an AI**, cause by cause: a newsreader-style engine;
+  our own sentence-by-sentence utterances (prosody resets, a gap per
+  sentence); lines written for the eye, not the ear; 1.1–1.4 s answer →
+  voice and a 2–3 s cold start on a page's first line (day 2's ledger); no
+  backchannels; no breaths, "hmm", laughter.
+- **Engines, ranked by blind "more natural" votes** (Artificial Analysis
+  Speech Arena, Sep 2026): ElevenLabs v4 1321 · Qwen-Audio 3.1 1292 ·
+  Cartesia Sonic 3.6 1278 · **Gemini 3.8 Flash TTS 1275** — free tier per
+  third-party guides, ≈ $0.81 / audio hour paid; a `style` field and inline
+  `<breath>` `<chuckle>` `<sigh>` `<short pause>` `<throat-clearing>`; Voice
+  Design (a voice from a description) and Voice Replication (from reference
+  AND consent audio). Groq Orpheus is on our key but needs the org admin to
+  accept its terms; $22 / M chars.
+- **Open weights:** best ranked are non-commercial (Breeze TTS 2, Fish S2,
+  Voxtral — research / NC licences). **Chatterbox Turbo (MIT, 350M)** clones
+  from ~10 s and performs `[laugh]` `[chuckle]` `[cough]`, watermarked —
+  measured on this laptop (i7-1260P, CPU): **≈ 4.5× slower than real time**
+  (a 7 s line in ~30 s). Too slow to voice live lines here; fine for
+  pre-rendering fixed lines once.
+- **Cloning a voice from an open dataset** (the user's question): technically
+  the same trick. Licences differ — LibriTTS-R / Hi-Fi TTS CC BY 4.0 (but
+  audiobook narration, and a clone copies the style of its reference),
+  DailyTalk CC BY-SA 4.0 (conversational, recorded for conversational TTS),
+  Expresso CC BY-NC 4.0 (improvised dialogue, 26 styles). A dataset licence
+  is not the speaker's consent to become a product voice (Hugging Face,
+  "Voice cloning with consent"); a celebrity or character voice is out —
+  Arijit Singh v. Codible Ventures (Bombay HC, July 2024) enjoined AI voice
+  cloning without consent; India's IT Rules (in force 20 Feb 2026) require
+  synthetic audio that passes for real to be labelled.
+- **Open decisions (the user's):** a Gemini key for the test; accepting
+  Orpheus's terms; real human voices — who records, with consent — which
+  would revise FR-11.21's "no cloning of real people" to "only with written
+  and recorded consent, never a public figure, revocable, labelled as AI".
 
 **2026-10-05 — the free field, by component.** Adopt = in the Revision 2
 build; evaluate = measured against the alternatives before choosing; avoid =
@@ -188,8 +267,8 @@ Spec §13. A **[GATE]** is release-blocking; the rest are tracked.
 
 | AC | | Target |
 |---|---|---|
-| AC-11.1 **[GATE]** | ⬜ p95 end-of-speech → first audio | ≤ 1.2 s |
-| AC-11.2 **[GATE]** | ⬜ Barge-in stop | ≤ 350 ms |
+| AC-11.1 **[GATE]** | ⬜ p95 end-of-speech → first audio — measured from "answer sent": 1.41 s (n=2), over | ≤ 1.2 s |
+| AC-11.2 **[GATE]** | ⬜ Barge-in stop — a stop asked by mic / end takes 6–9 ms in the browser; true barge-in needs day 3's VAD | ≤ 350 ms |
 | AC-11.3 **[GATE]** | ⬜ Premature cut-off rate | < 3% |
 | AC-11.4 **[GATE]** | ⬜ ASR WER gap between accent groups | ≤ 8 points |
 | AC-11.5 | ⬜ Overall WER on pilot audio | ≤ 12% |
@@ -237,7 +316,7 @@ Spec §5 declares 7 types. None exist.
 | `ASRResult` | ⬜ | Not written |
 | `UtteranceCompleteness` | ⬜ | Not written |
 | `TTSRequest` | ⬜ | Not written |
-| `TurnTiming` | ⬜ | Not written |
+| `TurnTiming` | 🟡 | The browser's marks and §11's stages (`m11_line_timing`, `ledger.py`); `vad_decision` and `asr_final` wait for days 3–4 |
 
 ---
 
@@ -285,7 +364,7 @@ Revision 2 removes. Days are the spec's unit — a focused day each.
 | Day | Task |
 |---|---|
 | 1 | ✅ Repo scaffold — `module.json`, ports from PORTS.txt, identity — and M06's `voice-core.ts` / `voice.ts` as the client baseline (moved to `@ai/core` v0.14.0; the voice check at `/voice`) |
-| 2 | The latency ledger (`TurnTiming`) in the browser from day one; measure M06's browser voice honestly: first audio after a line lands, stop time after the mic |
+| 2 | ✅ The latency ledger (`TurnTiming`) in the browser from day one; measure M06's browser voice honestly: first audio after a line lands, stop time after the mic (Core v0.15.0, M11 `1f8ffe1`; p95 answer → audio 1.41 s, cold start 2–3 s, stop 6–9 ms) |
 | 3 | Browser VAD (Silero via `ricky0123/vad`): the student starting to speak stops playback client-side, and the server is told to cancel |
 | 4 | ASR route on Groq `whisper-large-v3-turbo` with word timestamps (confirm the API returns word granularity); browser recognition stays as the no-key fallback |
 | 5 | Smart Turn v3.2 for semantic endpointing, with the adaptive VAD threshold (FR-11.4, FR-11.5); checked on 200 labelled endings of real answers |
