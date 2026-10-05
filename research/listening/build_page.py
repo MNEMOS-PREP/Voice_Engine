@@ -62,6 +62,8 @@ def main() -> None:
             "source": source_of(c),
             "label": SOURCE_LABEL.get(source_of(c), source_of(c)),
             "rtf": c.get("rtf"),
+            "audio_s": c.get("audio_s"),
+            "took_s": c.get("took_s"),
             "direction": c.get("direction"),
         }
         for c in clips
@@ -117,7 +119,7 @@ TEMPLATE = r"""<!doctype html>
   <div id="sections"></div>
   <div class="tally" id="tally"></div>
   <p class="note">The cloned voices are DailyTalk's two speakers (Lee et al., ICASSP 2023; CC BY-SA 4.0), recorded for conversational speech-synthesis research, cloned here from about 12 seconds of their own conversation. Research only: a dataset licence is not a speaker's consent to become a product voice. Chatterbox marks every clip with an inaudible watermark.</p>
-  <p class="note">"Written" lines are what the interviewer writes today; "spoken" lines say the same thing the way people talk. Comparing the two shows how much is the voice and how much is the wording. Speed is the time to make a clip on this laptop's CPU divided by the clip's length: under 1 can keep up with a conversation.</p>
+  <p class="note">"Written" lines are what the interviewer writes today; "spoken" lines say the same thing the way people talk. Comparing the two shows how much is the voice and how much is the wording. Under each clip: how long this laptop's CPU took to make it. Every clip plays at normal speed; a voice that takes longer to make than to play cannot answer live without a faster computer.</p>
 </main>
 <script type="application/json" id="data">__DATA__</script>
 <script>
@@ -153,7 +155,10 @@ function render() {
       list.forEach((c, i) => {
         const row = document.createElement("div"); row.className = "row";
         const name = blind ? `Voice ${String.fromCharCode(65 + i)}` : (c.today ? "Today · Edge's Neerja voice (live)" : c.label);
-        const meta = !blind && !c.today && c.rtf != null ? `speed ${c.rtf}× real time${c.rtf <= 1 ? " — keeps up" : " — slower than speech"}` : "";
+        // How long this laptop took to MAKE the clip — not how fast it plays.
+        const meta = !blind && !c.today && c.took_s != null
+          ? `took ${Math.round(c.took_s)} s to make these ${Math.round(c.audio_s)} s of speech on this laptop` + (c.rtf > 1 ? ` (${c.rtf}× too slow to use live)` : " (fast enough to use live)")
+          : "";
         const key = c.today ? "today" : c.source;
         row.innerHTML = `<div><div class="who">${name}</div><div class="meta">${meta}</div></div>
           <label class="vote"><input type="radio" name="${lineId}" value="${key}"> most human</label>`;
