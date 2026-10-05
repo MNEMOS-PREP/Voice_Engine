@@ -121,6 +121,38 @@ platform's contracts — character offsets, per-fact provenance, permanent
 evidence — are more demanding than general-purpose tools assume, so integration
 usually costs more than reimplementing the one idea we actually wanted.
 
+**2026-10-06 — the user's verdict, and a mostly-Indian roster.** After the
+blind listening test: Chatterbox's built-in voice and the DailyTalk clones
+were "pretty close — use both"; the roster should mix Indian and foreign
+accents, mostly Indian. The engine is therefore **Chatterbox Turbo (MIT)**,
+with cloned voices; persona `voice_id`s already carry the accent (`en-IN-…`,
+and `en-US-…` / `en-GB-…` for the foreign few).
+
+- **Indian voices:** IndicTTS (SMT Lab, IIT Madras; MeitY consortium) —
+  English recorded by native speakers of Indian languages *for speech
+  synthesis*, CC BY 4.0 (credit "IndicTTS, SMT Lab, IIT Madras"), confirmed on
+  IndiaAI's AIKosh. Read via `SPRINGLab/IndicTTS-English` (151,640 utterances,
+  no speaker labels): 29 samples at even offsets → **21 distinct voices** by
+  Chatterbox's own speaker encoder (cosine > 0.86 = same voice) → six cast by
+  pitch band and mutual difference (`pick_voices.py`), 18 clips, all but one
+  read back right by Whisper (one garbled the word under a `[chuckle]`).
+  Trade-off: IndicTTS is READ speech, so its clones lean narration;
+  conversational Indian references would come from Svarah (AI4Bharat,
+  CC BY 4.0, spontaneous speech, 117 speakers — gated on Hugging Face, the
+  user's account must accept) or the team's own recorded voices.
+- **Speed, measured (i7-1260P CPU):** PyTorch ≈ 7–9 speech tokens/s (real
+  time needs 25) → 4.5× too slow. ResembleAI's ONNX export: **q4 27.2 tok/s**
+  (language model 0.9× real time, one-step decoder +0.47× → 1.4× overall),
+  fp32 17.6 tok/s (1.9×), q8 2.0 tok/s (pathological here). All read back
+  right; greedy decoding (the model card's) speaks slower than PyTorch's
+  sampling. **Not live on a laptop CPU** — an 8 s line needs ~3 s of buffer.
+  Live lines need a GPU server (one cohort-wide box); fixed lines pre-render
+  on CPU.
+- **Idea — speculative synthesis:** M05's next bank question is one of a few
+  candidates known before the student finishes answering; rendering those
+  while the student talks (60–120 s of slack) would make most questions
+  instant even on CPU. Probes adapted to the answer cannot be pre-rendered.
+
 **2026-10-05 (evening) — "it sounds like an AI": what makes a voice human.**
 The user's verdict on the browser voice, and the question it opened: not the
 accent — whether it sounds like a person. Researched the same evening; the
