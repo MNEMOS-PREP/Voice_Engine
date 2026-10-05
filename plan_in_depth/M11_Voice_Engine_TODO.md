@@ -93,6 +93,57 @@ platform's contracts — character offsets, per-fact provenance, permanent
 evidence — are more demanding than general-purpose tools assume, so integration
 usually costs more than reimplementing the one idea we actually wanted.
 
+**2026-10-05 (evening) — "it sounds like an AI": what makes a voice human.**
+The user's verdict on the browser voice, and the question it opened: not the
+accent — whether it sounds like a person. Researched the same evening; the
+listening test is in `research/listening/` (Voice_Engine).
+
+- **What listeners hear as human** (the research): turns follow each other
+  after ~200 ms on average across 10 languages (Stivers et al., PNAS 2009);
+  natural talk carries ~6 disfluencies per 100 words, and "uh" / "um" are
+  signals of a short / long delay, not noise (Clark & Fox Tree 2002); filled
+  pauses raise perceived authenticity and audible breaths beat silent pauses
+  for naturalness and recall (Székely et al. 2019, 2020); listeners say
+  "mm-hm" on a low-pitch cue, ~700 ms after it (Ward & Tsukahara 2000).
+- **The deciding result — Sesame's CSM:** blind raters could not tell its
+  single lines from real recordings (≈ 50/50), but with 90 s of conversation
+  around them they consistently picked the human. The gap left is
+  conversational behaviour — timing, pauses, interruptions, emphasis — not
+  timbre. So: voice AND behaviour, or the uncanny valley.
+- **Why ours sounds like an AI**, cause by cause: a newsreader-style engine;
+  our own sentence-by-sentence utterances (prosody resets, a gap per
+  sentence); lines written for the eye, not the ear; 1.1–1.4 s answer →
+  voice and a 2–3 s cold start on a page's first line (day 2's ledger); no
+  backchannels; no breaths, "hmm", laughter.
+- **Engines, ranked by blind "more natural" votes** (Artificial Analysis
+  Speech Arena, Sep 2026): ElevenLabs v4 1321 · Qwen-Audio 3.1 1292 ·
+  Cartesia Sonic 3.6 1278 · **Gemini 3.8 Flash TTS 1275** — free tier per
+  third-party guides, ≈ $0.81 / audio hour paid; a `style` field and inline
+  `<breath>` `<chuckle>` `<sigh>` `<short pause>` `<throat-clearing>`; Voice
+  Design (a voice from a description) and Voice Replication (from reference
+  AND consent audio). Groq Orpheus is on our key but needs the org admin to
+  accept its terms; $22 / M chars.
+- **Open weights:** best ranked are non-commercial (Breeze TTS 2, Fish S2,
+  Voxtral — research / NC licences). **Chatterbox Turbo (MIT, 350M)** clones
+  from ~10 s and performs `[laugh]` `[chuckle]` `[cough]`, watermarked —
+  measured on this laptop (i7-1260P, CPU): **≈ 4.5× slower than real time**
+  (a 7 s line in ~30 s). Too slow to voice live lines here; fine for
+  pre-rendering fixed lines once.
+- **Cloning a voice from an open dataset** (the user's question): technically
+  the same trick. Licences differ — LibriTTS-R / Hi-Fi TTS CC BY 4.0 (but
+  audiobook narration, and a clone copies the style of its reference),
+  DailyTalk CC BY-SA 4.0 (conversational, recorded for conversational TTS),
+  Expresso CC BY-NC 4.0 (improvised dialogue, 26 styles). A dataset licence
+  is not the speaker's consent to become a product voice (Hugging Face,
+  "Voice cloning with consent"); a celebrity or character voice is out —
+  Arijit Singh v. Codible Ventures (Bombay HC, July 2024) enjoined AI voice
+  cloning without consent; India's IT Rules (in force 20 Feb 2026) require
+  synthetic audio that passes for real to be labelled.
+- **Open decisions (the user's):** a Gemini key for the test; accepting
+  Orpheus's terms; real human voices — who records, with consent — which
+  would revise FR-11.21's "no cloning of real people" to "only with written
+  and recorded consent, never a public figure, revocable, labelled as AI".
+
 **2026-10-05 — the free field, by component.** Adopt = in the Revision 2
 build; evaluate = measured against the alternatives before choosing; avoid =
 licence or hardware rules it out.

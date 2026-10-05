@@ -1,0 +1,54 @@
+{
+  "model": "ResembleAI/chatterbox-turbo",
+  "load_s": 305.0,
+  "clips": [
+    {
+      "file": "chatterbox_turbo_greeting_written.wav",
+      "line": "greeting_written",
+      "text": "Hi, I'm Meera, thanks for making the time. We'll keep this conversational. Let's start with something easy.",
+      "audio_s": 6.6,
+      "took_s": 48.9,
+      "rtf": 7.41
+    },
+    {
+      "file": "chatterbox_turbo_greeting_spoken.wav",
+      "line": "greeting_spoken",
+      "text": "Hi! I'm Meera. Thanks for making the time. So, we'll keep this pretty relaxed, okay? Let's start with something easy.",
+      "audio_s": 7.56,
+      "took_s": 34.99,
+      "rtf": 4.63
+    },
+    {
+      "file": "chatterbox_turbo_question_written.wav",
+      "line": "question_written",
+      "text": "Two keys hash to the same bucket. Walk me through how a hash map can handle that, and what it costs.",
+      "audio_s": 6.12,
+      "took_s": 28.82,
+      "rtf": 4.71
+    },
+    {
+      "file": "chatterbox_turbo_question_spoken.wav",
+      "line": "question_spoken",
+      "text": "Okay, so. Say two keys land in the same bucket. How would a hash map deal with that? And, um, what does it cost you?",
+      "audio_s": 8.2,
+      "took_s": 34.48,
+      "rtf": 4.2
+    },
+    {
+      "file": "chatterbox_turbo_followup_spoken.wav",
+      "line": "followup_spoken",
+      "text": "Hmm, right, chaining. And if one bucket just keeps getting longer, what happens to your lookups?",
+      "audio_s": 6.24,
+      "took_s": 28.39,
+      "rtf": 4.55
+    },
+    {
+      "file": "chatterbox_turbo_followup_sounds.wav",
+      "line": "followup_sounds",
+      "text": "[chuckle] Right, chaining, the classic. Okay. And if one bucket just keeps getting longer, what happens to your lookups?",
+      "audio_s": 7.68,
+      "took_s": 34.28,
+      "rtf": 4.46
+    }
+  ]
+}

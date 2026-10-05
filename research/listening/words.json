@@ -1,0 +1,62 @@
+[
+  {
+    "file": "chatterbox_turbo_greeting_written.wav",
+    "match": 0.882,
+    "heard": "Hi, I'm Mira. Thanks for making my time. We'll keep this conversational. Let's start with something easy."
+  },
+  {
+    "file": "chatterbox_turbo_greeting_spoken.wav",
+    "match": 0.95,
+    "heard": "Hi, I'm Mira. Thanks for making the time. So we'll keep this pretty relaxed, okay? Let's start with something easy."
+  },
+  {
+    "file": "chatterbox_turbo_question_written.wav",
+    "match": 0.927,
+    "heard": "Two keys hash to the same bucket. Walk me through how a HashMap can handle that and what it costs."
+  },
+  {
+    "file": "chatterbox_turbo_question_spoken.wav",
+    "match": 0.939,
+    "heard": "Okay, so say two keys land in the same bucket. How would a HashMap deal with that? And, um, what does it cost you?"
+  },
+  {
+    "file": "chatterbox_turbo_followup_spoken.wav",
+    "match": 1.0,
+    "heard": "Hmm, right, chaining. And if one bucket just keeps getting longer, what happens to your lookups?"
+  },
+  {
+    "file": "chatterbox_turbo_followup_sounds.wav",
+    "match": 1.0,
+    "heard": "Right chaining, the classic. Okay, and if one bucket just keeps getting longer, what happens to your lookups?"
+  },
+  {
+    "file": "chatterbox_clone_dailytalk0_greeting_spoken.wav",
+    "match": 0.95,
+    "heard": "Hi, I'm Mira. Thanks for making the time. So we'll keep this pretty relaxed, okay? Let's start with something easy."
+  },
+  {
+    "file": "chatterbox_clone_dailytalk0_question_spoken.wav",
+    "match": 0.939,
+    "heard": "Okay, so, say two keys land in the same bucket. How would a HashMap deal with that? And, um, what does it cost you?"
+  },
+  {
+    "file": "chatterbox_clone_dailytalk0_followup_sounds.wav",
+    "match": 1.0,
+    "heard": "Right, chaining, the classic. Okay, and if one bucket just keeps getting longer, what happens to your lookups?"
+  },
+  {
+    "file": "chatterbox_clone_dailytalk1_greeting_spoken.wav",
+    "match": 0.95,
+    "heard": "Hi, I'm Mira. Thanks for making the time. So, we'll keep this pretty relaxed, okay? Let's start with something easy."
+  },
+  {
+    "file": "chatterbox_clone_dailytalk1_question_spoken.wav",
+    "match": 0.939,
+    "heard": "Okay, so say two keys land in the same bucket, how would a HashMap deal with that? And, um, what does it cost you?"
+  },
+  {
+    "file": "chatterbox_clone_dailytalk1_followup_sounds.wav",
+    "match": 1.0,
+    "heard": "Right, chaining, the classic. Okay, and if one bucket just keeps getting longer, what happens to your lookups?"
+  }
+]

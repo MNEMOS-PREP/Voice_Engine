@@ -1,0 +1,58 @@
+{
+  "clips": [
+    {
+      "file": "chatterbox_clone_dailytalk0_greeting_spoken.wav",
+      "speaker": "0",
+      "line": "greeting_spoken",
+      "text": "Hi! I'm Meera. Thanks for making the time. So, we'll keep this pretty relaxed, okay? Let's start with something easy.",
+      "audio_s": 7.52,
+      "took_s": 29.63,
+      "rtf": 3.94
+    },
+    {
+      "file": "chatterbox_clone_dailytalk0_question_spoken.wav",
+      "speaker": "0",
+      "line": "question_spoken",
+      "text": "Okay, so. Say two keys land in the same bucket. How would a hash map deal with that? And, um, what does it cost you?",
+      "audio_s": 7.88,
+      "took_s": 36.0,
+      "rtf": 4.57
+    },
+    {
+      "file": "chatterbox_clone_dailytalk0_followup_sounds.wav",
+      "speaker": "0",
+      "line": "followup_sounds",
+      "text": "[chuckle] Right, chaining, the classic. Okay. And if one bucket just keeps getting longer, what happens to your lookups?",
+      "audio_s": 8.64,
+      "took_s": 35.23,
+      "rtf": 4.08
+    },
+    {
+      "file": "chatterbox_clone_dailytalk1_greeting_spoken.wav",
+      "speaker": "1",
+      "line": "greeting_spoken",
+      "text": "Hi! I'm Meera. Thanks for making the time. So, we'll keep this pretty relaxed, okay? Let's start with something easy.",
+      "audio_s": 8.8,
+      "took_s": 45.23,
+      "rtf": 5.14
+    },
+    {
+      "file": "chatterbox_clone_dailytalk1_question_spoken.wav",
+      "speaker": "1",
+      "line": "question_spoken",
+      "text": "Okay, so. Say two keys land in the same bucket. How would a hash map deal with that? And, um, what does it cost you?",
+      "audio_s": 8.68,
+      "took_s": 40.37,
+      "rtf": 4.65
+    },
+    {
+      "file": "chatterbox_clone_dailytalk1_followup_sounds.wav",
+      "speaker": "1",
+      "line": "followup_sounds",
+      "text": "[chuckle] Right, chaining, the classic. Okay. And if one bucket just keeps getting longer, what happens to your lookups?",
+      "audio_s": 8.2,
+      "took_s": 33.73,
+      "rtf": 4.11
+    }
+  ]
+}

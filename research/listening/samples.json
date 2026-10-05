@@ -1,0 +1,10 @@
+{
+  "lines": {
+    "greeting_written": "Hi, I'm Meera, thanks for making the time. We'll keep this conversational. Let's start with something easy.",
+    "greeting_spoken": "Hi! I'm Meera. Thanks for making the time. So, we'll keep this pretty relaxed, okay? Let's start with something easy.",
+    "question_written": "Two keys hash to the same bucket. Walk me through how a hash map can handle that, and what it costs.",
+    "question_spoken": "Okay, so. Say two keys land in the same bucket. How would a hash map deal with that? And, um, what does it cost you?",
+    "followup_spoken": "Hmm, right, chaining. And if one bucket just keeps getting longer, what happens to your lookups?"
+  },
+  "clips": []
+}
