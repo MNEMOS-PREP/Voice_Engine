@@ -11,11 +11,12 @@ import { useQuery } from "@tanstack/react-query";
 
 import { api, type DependencyStatus } from "@ai/core";
 
-import type { Interviewer } from "./types";
+import type { Interviewer, TimingSummary } from "./types";
 
 export const m11Keys = {
   deps: ["m11", "deps"] as const,
   interviewers: ["m11", "interviewers"] as const,
+  summary: (days: number) => ["m11", "timings", "summary", days] as const,
 };
 
 export function useDeps() {
@@ -23,6 +24,16 @@ export function useDeps() {
     queryKey: m11Keys.deps,
     queryFn: () => api.get<DependencyStatus[]>("/v1/deps"),
     staleTime: 30_000,
+  });
+}
+
+/** The latency ledger across the cohort — staff only, so only asked for by staff. */
+export function useTimingSummary(days: number, enabled: boolean) {
+  return useQuery({
+    queryKey: m11Keys.summary(days),
+    queryFn: () => api.get<TimingSummary>(`/v1/voice/timings/summary?days=${days}`),
+    enabled,
+    staleTime: 15_000,
   });
 }
 

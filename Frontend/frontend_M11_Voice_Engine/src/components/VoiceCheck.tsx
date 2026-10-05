@@ -24,13 +24,16 @@ import {
   PageHeader,
   SkeletonRows,
   VOICE_SUPPORTED,
+  isStaff,
   parseVoiceId,
   pickVoice,
   useInterviewerVoice,
+  useSession,
 } from "@ai/core";
 
 import { useDeps, useInterviewers } from "../api";
 import type { Interviewer } from "../types";
+import { LatencyLedger } from "./LatencyLedger";
 
 /** Played when M06 cannot say who the interviewers are. */
 const SAMPLE: Interviewer = {
@@ -195,6 +198,7 @@ export function VoiceCheck() {
   const deps = useDeps();
   const { voices, settled } = useBrowserVoices();
   const switchboard = useInterviewerVoice(null);
+  const staff = isStaff(useSession());
 
   const people = interviewers.data?.length ? interviewers.data : interviewers.isError ? [SAMPLE] : [];
   const chosen = useMemo(() => voicesByPerson(people, voices), [people, voices]);
@@ -287,6 +291,12 @@ export function VoiceCheck() {
               <p className="mt-3 border-t border-line pt-3 text-xs leading-relaxed text-ink-faint">{shared}</p>
             )}
           </Card>
+        </div>
+      )}
+
+      {staff && (
+        <div className="mt-4">
+          <LatencyLedger />
         </div>
       )}
     </div>

@@ -31,7 +31,7 @@ Nothing upstream is needed to boot, test or run. [`/v1/deps`](dependencies.txt) 
 
 ## Where it stands
 
-**Day 1 of the [Revision 2 build order](plan_in_depth/M11_Voice_Engine_TODO.md#revision-2-build-order-2026-10-05)**: the frame. The module boots alone, its one upstream (M06) is optional with a sentence a student can act on, the identity guard is on the router before any route exists, and the first screen plays every interviewer in the voice this browser gives them.
+**Days 1–2 of the [Revision 2 build order](plan_in_depth/M11_Voice_Engine_TODO.md#revision-2-build-order-2026-10-05)**: the frame, and the latency ledger. The module boots alone, its one upstream (M06) is optional with a sentence a student can act on, the identity guard is on the router, the first screen plays every interviewer in the voice this browser gives them, and every line an interviewer speaks is now measured.
 
 | Landed | |
 |---|---|
@@ -39,8 +39,11 @@ Nothing upstream is needed to boot, test or run. [`/v1/deps`](dependencies.txt) 
 | **The voice check** (`/voice`) | M06's interviewers, read from M06's persona files through `/v1/interviews/personas`, each with the browser voice chosen for them and a play button; says when several share a voice (FR-11.21), and when M06 is down plays one sample voice with M06's own sentence. |
 | **Identity before endpoints** | [`access.py`](Backend/backend_M11_Voice_Engine/access.py): `ai_core.guard` on the router. Platform_Core's stranger check runs from the first commit. |
 | **Its noun is its own** | `/v1/voice`, held against Platform_Shell's live proxy table by a test that reads the shell's `vite.config.ts`. |
+| **The latency ledger** (spec §5 `TurnTiming`, §11) | The browser records each spoken line's marks (`@ai/core` v0.15.0); `POST/GET /v1/voice/{session_id}/timings` keeps them, one row per line, idempotent on the browser's line id, readable only by the student whose interview it is and by staff. [`ledger.py`](Backend/backend_M11_Voice_Engine/ledger.py) turns marks into the spec's stages and holds the targets in one place; staff see p50 / p95 per stage against budget on `/voice`. |
 
-Next: the latency ledger (day 2), then browser VAD barge-in (day 3).
+**First numbers, measured live** (headless Edge, the Neerja online voice, real model): answer sent → first audio **1.1–1.4 s** (AC-11.1: 1.2 s at p95 — over); the model's first token 0.7–1.0 s; the voice ~0.3 s after a line lands, but **2–3 s for a page's first line** (the online voice's cold start); a stop **6–9 ms**.
+
+Next: browser VAD barge-in (day 3).
 
 ## Layout
 
@@ -49,13 +52,15 @@ Backend/
   backend_M11_Voice_Engine/
     app.py            FastAPI app, /health, /status
     router.py         /v1 routes (spec §7)
-    access.py         identity, router-level
+    access.py         identity, router-level; an interview id resolved to its student
+    models.py         m11_line_timing — the latency ledger, marks not durations
+    ledger.py         marks → the spec's stages; the targets, in one place
     dependencies.py   upstream probing from module.json
     tests/            no test opens a socket
 Frontend/
   frontend_M11_Voice_Engine/
     src/routes.tsx    /voice — mounted by Platform_Shell
-    src/components/   VoiceCheck
+    src/components/   VoiceCheck, LatencyLedger (staff)
 scripts/              launcher (launch.ps1, pane.ps1, control.ps1, services.txt)
 plan_in_depth/        the spec and the TODO
 ```

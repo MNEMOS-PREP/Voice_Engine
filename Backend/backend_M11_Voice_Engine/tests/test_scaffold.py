@@ -40,11 +40,15 @@ def test_manifest_declares_every_upstream_optional_with_a_sentence():
 
 
 def test_deps_names_m06_and_what_its_absence_costs(client):
-    """Nothing is listening in a test, so M06 reads as down — and the row
-    still carries the sentence a student would be shown."""
+    """M06 down: the row carries the sentence a student would be shown."""
     rows = client.get("/v1/deps").json()
     assert [r["module_id"] for r in rows] == ["M06"]
     assert rows[0]["available"] is False
+    assert "sample voice" in rows[0]["on_missing"]
+
+
+def test_deps_says_when_m06_is_up(client, upstream_up):
+    assert client.get("/v1/deps").json()[0]["available"] is True
 
 
 def shell_owners() -> dict[str, str]:

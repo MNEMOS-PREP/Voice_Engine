@@ -15,7 +15,31 @@ from fastapi.testclient import TestClient
 from sqlalchemy.pool import StaticPool
 from sqlmodel import Session, SQLModel, create_engine
 
+from backend_M11_Voice_Engine import dependencies
 from backend_M11_Voice_Engine.app import app
+
+
+@pytest.fixture(autouse=True)
+def no_upstream_probes(monkeypatch):
+    """`/v1/deps` would probe M06 over HTTP — and answer differently on a
+    laptop where M06 happens to be running. Every upstream reads as down; a
+    test that wants one up says so with `upstream_up`."""
+    from ai_core.dependencies import DependencyRegistry
+
+    monkeypatch.setattr(
+        DependencyRegistry, "_probe", lambda self, dep: (False, "tests open no sockets")
+    )
+    dependencies.reload()
+    yield
+    dependencies.reload()
+
+
+@pytest.fixture
+def upstream_up(monkeypatch):
+    from ai_core.dependencies import DependencyRegistry
+
+    monkeypatch.setattr(DependencyRegistry, "_probe", lambda self, dep: (True, "healthy (200)"))
+    dependencies.reload()
 
 
 @pytest.fixture(autouse=True)
