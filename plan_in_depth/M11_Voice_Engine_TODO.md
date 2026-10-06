@@ -1,6 +1,6 @@
 # M11 — TODO · Voice & Conversation Engine
 
-> **Completion: 86%** — 18 of 22 functional requirements met, 2 partly (FR-11.3 streaming ASR — per turn, with the browser's live caption; FR-11.16 clarification — asks again, does not yet name the unsure term), 2 open: FR-11.6 speculative prefill and FR-11.20 the 1.2 s budget (measured, over on this CPU). **Days 1–5, 7 and 9–12 of 14 done, 6 and 14 partly (2026-10-07).** A whole panel interview has been sat live, spoken: introductions part by part, hand-over and hand-back in each speaker's own voice, spoken answers heard, judged finished and sent, "okay" while the student talks, the lead closing. Waiting on the user: Svarah's gate (AC-11.4), Orpheus terms (day 8), the face (day 13), consented recordings.
+> **Completion: 95%** — 21 of 22 functional requirements met; the one open is FR-11.20, the 1.2 s budget, which is this laptop's CPU (measured: p50 2.5 s; the user's call — a faster machine later). **Every day of the build order that is M11's own work is done (2026-10-07); what remains waits on hardware, on the user's decisions, on real students, or on M18** — the "Later" list in the checkpoint below. A whole panel interview has been sat live, spoken, three times.
 >
 > _Method: `(met + ½ × partial) ÷ total`, counted from the spec, 2026-08-28. One measure applied the same way to all nineteen modules so they compare; it counts requirements, not screens or gates._
 
@@ -21,26 +21,101 @@ Legend: ✅ done · 🟡 partly done · ⬜ not started
 
 ---
 
-### 2026-10-07 — Checkpoint: where to pick up
+### 2026-10-07 (evening) — Checkpoint: where to pick up
 
-**Next, in order:**
-1. **FR-11.20 / AC-11.1 on a faster machine** — the 1.2 s budget is spent on
-   this CPU by synthesis alone (~2× real time). The user's call: later, on a
-   better machine. `scripts/latency_harness.mjs` is how to measure it there.
-2. **FR-11.6, speculative prefill** — needs M06 to start the interviewer's
-   step on a stable partial (the browser's live caption) and keep it when the
-   final words agree. Cross-module; P1.
-3. **FR-11.16's second half** — name the unsure term ("did you say quick sort
-   or quick select?"): M06 knows the question's key terms; M11 knows which
-   words were unsure.
-4. **The device matrix** (day 14) — the Arc A370M needs its driver (Windows
-   code 28) before OpenVINO; a phone over the LAN; Bluetooth headsets (EC-11.7).
-5. **Real students' audio, with consent** — Smart Turn's 200 endings (day 5),
-   the accent gap (AC-11.4), real code-switching (FR-11.22).
+**Finish first (an hour, no new code):**
+1. **Sit the nightly once, end to end, then register it.**
+   `powershell -NoProfile -ExecutionPolicy Bypass -File scripts\nightly_latency.ps1`
+   with the stack running, and check `research\latency\history.jsonl`. Then run
+   it again with `-Register` (02:30 daily, this user; `-Unregister` removes it).
+   The first manual run stopped at the shell's welcome gate: the harness now
+   onboards its own student through M04 and stops at once if Start is missing
+   (`latency_harness.mjs`). The second run was stopped at the user's request to
+   close, so this is still unverified end to end.
+2. **Sit this evening's features live through the harness.** All of them are
+   pinned by tests, but none has been heard in a real page yet:
+   - the strict prefill: its `prefill: N used of M tried` line gives AC-11.7;
+   - "did you say …?";
+   - the re-offer;
+   - captions from M11 (Firefox has no speech recognition of its own);
+   - a call pausing the clock (headless Edge can mute the fake microphone's
+     track);
+   - offline answers.
 
-**Waiting on the user:** Svarah's gate on Hugging Face (AC-11.4); Groq
-Orpheus terms (day 8 — optional, Chatterbox is the voice); the face (day 13);
-consented recordings of real answers.
+**Later — none of it is M11 code:**
+- **A faster machine:**
+  - FR-11.20 and AC-11.1: p95 ≤ 1.2 s from end of speech to first audio. The
+    p50 is 2.5 s, and synthesis takes ~2× real time on this CPU.
+  - The device matrix: the Arc A370M needs its driver (Windows code 28) before
+    OpenVINO, plus phones over the LAN and Bluetooth headsets in hand. This is
+    also where AC-11.2's p95 comes from.
+- **The user's decisions:**
+  - Svarah's terms on Hugging Face (AC-11.4, the accent gap).
+  - Groq Orpheus terms (day 8; optional now that Chatterbox is the voice).
+  - The face (day 13, spec §15.6).
+  - Consented recordings of real students. These give Smart Turn its 200
+    endings, AC-11.5's WER, and real Hinglish for FR-11.22.
+- **Real students (a pilot), measured rather than built:**
+  - AC-11.3, the premature cut-off rate (counted live by `cutShort`);
+  - AC-11.6, "it kept cutting me off";
+  - AC-11.8, voice against text completion;
+  - AC-11.9, hold-to-talk engaging before a student gives up.
+- **Other modules:**
+  - EC-11.2, a second speaker: M11 can diarise, but the signal is M18
+    Integrity's, and M18 is not built.
+  - M12 (delivery: fillers, pauses) and M14 (group discussion) will consume
+    M11's word times and Core's turn-taking. That is their work, not M11's.
+
+### 2026-10-07 (evening) — FR-11.3, 11.6 and 11.16; four edge cases; the nightly
+
+- ✅ **FR-11.6, in its strict form** (M06 `8152191`; Core v0.25.0 `42b7b88`;
+  room `364bef9`):
+  - **The user's rule:** *"the reply should be based on what the answer is,
+    not assume what he/she is gonna say"*.
+  - **At a pause:** in a turn of 3 s or more, what has been said so far is
+    written down and sent as a prefill. M06 runs the step in memory, writing
+    nothing, and keeps each model answer by its exact request.
+  - **On the answer:** the real step uses a kept answer only for a
+    byte-identical request — the same words and the same state.
+  - **Exact words, by construction:** the prefill's words and the answer's come
+    from the same audio cut, so they match exactly when nothing more was said.
+  - **Pinned:** no second model call, and the same line as without a prefill.
+    One word more and the model is asked.
+- ✅ **FR-11.16, naming the word** (M06 `28fdc2e`, `clarify.py`):
+  - "Did you say quick sort or quick select?" — once a question, three a
+    session.
+  - **The terms are the question's own:** its key points, each rung's
+    expected points, its label and stem.
+  - **Never asked** when what was heard is one of those terms, or the same word
+    with an ending.
+  - **The reply is judged with the answer it clarifies,** and sent to M13 and
+    M04 together with it.
+- ✅ **FR-11.3, captions from M11** (Core v0.25.0, `caption.ts`): where the
+  browser cannot caption, the last 10 s of the turn are captioned every 2.5 s,
+  with unsure words lighter. The browser's own captions are used everywhere
+  else.
+- ✅ **EC-11.1** (M06 `28fdc2e`, room `364bef9`): when the student comes in at
+  the very start of a line, the interviewer yields aside ("Sorry — go ahead.").
+  M06 then puts the question again, and what was said before it was heard is
+  not judged.
+- ✅ **EC-11.7** (Core v0.25.0; M11 `634c678`; room): the mic check and the room
+  warn of a Bluetooth headset — by its name, by an 8–16 kHz rate, or by a first
+  word that never came back.
+- ✅ **EC-11.12** (M06 `7846920`; Core; room): a phone call takes the
+  microphone, the interviewer falls quiet, and the clock stops. No pause is
+  spent and no reconnect is counted. Five seconds back in, then the question
+  again.
+- ✅ **EC-11.15** (Core `isOffline`; room): offline, the answer's audio is kept
+  and goes when the network is back. A send that fails puts the words back in
+  the box.
+- 🟡 **Day 14, the nightly** (`scripts/nightly_latency.ps1`, M11): runs the
+  harness on a good network and on 2G, skips when the stack is down, uses its
+  own student, and appends to `research/latency/history.jsonl` (gitignored).
+  `-Register` / `-Unregister`. Not yet sat end to end (see the checkpoint).
+- ✅ **Found by sitting it and fixed the same evening:**
+  - "No, that's all from me." was filed as a panel question (M06 `2b6fec0`).
+  - An answer of 2–4 s was still cut after one sentence (Core v0.24.1
+    `40df116`).
 
 ### 2026-10-06/07 — Days 9 to 12 and 14, and an interview sat live
 
@@ -520,7 +595,7 @@ licence or hardware rules it out.
 
 | | |
 |---|---|
-| Status | **Days 1–5, 7, 9–12 of 14 (Revision 2), 6 and 14 partly** (2026-10-07). Listening (VAD, barge-in), recognition with word times and the language detected, knowing when the student has finished (their pauses, Smart Turn, a long answer given room), the interviewers' own voices (Chatterbox, cast per persona, a lexicon, notation said as words), the room's timing (calibrated silence, backchannels, note-taking pauses), the mic check and echo, answers kept with consent, hold-to-talk, and a latency harness. The voice client is M11's code in `@ai/core` (v0.24.0). |
+| Status | **95% — every day of the build order that is M11's own work is done (2026-10-07).** Left: FR-11.20 on a faster machine, the nightly sat once and registered, and the "Later" list (hardware, the user's decisions, real students, M18). The voice client is M11's code in `@ai/core` (v0.25.0). |
 | Spec | Written, and the source of every row below. |
 | Scope | 22 functional requirements (18 of them P0), 9 acceptance metrics (4 release-blocking), 15 edge cases. |
 
@@ -550,10 +625,10 @@ Spec §4, verbatim. This is the authoritative list.
 |---|---|---|
 | FR-11.1 | ✅ WebRTC audio capture with echo cancellation and noise suppression — Revision 2's form: `getUserMedia` with echo cancellation, noise suppression and gain control (`useListening`, day 3), and the answer's audio cut from the same audio thread and sent per turn (day 4) | P0 |
 | FR-11.2 | ✅ Real mic check with a live transcription round-trip — the room's noise floor (kept, and the VAD starts from it), then a sentence read aloud and read back by M11's recogniser, with how much came back and a word on the room (M11 `277c69e`, Core v0.22.0) | P0 |
-| FR-11.3 | 🟡 Streaming ASR with word-level timestamps — word times from Whisper per turn (day 4); the live, streaming caption is the browser's own recognition, so the words of record are not streamed | P0 |
+| FR-11.3 | ✅ Streaming ASR with word-level timestamps — Revision 2's form: the words of record per turn with word times (day 4); the live caption from M11's recogniser where the browser has none — its last 10 s every 2.5 s, unsure words marked (Core v0.25.0) — and the browser's own elsewhere. Chunked, not a socket stream | P0 |
 | FR-11.4 | ✅ VAD-based endpointing with a per-speaker adaptive threshold — §6.2's formula over the speaker's own pauses, learned across the session (`endpoint.ts`, day 5) | P0 |
 | FR-11.5 | ✅ Semantic endpointing to avoid cutting incomplete utterances — Smart Turn v3.2 on M11 (`turn.py`); "not finished" waits longer, capped at 2.5 s (day 5) | P0 |
-| FR-11.6 | ⬜ Speculative LLM prefill on stabilised partial transcripts | P1 |
+| FR-11.6 | ✅ Speculative LLM prefill on stabilised partial transcripts — strictly: used only for a byte-identical model request, so only for the exact words said (M06 `8152191`, `prefill.py`; Core v0.25.0). The spec's 15% tolerance is not used, by the user's rule | P1 |
 | FR-11.7 | ✅ Streaming TTS with clause-level first chunk — sentences asked in speaking order, the first playing while the next is made; a long first sentence cut at its first clause (Core v0.23.0). Lines land whole from M06, so there is no token stream to start earlier | P0 |
 | FR-11.8 | ✅ Barge-in: full stop of LLM + TTS + playback within 350 ms — the detector stops playback, the queue and the requests; 261 ms first word → silent, 1 ms after the decision (day 3). Lines land whole, so no model stream is running to cancel | P0 |
 | FR-11.9 | ✅ Truncate the interviewer turn at `heard_up_to_ms` on barge-in — the cut (part and fraction) recorded on the turn; the transcript dims the rest and the interviewer model reads the line as heard (day 9, M06 `7b67a60`) | P0 |
@@ -563,7 +638,7 @@ Spec §4, verbatim. This is the authoritative list.
 | FR-11.13 | ✅ Repeat-last-utterance from cache — M11 caches every sentence it makes (memory and disk), so a repeat is instant; said by whoever asked it | P0 |
 | FR-11.14 | ✅ Mid-turn modality switch preserving the partial transcript — Talk freely off (or hold-to-talk on) mid-answer writes what was said into the box (`flush`, Core v0.23.0; M06 `870f184`) | P0 |
 | FR-11.15 | ✅ Low-confidence spans marked and excluded from evidence citation — carried with the answer to M06 (`3eeb88d`) and on to M13, which rejects a quote overlapping them (`382678a`); dotted in the transcript | P0 |
-| FR-11.16 | 🟡 Natural clarification on low ASR confidence — "Sorry, I didn't catch that" once a question when mean confidence < 0.4, in the register's words, not judged (M06 `3eeb88d`); an answer heard but written as nothing is asked for again aloud (`779146c`). Not yet: naming the unsure term (§6.8) | P1 |
+| FR-11.16 | ✅ Natural clarification on low ASR confidence — "didn't catch that" for an answer nobody could make out (`3eeb88d`); "did you say quick sort or quick select?" for an unsure word near one of the question's own terms, once a question and three a session, the reply judged with the answer (`28fdc2e`) | P1 |
 | FR-11.17 | ✅ Degradation ladder down to push-to-talk — Revision 2's form: hold-to-talk (a big button, the interviewer stops on press, one upload per answer, a live caption) by choice, on a poor connection (`navigator.connection`, checked under DevTools throttling), after two drops, or after repeated echo; the browser's voice when the connection was poor at the start; two answers nobody could write down → typing (M06 `870f184`, `779146c`) | P0 |
 | FR-11.18 | ✅ Live captions always on — the student's words as they speak (the browser's recognition, in Talk freely and while holding to talk), the words of record with unsure ones dotted, and the interviewer's line appearing as it is said | P0 |
 | FR-11.19 | ✅ Per-turn audio stored, aligned to the transcript clock — with consent only (refused otherwise), the student's or staff's to read, deleted as files; played back in the notes beside the words (M11 `7d81077`, M06 `870f184`) | P0 |
@@ -585,7 +660,7 @@ Spec §13. A **[GATE]** is release-blocking; the rest are tracked.
 | AC-11.4 **[GATE]** | ⬜ ASR WER gap between accent groups | ≤ 8 points |
 | AC-11.5 | ⬜ Overall WER on pilot audio | ≤ 12% |
 | AC-11.6 | ⬜ "It kept cutting me off" complaints | < 5% of sessions |
-| AC-11.7 | ⬜ Prefill cancel rate | 25–40% (outside → tune the window) |
+| AC-11.7 | ⬜ Prefill cancel rate — measured by the latency harness from M06's own record (each answer's prefills tried and used); no number yet | 25–40% (outside → tune the window) |
 | AC-11.8 | ⬜ Voice session completion rate vs text | within 10 points |
 | AC-11.9 | ⬜ Push-to-talk fallback engages before abandonment | ≥ 80% of poor-network sessions |
 
@@ -598,21 +673,21 @@ difference between a demo and a product.
 
 | EC | | Expected behaviour |
 |---|---|---|
-| EC-11.1 | 🟡 Candidate speaks over the very first word | Barge-in works from t=0 ✅; the question re-offered ("go ahead") ⬜ |
-| EC-11.2 | ⬜ Two people speaking (roommate) | Diarisation flags a second speaker → M18 signal; interviewer continues with the enrolled speaker |
+| EC-11.1 | ✅ Candidate speaks over the very first word | Barge-in from t=0; the interviewer yields aside ("Sorry — go ahead."); M06 puts the question again (`28fdc2e`) |
+| EC-11.2 | ⬜ Two people speaking (roommate) | Later: diarisation is M11's, the signal is M18 Integrity's — not built |
 | EC-11.3 | ✅ Candidate silent for 45 s | One prompt, then a second, then offer to move on — M06's EC-6.1, spoken, and counted only while the interviewer is quiet and the student silent |
 | EC-11.4 | ✅ Extremely fast speaker | The threshold shortens with their pauses (down to 400 ms) |
 | EC-11.5 | ✅ Very slow / halting speaker | Lengthens to 1,400 ms; Smart Turn waits on "not finished"; a long answer gets a full second; a cut-off is learned from |
 | EC-11.6 | ✅ Heavy background noise (hostel) | Noise suppression on; the mic check's floor seeds the VAD; headphones suggested by the mic check for a noisy room |
-| EC-11.7 | 🟡 Bluetooth headset cuts the first 200 ms | 300 ms of prefix kept before speech ✅; a mic-check warning when detected ⬜ |
+| EC-11.7 | ✅ Bluetooth headset cuts the first 200 ms | 300 ms of prefix kept; the mic check and the room warn — by name, rate, or a first word lost (Core v0.25.0, M11 `634c678`) |
 | EC-11.8 | ✅ Echo (speakers, no headphones) | Echo cancellation on; the interviewer's own words heard back are not sent, headphones suggested, twice → hold-to-talk |
 | EC-11.9 | ✅ ASR returns empty for a long utterance | The asker says their "didn't catch that" aloud; twice → typing |
 | EC-11.10 | ✅ Candidate answers entirely in Hindi | Written as said, scored on content (M13's rule 4), noted in the report, never penalised |
 | EC-11.11 | ✅ TTS mispronounces a technical term | The lexicon (per voice, probed: one entry), crowd-flaggable; big-O said as words (`notation.py`, probed) |
-| EC-11.12 | ⬜ Phone call interrupts on mobile | Auto-pause, resume with a 5-second re-entry |
+| EC-11.12 | ✅ Phone call interrupts on mobile | The clock stops (no pause spent), five seconds back in, the question again (M06 `7846920`, Core v0.25.0) |
 | EC-11.13 | ✅ Tab backgrounded | The voice carries on; back from another tab after a line was said, the room says so with the way to hear it again |
 | EC-11.14 | ✅ Barge-in right after the first syllable | The 250 ms sustain (`vad.ts`) |
-| EC-11.15 | ⬜ Network dies mid-answer | Local recording buffer flushed on reconnect; nothing lost |
+| EC-11.15 | ✅ Network dies mid-answer | The answer's audio is kept and goes when the network is back; a failed send puts the words back in the box (Core `isOffline`, room `364bef9`) |
 
 ---
 
@@ -697,4 +772,4 @@ Revision 2 removes. Days are the spec's unit — a focused day each.
 | 11 | ✅ Calibrated silence, backchannels and note-taking pauses from the persona files (FR-11.10 to FR-11.12) — Core v0.23.0, M06 `fda446f`, `870f184` |
 | 12 | ✅ Per-turn audio stored with consent (FR-11.19, M11 `7d81077`); the push-to-talk ladder (FR-11.17, M06 `870f184`) |
 | 13 | The face — only if chosen (spec §15.6): lip-sync from the audio itself (HeadAudio or `wav2arkit`) |
-| 14 | 🟡 ✅ Latency harness (`scripts/latency_harness.mjs`: a spoken panel interview graded by the ledger, `--profile 3g/2g` for network chaos); ⬜ nightly schedule, device matrix (the Arc needs its driver) |
+| 14 | 🟡 ✅ Latency harness (`scripts/latency_harness.mjs`; `--profile 2g`: the room moved to hold-to-talk, checked live) and the nightly (`scripts/nightly_latency.ps1`) — not yet sat end to end or registered; ⬜ the device matrix (hardware) |
