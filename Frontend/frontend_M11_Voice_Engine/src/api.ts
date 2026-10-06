@@ -7,11 +7,11 @@
  * standalone alike, `/v1/interviews` is proxied to M06.
  */
 
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { api, type DependencyStatus } from "@ai/core";
 
-import type { CastInfo, EngineState, Interviewer, TimingSummary } from "./types";
+import type { CastInfo, EngineState, Interviewer, LexiconFlagCount, TimingSummary } from "./types";
 
 export const m11Keys = {
   deps: ["m11", "deps"] as const,
@@ -19,7 +19,28 @@ export const m11Keys = {
   summary: (days: number) => ["m11", "timings", "summary", days] as const,
   engine: ["m11", "engine"] as const,
   cast: ["m11", "cast"] as const,
+  flags: ["m11", "lexicon", "flags"] as const,
 };
+
+/** EC-11.11: flag a word an interviewer said wrong. */
+export function useFlagWord() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (body: { word: string; heard_as?: string | null; voice?: string | null }) =>
+      api.post<{ status: string }>("/v1/voice/lexicon/flags", body),
+    onSuccess: () => client.invalidateQueries({ queryKey: m11Keys.flags }),
+  });
+}
+
+/** Every flagged word, for staff. */
+export function useLexiconFlags(enabled: boolean) {
+  return useQuery({
+    queryKey: m11Keys.flags,
+    queryFn: () => api.get<LexiconFlagCount[]>("/v1/voice/lexicon/flags"),
+    enabled,
+    retry: false,
+  });
+}
 
 /** Whether M11's voice is ready — polled while it warms up, then left alone. */
 export function useEngine() {

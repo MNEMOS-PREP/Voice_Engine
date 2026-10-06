@@ -25,10 +25,10 @@ from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
 
-from . import asr, ledger, tts, turn
+from . import asr, ledger, lexicon, tts, turn
 from .access import enforce_access
 from .dependencies import deps
-from .models import LineTiming
+from .models import LexiconFlag, LineTiming
 
 router = APIRouter(prefix="/v1", dependencies=[Depends(enforce_access)])
 
@@ -388,6 +388,84 @@ async def turn_finished(
     return TurnOut(
         probability=round(probability, 4), finished=probability > turn.THRESHOLD, latency_ms=ms
     )
+
+
+# ─────────────────────────────────────────────────────────────────────────
+#  Words the voices get wrong (EC-11.11)
+# ─────────────────────────────────────────────────────────────────────────
+
+
+class LexiconEntryOut(BaseModel):
+    term: str
+    say: str
+    exact: bool = False
+    why: str | None = None
+
+
+class FlagIn(BaseModel):
+    word: str = Field(min_length=1, max_length=60)
+    voice: str | None = Field(default=None, max_length=64)
+    heard_as: str | None = Field(default=None, max_length=60)
+
+
+class FlagCount(BaseModel):
+    word: str
+    flags: int
+    #: Already respelled in the table.
+    fixed: bool
+    heard_as: list[str]
+
+
+@router.get("/voice/lexicon", response_model=list[LexiconEntryOut], tags=["voice"])
+def lexicon_table() -> list[LexiconEntryOut]:
+    """How the voices say the words they got wrong, and why each is here."""
+    keep = ("term", "say", "exact", "why")
+    return [LexiconEntryOut(**{k: e[k] for k in keep if k in e}) for e in lexicon.entries()]
+
+
+@router.post("/voice/lexicon/flags", status_code=201, tags=["voice"])
+def flag_word(
+    body: FlagIn,
+    principal: Principal | None = Depends(enforce_access),
+    db: Session = Depends(get_session),
+) -> dict[str, str]:
+    """A word said wrong. Staff see it; the probe checks it."""
+    if principal is None:
+        raise HTTPException(status_code=401, detail="Not signed in.")
+    db.add(
+        LexiconFlag(
+            word=" ".join(body.word.split()),
+            voice=body.voice,
+            heard_as=body.heard_as,
+            candidate_id=principal.candidate_id if principal.role is Role.student else None,
+        )
+    )
+    db.commit()
+    return {"status": "flagged"}
+
+
+@router.get(
+    "/voice/lexicon/flags",
+    response_model=list[FlagCount],
+    dependencies=[Depends(staff_only)],
+    tags=["voice"],
+)
+def lexicon_flags(db: Session = Depends(get_session)) -> list[FlagCount]:
+    """Every flagged word, most-flagged first, and whether it is fixed."""
+    fixed = {e["term"].lower() for e in lexicon.entries()}
+    by_word: dict[str, list[LexiconFlag]] = {}
+    for row in db.exec(select(LexiconFlag)).all():
+        by_word.setdefault(row.word.lower(), []).append(row)
+    out = [
+        FlagCount(
+            word=rows[0].word,
+            flags=len(rows),
+            fixed=word in fixed,
+            heard_as=sorted({r.heard_as for r in rows if r.heard_as}),
+        )
+        for word, rows in by_word.items()
+    ]
+    return sorted(out, key=lambda f: (-f.flags, f.word))
 
 
 __all__ = ["router"]

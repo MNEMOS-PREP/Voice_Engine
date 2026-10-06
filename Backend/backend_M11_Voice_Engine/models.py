@@ -58,4 +58,20 @@ class LineTiming(SQLModel, table=True):
     recorded_at: datetime = Field(default_factory=utcnow, index=True)
 
 
-__all__ = ["LineTiming"]
+class LexiconFlag(SQLModel, table=True):
+    """Someone heard a word said wrong (EC-11.11, "crowd-flaggable")."""
+
+    __tablename__ = "m11_lexicon_flag"
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    #: The word as written — what the line said.
+    word: str = Field(index=True, max_length=60)
+    #: The voice that said it wrong, when known.
+    voice: str | None = Field(default=None, max_length=64)
+    #: How it sounded, in the flagger's words, if they said.
+    heard_as: str | None = Field(default=None, max_length=60)
+    candidate_id: str | None = Field(default=None, index=True)
+    flagged_at: datetime = Field(default_factory=utcnow, index=True)
+
+
+__all__ = ["LexiconFlag", "LineTiming"]

@@ -37,7 +37,9 @@ import {
 
 import { useCast, useDeps, useEngine, useInterviewers } from "../api";
 import type { CastVoice, Interviewer } from "../types";
+import { FlaggedWords } from "./FlaggedWords";
 import { LatencyLedger } from "./LatencyLedger";
+import { WordFlag } from "./WordFlag";
 
 /** Played when M06 cannot say who the interviewers are. */
 const SAMPLE: Interviewer = {
@@ -330,13 +332,20 @@ export function VoiceCheck() {
                 {credits.map(([credit, licence]) => `${credit} (${licence})`).join(" · ")}.
               </p>
             )}
+            {serverReady && (
+              // EC-11.11: a word said wrong is one a student noticed.
+              <div className="mt-3 border-t border-line pt-3">
+                <WordFlag />
+              </div>
+            )}
           </Card>
         </div>
       )}
 
       {staff && (
-        <div className="mt-4">
+        <div className="mt-4 space-y-4">
           <LatencyLedger />
+          <FlaggedWords />
         </div>
       )}
     </div>

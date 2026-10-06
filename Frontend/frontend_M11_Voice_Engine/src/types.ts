@@ -44,6 +44,15 @@ export interface CastInfo {
   voices: CastVoice[];
 }
 
+/** A word students flagged as said wrong (EC-11.11). */
+export interface LexiconFlagCount {
+  word: string;
+  flags: number;
+  /** The lexicon already respells it. */
+  fixed: boolean;
+  heard_as: string[];
+}
+
 /** One stage of the latency ledger across the cohort (`GET /v1/voice/timings/summary`). */
 export interface StageSummary {
   name: string;

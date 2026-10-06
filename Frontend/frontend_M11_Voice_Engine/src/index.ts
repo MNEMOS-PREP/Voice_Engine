@@ -9,5 +9,24 @@
 export { m11Routes } from "./routes";
 export { VoiceCheck } from "./components/VoiceCheck";
 export { LatencyLedger } from "./components/LatencyLedger";
-export { m11Keys, useCast, useDeps, useEngine, useInterviewers, useTimingSummary } from "./api";
-export type { CastInfo, CastVoice, EngineState, Interviewer, StageSummary, TimingSummary } from "./types";
+export { FlaggedWords } from "./components/FlaggedWords";
+export { WordFlag } from "./components/WordFlag";
+export {
+  m11Keys,
+  useCast,
+  useDeps,
+  useEngine,
+  useFlagWord,
+  useInterviewers,
+  useLexiconFlags,
+  useTimingSummary,
+} from "./api";
+export type {
+  CastInfo,
+  CastVoice,
+  EngineState,
+  Interviewer,
+  LexiconFlagCount,
+  StageSummary,
+  TimingSummary,
+} from "./types";
