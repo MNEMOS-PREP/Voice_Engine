@@ -56,7 +56,7 @@ const PROFILES = {
 if (!(PROFILE in PROFILES)) throw new Error(`--profile is one of ${Object.keys(PROFILES).join(", ")}`);
 
 const WHO = { "X-Role": "student", "X-Candidate-Id": CANDIDATE };
-const STAFF = { "X-Role": "admin" };
+const STAFF = { "X-Role": "admin", "X-Candidate-Id": "ops" };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const t0 = Date.now();
 const log = (...a) => console.log(`[${((Date.now() - t0) / 1000).toFixed(0)}s]`, ...a);
