@@ -40,6 +40,7 @@ const args = Object.fromEntries(
 const SHELL = args.shell ?? "http://localhost:5173";
 const M06 = args.m06 ?? "http://127.0.0.1:8106";
 const M11 = args.m11 ?? "http://127.0.0.1:8111";
+const M04 = args.m04 ?? "http://127.0.0.1:8104";
 const CANDIDATE = args.candidate ?? "4d0aa1c0-0000-4000-8000-000000000004";
 const MODE = args.mode ?? "mock";
 const MINUTES = Number(args.minutes ?? 20);
@@ -114,6 +115,22 @@ async function voiced(sentence) {
 }
 
 // ── the interview ─────────────────────────────────────────────────────────
+
+// A student who was never welcomed is sent to the welcome step, not the
+// interview (the shell's gate). The harness's own student is marked welcomed
+// in M04 — and given no consent, so its interviews move nobody's skill graph.
+try {
+  const profile = await (await fetch(`${M04}/v1/candidates/${CANDIDATE}/profile`, { headers: WHO })).json();
+  if (!profile?.onboarded_at) {
+    await fetch(`${M04}/v1/candidates/${CANDIDATE}/profile`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json", ...WHO },
+      body: JSON.stringify({ display_name: "Latency harness", onboarded: true }),
+    });
+  }
+} catch {
+  /* M04 not running: the shell will say so at the gate below */
+}
 
 const created = await fetch(`${M06}/v1/interviews`, {
   method: "POST",
@@ -240,7 +257,9 @@ async function watch(from, sentBefore = null) {
 try {
   await send("Page.navigate", { url: `${SHELL}/mock/${SID}/plan?as=student&candidate=${CANDIDATE}` });
   await sleep(8000);
-  log("Start:", await click("Start the interview"));
+  const started = await click("Start the interview");
+  log("Start:", started);
+  if (started !== "ok") throw new Error(`no Start button at ${await ev("location.pathname")}`);
   await watch(Date.now());
   await shot(`latency-${SID}-opening`);
   if (PROFILES[PROFILE]) {
@@ -263,7 +282,9 @@ try {
     }
     const back = all.some((b) => /^[^:]+: Thanks, /.test(b) && all.indexOf(b) > 1);
     const reply = await answerFor(asked.replace(/^[^:]*: /, ""), n);
-    const spoken = back && spokenSoFar < SPOKEN && !(await holdMode());
+    // Spoken after the round comes back to the lead — or, on a panel with
+    // no hand-over to wait for (a student with no resume), after two typed.
+    const spoken = (back || n > 2) && spokenSoFar < SPOKEN && !(await holdMode());
     let from;
     if (spoken) {
       spokenSoFar += 1;
@@ -300,6 +321,20 @@ browser.kill();
 await fetch(`${M06}/v1/interviews/${SID}/end`, { method: "POST", headers: WHO }).catch(() => undefined);
 await sleep(3000); // the last line's record reaches the ledger
 const summary = await (await fetch(`${M11}/v1/voice/timings/summary?days=1&session_id=${SID}`, { headers: STAFF })).json();
+// M06's side of the run: the prefills (FR-11.6, AC-11.7's cancel rate) and
+// the questions asked about rather than judged (FR-11.16, EC-11.1).
+const sat = await (await fetch(`${M06}/v1/interviews/${SID}`, { headers: WHO })).json().catch(() => ({ transcript: [] }));
+const answered = (sat.transcript ?? []).filter((t) => t.role === "candidate");
+const prefill = {
+  tried: answered.reduce((n, t) => n + (t.prefill?.tried ?? 0), 0),
+  used: answered.filter((t) => t.prefill?.used).length,
+};
+const asked = (sat.transcript ?? []).filter((t) => t.role === "interviewer");
+const askedAbout = {
+  clarify_term: asked.filter((t) => t.probe_move === "clarify_term").length,
+  reoffer: asked.filter((t) => t.probe_move === "reoffer").length,
+  didnt_catch: asked.filter((t) => t.probe_move === "didnt_catch").length,
+};
 const voices = {};
 for (const s of page.speak) (voices[s.persona] ??= new Set()).add(s.voice);
 const report = {
@@ -312,6 +347,8 @@ const report = {
   asides_played: page.asides,
   kept: page.kept,
   hold_to_talk: page.holdToTalk,
+  prefill,
+  asked_about: askedAbout,
   errors,
 };
 writeFileSync(join(OUT, `latency-${SID}.json`), JSON.stringify(report, null, 1));
@@ -326,6 +363,11 @@ for (const s of summary.stages ?? []) {
   if (s.met === false) over_budget = true;
   console.log(`${s.name.padEnd(18)} ${String(s.p50).padStart(6)}  ${String(s.p95).padStart(6)}  ${String(s.target_ms ?? "—").padStart(6)}  ${(s.gate ?? "").padEnd(8)} ${verdict}  (n=${s.n})`);
 }
+if (prefill.tried) {
+  const cancelled = Math.round((100 * (prefill.tried - prefill.used)) / prefill.tried);
+  console.log(`prefill: ${prefill.used} used of ${prefill.tried} tried — cancel rate ${cancelled}% (AC-11.7: 25–40%)`);
+}
+console.log(`asked about, not judged: ${JSON.stringify(askedAbout)}`);
 if (PROFILE === "2g") console.log(`2g: hold-to-talk ${page.holdToTalk ? "engaged" : "NOT engaged"} (FR-11.17)`);
 if (errors.length) console.log("errors:", JSON.stringify(errors));
 console.log(`report: ${join(OUT, `latency-${SID}.json`)}`);
