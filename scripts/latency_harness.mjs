@@ -11,8 +11,9 @@
 // asides ("okay"), answers kept, and errors.
 //
 // Network chaos (spec §16): `--profile 3g|2g` throttles the page through the
-// DevTools protocol, which the browser reports to the page as its connection;
-// on 2g the room must move to hold-to-talk (FR-11.17), and the harness checks.
+// DevTools protocol once the opening is said — the browser reports it to the
+// page as its connection; on 2g the room must move to hold-to-talk
+// (FR-11.17) mid-interview, and the harness checks that it did.
 //
 // Needs the stack running (start_all.bat): shell :5173, M06, M11 (voice
 // ready), M01/M02/M04/M05 for a planned interview. Answers come from a model
@@ -163,7 +164,6 @@ const shot = async (name) => {
 await send("Page.enable");
 await send("Runtime.enable");
 await send("Network.enable");
-if (PROFILES[PROFILE]) await send("Network.emulateNetworkConditions", PROFILES[PROFILE]);
 await send("Page.addScriptToEvaluateOnNewDocument", { source: `
   try { localStorage.setItem("m06.talkFreely", "on"); localStorage.setItem("m11.keepAnswers", "on"); } catch {}
   window.__speak = []; window.__kept = [];
@@ -243,6 +243,13 @@ try {
   log("Start:", await click("Start the interview"));
   await watch(Date.now());
   await shot(`latency-${SID}-opening`);
+  if (PROFILES[PROFILE]) {
+    // The connection degrades mid-interview, as a hostel's does — and the
+    // page hears of it the way it would (navigator.connection's change).
+    await send("Network.emulateNetworkConditions", PROFILES[PROFILE]);
+    await sleep(2000);
+    log(`network now ${PROFILE}:`, JSON.stringify(await ev(`({ type: navigator.connection?.effectiveType, rtt: navigator.connection?.rtt })`)));
+  }
   let spokenSoFar = 0;
   for (let n = 1; n <= MAX && !(await over()); n++) {
     const all = (await bubbles()) ?? [];
@@ -289,6 +296,8 @@ const page = {
 };
 ws.close();
 browser.kill();
+// However it went, the interview is over: an open one blocks the next run.
+await fetch(`${M06}/v1/interviews/${SID}/end`, { method: "POST", headers: WHO }).catch(() => undefined);
 await sleep(3000); // the last line's record reaches the ledger
 const summary = await (await fetch(`${M11}/v1/voice/timings/summary?days=1&session_id=${SID}`, { headers: STAFF })).json();
 const voices = {};
