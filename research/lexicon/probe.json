@@ -1,0 +1,1074 @@
+{
+ "Asking Clarifying Questions|chatterbox-default": {
+  "term": "Asking Clarifying Questions",
+  "said": "Asking Clarifying Questions",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about asking clarifying questions.",
+  "ok": true
+ },
+ "Being Concise|chatterbox-default": {
+  "term": "Being Concise",
+  "said": "Being Concise",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about being concise.",
+  "ok": true
+ },
+ "Disagreeing With the Interviewer|chatterbox-default": {
+  "term": "Disagreeing With the Interviewer",
+  "said": "Disagreeing With the Interviewer",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about disagreeing with the interviewer.",
+  "ok": true
+ },
+ "Explaining Trade-offs|chatterbox-default": {
+  "term": "Explaining Trade-offs",
+  "said": "Explaining Trade-offs",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about explaining trade-offs.",
+  "ok": true
+ },
+ "Filler Words|chatterbox-default": {
+  "term": "Filler Words",
+  "said": "Filler Words",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about filler words.",
+  "ok": true
+ },
+ "Handling Interruptions|chatterbox-default": {
+  "term": "Handling Interruptions",
+  "said": "Handling Interruptions",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about handling interruptions.",
+  "ok": true
+ },
+ "Handling What You Don't Know|chatterbox-default": {
+  "term": "Handling What You Don't Know",
+  "said": "Handling What You Don't Know",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about handling, what you don't know.",
+  "ok": true
+ },
+ "Listening to the Question|chatterbox-default": {
+  "term": "Listening to the Question",
+  "said": "Listening to the Question",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about listening to the question.",
+  "ok": true
+ },
+ "Pace and Pausing|chatterbox-default": {
+  "term": "Pace and Pausing",
+  "said": "Pace and Pausing",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about pace and pausing.",
+  "ok": true
+ },
+ "Quantifying Impact|chatterbox-default": {
+  "term": "Quantifying Impact",
+  "said": "Quantifying Impact",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about quantifying impact.",
+  "ok": true
+ },
+ "Questions You Ask Them|chatterbox-default": {
+  "term": "Questions You Ask Them",
+  "said": "Questions You Ask Them",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about questions you ask them.",
+  "ok": true
+ },
+ "Structuring an Answer|chatterbox-default": {
+  "term": "Structuring an Answer",
+  "said": "Structuring an Answer",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about structuring an answer.",
+  "ok": true
+ },
+ "Taking a Hint|chatterbox-default": {
+  "term": "Taking a Hint",
+  "said": "Taking a Hint",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about taking a hint.",
+  "ok": true
+ },
+ "Talking About Your Projects|chatterbox-default": {
+  "term": "Talking About Your Projects",
+  "said": "Talking About Your Projects",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about talking about your projects.",
+  "ok": true
+ },
+ "Thinking Aloud|chatterbox-default": {
+  "term": "Thinking Aloud",
+  "said": "Thinking Aloud",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about thinking aloud.",
+  "ok": true
+ },
+ "Abstraction and Interfaces|chatterbox-default": {
+  "term": "Abstraction and Interfaces",
+  "said": "Abstraction and Interfaces",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about abstraction and interfaces.",
+  "ok": true
+ },
+ "Aggregation and Grouping|chatterbox-default": {
+  "term": "Aggregation and Grouping",
+  "said": "Aggregation and Grouping",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about aggregation and grouping.",
+  "ok": true
+ },
+ "CPU Scheduling|chatterbox-default": {
+  "term": "CPU Scheduling",
+  "said": "CPU Scheduling",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about CPU scheduling.",
+  "ok": true
+ },
+ "Caching and Locality|chatterbox-default": {
+  "term": "Caching and Locality",
+  "said": "Caching and Locality",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about caching and locality.",
+  "ok": true
+ },
+ "Classes and Objects|chatterbox-default": {
+  "term": "Classes and Objects",
+  "said": "Classes and Objects",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about classes and objects.",
+  "ok": true
+ },
+ "Compilation and Interpretation|chatterbox-default": {
+  "term": "Compilation and Interpretation",
+  "said": "Compilation and Interpretation",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about compilation and interpretation.",
+  "ok": true
+ },
+ "Computer Architecture Basics|chatterbox-default": {
+  "term": "Computer Architecture Basics",
+  "said": "Computer Architecture Basics",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about computer architecture basics.",
+  "ok": true
+ },
+ "Concurrency Control|chatterbox-default": {
+  "term": "Concurrency Control",
+  "said": "Concurrency Control",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about concurrency control.",
+  "ok": true
+ },
+ "Congestion Control|chatterbox-default": {
+  "term": "Congestion Control",
+  "said": "Congestion Control",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about congestion control.",
+  "ok": true
+ },
+ "Context Switching|chatterbox-default": {
+  "term": "Context Switching",
+  "said": "Context Switching",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about context switching.",
+  "ok": true
+ },
+ "DNS|chatterbox-default": {
+  "term": "DNS",
+  "said": "DNS",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about DNS.",
+  "ok": true
+ },
+ "Database Indexing|chatterbox-default": {
+  "term": "Database Indexing",
+  "said": "Database Indexing",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about database indexing.",
+  "ok": true
+ },
+ "Deadlocks|chatterbox-default": {
+  "term": "Deadlocks",
+  "said": "Deadlocks",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about deadlocks.",
+  "ok": true
+ },
+ "Design Patterns|chatterbox-default": {
+  "term": "Design Patterns",
+  "said": "Design Patterns",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about design patterns.",
+  "ok": true
+ },
+ "Encapsulation|chatterbox-default": {
+  "term": "Encapsulation",
+  "said": "Encapsulation",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about encapsulation.",
+  "ok": true
+ },
+ "Exception Handling|chatterbox-default": {
+  "term": "Exception Handling",
+  "said": "Exception Handling",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about exception handling.",
+  "ok": true
+ },
+ "File Systems|chatterbox-default": {
+  "term": "File Systems",
+  "said": "File Systems",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about file systems.",
+  "ok": true
+ },
+ "Functional Dependencies|chatterbox-default": {
+  "term": "Functional Dependencies",
+  "said": "Functional Dependencies",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about functional dependencies.",
+  "ok": true
+ },
+ "Garbage Collection|chatterbox-default": {
+  "term": "Garbage Collection",
+  "said": "Garbage Collection",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about garbage collection.",
+  "ok": true
+ },
+ "HTTP and REST|chatterbox-default": {
+  "term": "HTTP and REST",
+  "said": "HTTP and REST",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about HTTP and REST.",
+  "ok": true
+ },
+ "HTTPS and TLS|chatterbox-default": {
+  "term": "HTTPS and TLS",
+  "said": "HTTPS and TLS",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about HTTPS and TLS.",
+  "ok": true
+ },
+ "Hash Function Design|chatterbox-default": {
+  "term": "Hash Function Design",
+  "said": "Hash Function Design",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about hash function design.",
+  "ok": true
+ },
+ "IP Addressing|chatterbox-default": {
+  "term": "IP Addressing",
+  "said": "IP Addressing",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about IP addressing.",
+  "ok": true
+ },
+ "Inheritance|chatterbox-default": {
+  "term": "Inheritance",
+  "said": "Inheritance",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about inheritance.",
+  "ok": true
+ },
+ "Inter-process Communication|chatterbox-default": {
+  "term": "Inter-process Communication",
+  "said": "Inter-process Communication",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about interprocess communication.",
+  "ok": false
+ },
+ "Isolation Levels|chatterbox-default": {
+  "term": "Isolation Levels",
+  "said": "Isolation Levels",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about isolation levels.",
+  "ok": true
+ },
+ "Joins|chatterbox-default": {
+  "term": "Joins",
+  "said": "Joins",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about joins.",
+  "ok": true
+ },
+ "Memory Management|chatterbox-default": {
+  "term": "Memory Management",
+  "said": "Memory Management",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about memory management.",
+  "ok": true
+ },
+ "Network Layer Models|chatterbox-default": {
+  "term": "Network Layer Models",
+  "said": "Network Layer Models",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about network layer models.",
+  "ok": true
+ },
+ "Network Security Basics|chatterbox-default": {
+  "term": "Network Security Basics",
+  "said": "Network Security Basics",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about network security basics.",
+  "ok": true
+ },
+ "NoSQL and When to Use It|chatterbox-default": {
+  "term": "NoSQL and When to Use It",
+  "said": "NoSQL and When to Use It",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about NoSQL and when to use it.",
+  "ok": true
+ },
+ "Normalisation|chatterbox-default": {
+  "term": "Normalisation",
+  "said": "Normalisation",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about normalization.",
+  "ok": false
+ },
+ "Page Replacement|chatterbox-default": {
+  "term": "Page Replacement",
+  "said": "Page Replacement",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about page replacement.",
+  "ok": true
+ },
+ "Paging and Segmentation|chatterbox-default": {
+  "term": "Paging and Segmentation",
+  "said": "Paging and Segmentation",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about paging and segmentation.",
+  "ok": true
+ },
+ "Polymorphism|chatterbox-default": {
+  "term": "Polymorphism",
+  "said": "Polymorphism",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about polymorphism.",
+  "ok": true
+ },
+ "Processes and Threads|chatterbox-default": {
+  "term": "Processes and Threads",
+  "said": "Processes and Threads",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about processes and threads.",
+  "ok": true
+ },
+ "Query Optimisation|chatterbox-default": {
+  "term": "Query Optimisation",
+  "said": "Query Optimisation",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about query optimization.",
+  "ok": false
+ },
+ "Routing|chatterbox-default": {
+  "term": "Routing",
+  "said": "Routing",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about routing.",
+  "ok": true
+ },
+ "SOLID Principles|chatterbox-default": {
+  "term": "SOLID Principles",
+  "said": "SOLID Principles",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about solid principles.",
+  "ok": true
+ },
+ "SQL Queries|chatterbox-default": {
+  "term": "SQL Queries",
+  "said": "SQL Queries",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about SQL queries.",
+  "ok": true
+ },
+ "Sockets|chatterbox-default": {
+  "term": "Sockets",
+  "said": "Sockets",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about sockets.",
+  "ok": true
+ },
+ "Subnetting|chatterbox-default": {
+  "term": "Subnetting",
+  "said": "Subnetting",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about subnetting.",
+  "ok": true
+ },
+ "Synchronisation|chatterbox-default": {
+  "term": "Synchronisation",
+  "said": "Synchronisation",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about synchronization.",
+  "ok": false
+ },
+ "System Calls|chatterbox-default": {
+  "term": "System Calls",
+  "said": "System Calls",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about system calls.",
+  "ok": true
+ },
+ "TCP Reliability|chatterbox-default": {
+  "term": "TCP Reliability",
+  "said": "TCP Reliability",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about TCP reliability.",
+  "ok": true
+ },
+ "TCP and UDP|chatterbox-default": {
+  "term": "TCP and UDP",
+  "said": "TCP and UDP",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about TCP and UDP.",
+  "ok": true
+ },
+ "Testing and Debugging|chatterbox-default": {
+  "term": "Testing and Debugging",
+  "said": "Testing and Debugging",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about testing and debugging.",
+  "ok": true
+ },
+ "The Relational Model|chatterbox-default": {
+  "term": "The Relational Model",
+  "said": "The Relational Model",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about the relational model.",
+  "ok": true
+ },
+ "Transactions and ACID|chatterbox-default": {
+  "term": "Transactions and ACID",
+  "said": "Transactions and ACID",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about transactions and A-side.",
+  "ok": false
+ },
+ "Virtual Memory|chatterbox-default": {
+  "term": "Virtual Memory",
+  "said": "Virtual Memory",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about virtual memory.",
+  "ok": true
+ },
+ "Amortized Analysis|chatterbox-default": {
+  "term": "Amortized Analysis",
+  "said": "Amortized Analysis",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about amortized analysis.",
+  "ok": true
+ },
+ "Arrays|chatterbox-default": {
+  "term": "Arrays",
+  "said": "Arrays",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about arrays.",
+  "ok": true
+ },
+ "Backtracking|chatterbox-default": {
+  "term": "Backtracking",
+  "said": "Backtracking",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about backtracking.",
+  "ok": true
+ },
+ "Balanced Trees|chatterbox-default": {
+  "term": "Balanced Trees",
+  "said": "Balanced Trees",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about balanced trees.",
+  "ok": true
+ },
+ "Binary Search|chatterbox-default": {
+  "term": "Binary Search",
+  "said": "Binary Search",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about binary search.",
+  "ok": true
+ },
+ "Binary Search Trees|chatterbox-default": {
+  "term": "Binary Search Trees",
+  "said": "Binary Search Trees",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about binary search trees.",
+  "ok": true
+ },
+ "Binary Search on the Answer|chatterbox-default": {
+  "term": "Binary Search on the Answer",
+  "said": "Binary Search on the Answer",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about binary search on the answer.",
+  "ok": true
+ },
+ "Bit Manipulation|chatterbox-default": {
+  "term": "Bit Manipulation",
+  "said": "Bit Manipulation",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about bit manipulation.",
+  "ok": true
+ },
+ "Breadth-First Search|chatterbox-default": {
+  "term": "Breadth-First Search",
+  "said": "Breadth-First Search",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about bread-first search.",
+  "ok": false
+ },
+ "Combinatorics|chatterbox-default": {
+  "term": "Combinatorics",
+  "said": "Combinatorics",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about combinatorics.",
+  "ok": true
+ },
+ "Control Flow|chatterbox-default": {
+  "term": "Control Flow",
+  "said": "Control Flow",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about control flow.",
+  "ok": true
+ },
+ "Depth-First Search|chatterbox-default": {
+  "term": "Depth-First Search",
+  "said": "Depth-First Search",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about depth-first search.",
+  "ok": true
+ },
+ "Divide and Conquer|chatterbox-default": {
+  "term": "Divide and Conquer",
+  "said": "Divide and Conquer",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about divide and conquer.",
+  "ok": true
+ },
+ "Dynamic Programming|chatterbox-default": {
+  "term": "Dynamic Programming",
+  "said": "Dynamic Programming",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about dynamic programming,",
+  "ok": true
+ },
+ "Edit Distance|chatterbox-default": {
+  "term": "Edit Distance",
+  "said": "Edit Distance",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about edit distance.",
+  "ok": true
+ },
+ "Fenwick Trees|chatterbox-default": {
+  "term": "Fenwick Trees",
+  "said": "Fenwick Trees",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about Fenwick trees.",
+  "ok": true
+ },
+ "Functions and Scope|chatterbox-default": {
+  "term": "Functions and Scope",
+  "said": "Functions and Scope",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about functions and scope.",
+  "ok": true
+ },
+ "Graph Representation|chatterbox-default": {
+  "term": "Graph Representation",
+  "said": "Graph Representation",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about graph representation.",
+  "ok": true
+ },
+ "Greedy Algorithms|chatterbox-default": {
+  "term": "Greedy Algorithms",
+  "said": "Greedy Algorithms",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about greedy algorithms.",
+  "ok": true
+ },
+ "Grid DP|chatterbox-default": {
+  "term": "Grid DP",
+  "said": "Grid DP",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about GridDP.",
+  "ok": false
+ },
+ "Hashing|chatterbox-default": {
+  "term": "Hashing",
+  "said": "Hashing",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about hashing.",
+  "ok": true
+ },
+ "Heaps|chatterbox-default": {
+  "term": "Heaps",
+  "said": "Heaps",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about heaps.",
+  "ok": true
+ },
+ "Interval Problems|chatterbox-default": {
+  "term": "Interval Problems",
+  "said": "Interval Problems",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about interval problems.",
+  "ok": true
+ },
+ "Knapsack|chatterbox-default": {
+  "term": "Knapsack",
+  "said": "Knapsack",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about knapsack.",
+  "ok": true
+ },
+ "Linked Lists|chatterbox-default": {
+  "term": "Linked Lists",
+  "said": "Linked Lists",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about linked lists.",
+  "ok": true
+ },
+ "Longest Increasing Subsequence|chatterbox-default": {
+  "term": "Longest Increasing Subsequence",
+  "said": "Longest Increasing Subsequence",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about longest increasing subsequence.",
+  "ok": true
+ },
+ "Matrices|chatterbox-default": {
+  "term": "Matrices",
+  "said": "Matrices",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about matrices.",
+  "ok": true
+ },
+ "Minimum Spanning Tree|chatterbox-default": {
+  "term": "Minimum Spanning Tree",
+  "said": "Minimum Spanning Tree",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about minimum spanning tree.",
+  "ok": true
+ },
+ "Modular Arithmetic|chatterbox-default": {
+  "term": "Modular Arithmetic",
+  "said": "Modular Arithmetic",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about modular arithmetic.",
+  "ok": true
+ },
+ "Monotonic Stack|chatterbox-default": {
+  "term": "Monotonic Stack",
+  "said": "Monotonic Stack",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about monotonic stack.",
+  "ok": true
+ },
+ "Non-comparison Sorting|chatterbox-default": {
+  "term": "Non-comparison Sorting",
+  "said": "Non-comparison Sorting",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about non-compensating sorting.",
+  "ok": false
+ },
+ "Number Theory|chatterbox-default": {
+  "term": "Number Theory",
+  "said": "Number Theory",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about number theory.",
+  "ok": true
+ },
+ "Pointers and References|chatterbox-default": {
+  "term": "Pointers and References",
+  "said": "Pointers and References",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about pointers and references.",
+  "ok": true
+ },
+ "Prefix Sums|chatterbox-default": {
+  "term": "Prefix Sums",
+  "said": "Prefix Sums",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about prefix sums.",
+  "ok": true
+ },
+ "Queues|chatterbox-default": {
+  "term": "Queues",
+  "said": "Queues",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about Queez.",
+  "ok": false
+ },
+ "Recurrence Relations|chatterbox-default": {
+  "term": "Recurrence Relations",
+  "said": "Recurrence Relations",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about recurrence relations.",
+  "ok": true
+ },
+ "Recursion|chatterbox-default": {
+  "term": "Recursion",
+  "said": "Recursion",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about recursion.",
+  "ok": true
+ },
+ "Segment Trees|chatterbox-default": {
+  "term": "Segment Trees",
+  "said": "Segment Trees",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about segment trees.",
+  "ok": true
+ },
+ "Shortest Paths|chatterbox-default": {
+  "term": "Shortest Paths",
+  "said": "Shortest Paths",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about shortest paths,",
+  "ok": true
+ },
+ "Sliding Window|chatterbox-default": {
+  "term": "Sliding Window",
+  "said": "Sliding Window",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about sliding window.",
+  "ok": true
+ },
+ "Sorting|chatterbox-default": {
+  "term": "Sorting",
+  "said": "Sorting",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about sorting.",
+  "ok": true
+ },
+ "Space Complexity|chatterbox-default": {
+  "term": "Space Complexity",
+  "said": "Space Complexity",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about space complexity.",
+  "ok": true
+ },
+ "Stacks|chatterbox-default": {
+  "term": "Stacks",
+  "said": "Stacks",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about stacks.",
+  "ok": true
+ },
+ "String Matching|chatterbox-default": {
+  "term": "String Matching",
+  "said": "String Matching",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about string matching.",
+  "ok": true
+ },
+ "Strings|chatterbox-default": {
+  "term": "Strings",
+  "said": "Strings",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about strings.",
+  "ok": true
+ },
+ "Strongly Connected Components|chatterbox-default": {
+  "term": "Strongly Connected Components",
+  "said": "Strongly Connected Components",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about strongly connected components.",
+  "ok": true
+ },
+ "Time Complexity|chatterbox-default": {
+  "term": "Time Complexity",
+  "said": "Time Complexity",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about time complexity.",
+  "ok": true
+ },
+ "Topological Sort|chatterbox-default": {
+  "term": "Topological Sort",
+  "said": "Topological Sort",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about topological sort.",
+  "ok": true
+ },
+ "Tree DP|chatterbox-default": {
+  "term": "Tree DP",
+  "said": "Tree DP",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about TreeDP.",
+  "ok": false
+ },
+ "Tree Traversals|chatterbox-default": {
+  "term": "Tree Traversals",
+  "said": "Tree Traversals",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about tree traversals.",
+  "ok": true
+ },
+ "Trees|chatterbox-default": {
+  "term": "Trees",
+  "said": "Trees",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about trees.",
+  "ok": true
+ },
+ "Tries|chatterbox-default": {
+  "term": "Tries",
+  "said": "Tries",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about tries.",
+  "ok": true
+ },
+ "Two Pointers|chatterbox-default": {
+  "term": "Two Pointers",
+  "said": "Two Pointers",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about two pointers.",
+  "ok": true
+ },
+ "Union-Find|chatterbox-default": {
+  "term": "Union-Find",
+  "said": "Union-Find",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about Union Find.",
+  "ok": true
+ },
+ "Variables and Types|chatterbox-default": {
+  "term": "Variables and Types",
+  "said": "Variables and Types",
+  "voice": "chatterbox-default",
+  "kind": "concept",
+  "heard": " Next, let's talk about variables and types.",
+  "ok": true
+ },
+ "Arjun|chatterbox-default": {
+  "term": "Arjun",
+  "said": "Arjun",
+  "voice": "chatterbox-default",
+  "kind": "name",
+  "heard": " Next, let's talk about Arjun.",
+  "ok": true
+ },
+ "Arjun|indictts-022743": {
+  "term": "Arjun",
+  "said": "Arjun",
+  "voice": "indictts-022743",
+  "kind": "name",
+  "heard": " Next, let's talk about Arjun.",
+  "ok": true
+ },
+ "Meera|chatterbox-default": {
+  "term": "Meera",
+  "said": "Meera",
+  "voice": "chatterbox-default",
+  "kind": "name",
+  "heard": " Next, let's talk about Mira.",
+  "ok": false
+ },
+ "Meera|indictts-022743": {
+  "term": "Meera",
+  "said": "Meera",
+  "voice": "indictts-022743",
+  "kind": "name",
+  "heard": " Next, let's talk about mere.",
+  "ok": false
+ },
+ "Sunita|chatterbox-default": {
+  "term": "Sunita",
+  "said": "Sunita",
+  "voice": "chatterbox-default",
+  "kind": "name",
+  "heard": " Next, let's talk about Sunita,",
+  "ok": true
+ },
+ "Sunita|indictts-022743": {
+  "term": "Sunita",
+  "said": "Sunita",
+  "voice": "indictts-022743",
+  "kind": "name",
+  "heard": " Next, let's talk about Sunita.",
+  "ok": true
+ },
+ "Vikram|chatterbox-default": {
+  "term": "Vikram",
+  "said": "Vikram",
+  "voice": "chatterbox-default",
+  "kind": "name",
+  "heard": " Next, let's talk about Vikram.",
+  "ok": true
+ },
+ "Vikram|indictts-022743": {
+  "term": "Vikram",
+  "said": "Vikram",
+  "voice": "indictts-022743",
+  "kind": "name",
+  "heard": " Next, let's talk about Vikram.",
+  "ok": true
+ },
+ "Priya|chatterbox-default": {
+  "term": "Priya",
+  "said": "Priya",
+  "voice": "chatterbox-default",
+  "kind": "name",
+  "heard": " Next, let's talk about Priya.",
+  "ok": true
+ },
+ "Priya|indictts-022743": {
+  "term": "Priya",
+  "said": "Priya",
+  "voice": "indictts-022743",
+  "kind": "name",
+  "heard": " Next, let's talk about Priya.",
+  "ok": true
+ },
+ "Raghavan|chatterbox-default": {
+  "term": "Raghavan",
+  "said": "Raghavan",
+  "voice": "chatterbox-default",
+  "kind": "name",
+  "heard": " Next, let's talk about Ragavan.",
+  "ok": false
+ },
+ "Raghavan|indictts-022743": {
+  "term": "Raghavan",
+  "said": "Raghavan",
+  "voice": "indictts-022743",
+  "kind": "name",
+  "heard": " Next, let's talk about Raghuavan.",
+  "ok": false
+ },
+ "Kabir|chatterbox-default": {
+  "term": "Kabir",
+  "said": "Kabir",
+  "voice": "chatterbox-default",
+  "kind": "name",
+  "heard": " Next, let's talk about Kabir.",
+  "ok": true
+ },
+ "Kabir|indictts-022743": {
+  "term": "Kabir",
+  "said": "Kabir",
+  "voice": "indictts-022743",
+  "kind": "name",
+  "heard": " Next, let's talk about Kabir.",
+  "ok": true
+ }
+}
