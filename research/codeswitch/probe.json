@@ -1,0 +1,482 @@
+[
+ {
+  "kind": "hindi",
+  "clip": "hi_0",
+  "setting": "en",
+  "detected": "English",
+  "text": "Prasiddh Kabir Adheta, Purushottam Agrawal ka Yehashodh Alek, Us Ramanand ki khooj karta hai.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_0",
+  "setting": "auto",
+  "detected": "Hindi",
+  "text": "प्रसिद्ध कबीर अध्येता पुरुशोत्तम अग्रवाल का यह शोध आलेक उस रामानंद की खोज करता है.",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_0",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "प्रसिद्ध कबीर अध्येता पुरुशोत्तम अग्रवाल का यह शोध आलेक उस रामानंद की खोज करता है.",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_37",
+  "setting": "en",
+  "detected": "English",
+  "text": "This is the end of the day.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_37",
+  "setting": "auto",
+  "detected": "Hindi",
+  "text": "इसके बाद वो आज की आवाज वाले पत्थरों को अलग-अलग गुच्छों में बांधता और उन्हें अपने कंधे पर लटका लेता.",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_37",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "इसके बाद वो आज की आवाज वाले पत्थरों को अलग-अलग गुच्छों में बांधता और उन्हें अपने कंधे पर लटका लेता.",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_211",
+  "setting": "en",
+  "detected": "English",
+  "text": "Nishchit hi adhunik kavita ke kut kuch hat tak jahn ki kavita ka varnan kar sakti hain ki vhe apna kavya san saar swayam rachati hain, agyat ahsaso ki zameen ko tatolti hain.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_211",
+  "setting": "auto",
+  "detected": "Hindi",
+  "text": "निश्चित ही आधुनिक कविता के कूट कुछ हद तक जान की कविता का वर्णन कर सकते हैं कि वे अपना काव्य संसार स्वयम रच्चती हैं, अज्यात एहसासों की जमीन को टटोलती हैं.",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_211",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "निश्चित ही आधुनिक कविता के कूट कुछ हद तक जान की कविता का वर्णन कर सकते हैं कि वे अपना काव्य संसार स्वयम रच्चती हैं, अज्यात एहसासों की जमीन को टटोलती हैं.",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_512",
+  "setting": "en",
+  "detected": "English",
+  "text": "28 Filistini and 4 Pakistanis killed.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_512",
+  "setting": "auto",
+  "detected": "Hindi",
+  "text": "28 फिलिस्तिनी और 4 पाकिस्तानी मारे गए हैं.",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_512",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "28 फिलिस्तिनी और 4 पाकिस्तानी मारे गए हैं.",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_1024",
+  "setting": "en",
+  "detected": "English",
+  "text": "I'm a project you built and I'm a project you built.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_1024",
+  "setting": "auto",
+  "detected": "Hindi",
+  "text": "हरे भरे पेड़ों और जाडियों से ढकी पहाडियों से घीरे इस विशाल जंगल के एक छोर पर बसी इस छोटी सी बस्ती में जब सवेरे की पहली बस आकर रुकती है तो यहां के ठहरे हुए जीवन में जैसे एक हलचल सी आरंब हो जाती है.",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_1024",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "हरे भरे पेड़ों और जाडियों से ढकी पहाडियों से घीरे इस विशाल जंगल के एक छोर पर बसी इस छोटी सी बस्ती में जब सवेरे की पहली बस आकर रुकती है तो यहां के ठहरे हुए जीवन में जैसे एक हलचल सी आरंब हो जाती है.",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_2048",
+  "setting": "en",
+  "detected": "English",
+  "text": "Sach and Jhut, Judwaan bhai thay, doonokie eeksiy shakil thay.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_2048",
+  "setting": "auto",
+  "detected": "Hindi",
+  "text": "सच और जूट जुडवां भाई थे, दोनों की एक सी शकल थी,",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_2048",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "सच और जूट जुडवां भाई थे, दोनों की एक सी शकल थी,",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_3001",
+  "setting": "en",
+  "detected": "English",
+  "text": "I have set your password to your chest, then you can see the screen for a second, then you can unlock the screen.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_3001",
+  "setting": "auto",
+  "detected": "Hindi",
+  "text": "एक बार password के लिए अपने चेहरे को आपने सेट कर लिया, उसके बाद बस स्क्रीन को कुछ सेकंड के लिए देखिए, उसके बाद आप स्क्रीन को स्वाइप कर अनलॉक कर सकते हैं.",
+  "devanagari": 0.9
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_3001",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "एक बार password के लिए अपने चेहरे को आपने सेट कर लिया, उसके बाद बस स्क्रीन को कुछ सेकंड के लिए देखिए, उसके बाद आप स्क्रीन को स्वाइप कर अनलॉक कर सकते हैं.",
+  "devanagari": 0.9
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_4096",
+  "setting": "en",
+  "detected": "English",
+  "text": "We are now watching the Jinn Mahadvipo, who are the ones who were made by the",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_4096",
+  "setting": "auto",
+  "detected": "Hindi",
+  "text": "वे इस धराकी उत्पत्ति के साथ ही बने थे तथा इन पर समुद्र में तैरते रहने के कारण तथा वायू के प्रवाह के कारण इनका खिसकना निरंतर जारी है।",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "hindi",
+  "clip": "hi_4096",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "वे इस धराकी उत्पत्ति के साथ ही बने थे तथा इन पर समुद्र में तैरते रहने के कारण तथा वायू के प्रवाह के कारण इनका खिसकना निरंतर जारी है।",
+  "devanagari": 1.0
+ },
+ {
+  "kind": "english",
+  "clip": "100461_0",
+  "setting": "en",
+  "detected": "English",
+  "text": "The Sultan appreciating the intelligence and wit King Rayar had in replying to his invitation.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "100461_0",
+  "setting": "auto",
+  "detected": "English",
+  "text": "The Sultan appreciating the intelligence and wit King Rayar had in replying to his invitation.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "100461_0",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "The Sultan appreciating the intelligence and wit King Rayar had in replying to his invitation.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "115625_0",
+  "setting": "en",
+  "detected": "English",
+  "text": "The merchant replied, My son, I do not know anything.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "115625_0",
+  "setting": "auto",
+  "detected": "English",
+  "text": "The merchant replied, My son, I do not know anything.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "115625_0",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "The merchant replied, My son, I do not know anything.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "130789_0",
+  "setting": "en",
+  "detected": "English",
+  "text": "He drew in a deep breath as he looked at them.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "130789_0",
+  "setting": "auto",
+  "detected": "English",
+  "text": "He drew in a deep breath as he looked at them.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "130789_0",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "He drew in a deep breath as he looked at them.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "142162_0",
+  "setting": "en",
+  "detected": "English",
+  "text": "Their names were Ram, Sam and Sunil.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "142162_0",
+  "setting": "auto",
+  "detected": "English",
+  "text": "Their names were Ram, Sam and Sunil.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "142162_0",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "Their names were Ram, Sam and Sunil.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "1895_0",
+  "setting": "en",
+  "detected": "English",
+  "text": "I did not listen to such lame excuses.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "1895_0",
+  "setting": "auto",
+  "detected": "English",
+  "text": "I did not listen to such lame excuses.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "1895_0",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "I did not listen to such lame excuses.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "32223_0",
+  "setting": "en",
+  "detected": "English",
+  "text": "Poor Kua, not knowing that the rooty had fallen from her beak, she kept on singing. Saa, sing the sunflowers. Re, ring out the red roses. Ga, giggle the gulmohars. Ma, murmur the marigolds. Pa, pop the pretty puppies. Da, dance the dalias. Ni, not the neem flowers. Sarega ma pada nisa.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "32223_0",
+  "setting": "auto",
+  "detected": "English",
+  "text": "Poor Kua, not knowing that the rooty had fallen from her beak, she kept on singing. Saa, sing the sunflowers. Re, ring out the red roses. Ga, giggle the gulmohars. Ma, murmur the marigolds. Pa, pop the pretty puppies. Da, dance the dalias. Ni, not the neem flowers. Sarega ma pada nisa.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "32223_0",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "poor kua not knowing that the rooty had fallen from her beak she kept on singing. sa sing the sunflowers. re ring out the red roses. ga giggle the gullmohars. ma murmur the marigolds. pa pop the pretty puppies. da dance the dhalias. ni not the neemflowers. सारे गा मापादा नीसा.",
+  "devanagari": 0.04
+ },
+ {
+  "kind": "english",
+  "clip": "47387_0",
+  "setting": "en",
+  "detected": "English",
+  "text": "These fruits will not help you to protect yourself against the cold.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "47387_0",
+  "setting": "auto",
+  "detected": "English",
+  "text": "These fruits will not help you to protect yourself against the cold.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "47387_0",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "These fruits will not help you to protect yourself against the cold.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "58760_0",
+  "setting": "en",
+  "detected": "English",
+  "text": "Seeing the whole drama of Rat liberating Dow King and his friends, the crow thought, I do not trust anyone.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "58760_0",
+  "setting": "auto",
+  "detected": "English",
+  "text": "Seeing the whole drama of Rat liberating Dow King and his friends, the crow thought, I do not trust anyone.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "english",
+  "clip": "58760_0",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "Seeing the whole drama of Rat liberating Dow King and his friends, the crow thought, I do not trust anyone.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "mixed",
+  "clip": "100461_0+hi_0",
+  "setting": "en",
+  "detected": "English",
+  "text": "The Sultan appreciating the intelligence and wit King Rayaar had in replying to his invitation. Prasiddh Kabir Adheta, Purushottam Agrawal ka Yehashodh Alek, us Ramanand ki khooj karta hai.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "mixed",
+  "clip": "100461_0+hi_0",
+  "setting": "auto",
+  "detected": "Hindi",
+  "text": "The Sultan appreciating the intelligence and wit King Rayaar had in replying to his invitation. प्रसिद्ध कबीर अध्येता पुरुशोत्तम अग्रवाल का यह शोध आलेक उस रामानंद की खोज करता है.",
+  "devanagari": 0.35
+ },
+ {
+  "kind": "mixed",
+  "clip": "100461_0+hi_0",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "The Sultan appreciating the intelligence and wit King Rayaar had in replying to his invitation. प्रसिद्ध कबीर अध्येता पुरुशोत्तम अग्रवाल का यह शोध आलेक उस रामानंद की खोज करता है.",
+  "devanagari": 0.35
+ },
+ {
+  "kind": "mixed",
+  "clip": "115625_0+hi_37",
+  "setting": "en",
+  "detected": "English",
+  "text": "The merchant replied, My son, I do not know anything. इसके बाद वो आज की आवाज वाले पत्थरों को अलग-अलग गुच्छों में बांधता और उन्हें अपने कंधे पर लटका लेता.",
+  "devanagari": 0.54
+ },
+ {
+  "kind": "mixed",
+  "clip": "115625_0+hi_37",
+  "setting": "auto",
+  "detected": "Hindi",
+  "text": "The merchant replied, My son, I do not know anything. इसके बाद वो आज की आवाज वाले पत्थरों को अलग-अलग गुच्छों में बांधता और उन्हें अपने कंधे पर लटका लेता.",
+  "devanagari": 0.54
+ },
+ {
+  "kind": "mixed",
+  "clip": "115625_0+hi_37",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "The merchant replied, My son, I do not know anything. इसके बाद वो आज की आवाज वाले पत्थरों को अलग-अलग गुच्छों में बांधता और उन्हें अपने कंधे पर लटका लेता.",
+  "devanagari": 0.54
+ },
+ {
+  "kind": "mixed",
+  "clip": "130789_0+hi_211",
+  "setting": "en",
+  "detected": "English",
+  "text": "He drew in a deep breath as he looked at them.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "mixed",
+  "clip": "130789_0+hi_211",
+  "setting": "auto",
+  "detected": "Hindi",
+  "text": "He drew in a deep breath as he looked at them. Nishchit hii Aadhunik Kavita ke Koot kuch hadt tak jaan ki Kavita ka Varnan kar sakte hain ki vhe apna Kavya Sansaar swayam rachati hain, agyat ahsason ki zameen ko tatolti hain.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "mixed",
+  "clip": "130789_0+hi_211",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "He drew in a deep breath as he looked at them. Nishchit hii Aadhunik Kavita ke Koot kuch hadt tak jaan ki Kavita ka Varnan kar sakte hain ki vhe apna Kavya Sansaar swayam rachati hain, agyat ahsason ki zameen ko tatolti hain.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "mixed",
+  "clip": "142162_0+hi_512",
+  "setting": "en",
+  "detected": "English",
+  "text": "Their names were Ram, Sam and Sunil. 28 Philistini and 4 Pakistani mare gay hai.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "mixed",
+  "clip": "142162_0+hi_512",
+  "setting": "auto",
+  "detected": "Hindi",
+  "text": "Their names were Ram, Sam and Sunil. 28 Philistini and 4 Pakistani mare gay hai.",
+  "devanagari": 0.0
+ },
+ {
+  "kind": "mixed",
+  "clip": "142162_0+hi_512",
+  "setting": "hi",
+  "detected": "Hindi",
+  "text": "Their names were Ram, Sam and Sunil. 28 Philistini and 4 Pakistani mare gay hai.",
+  "devanagari": 0.0
+ }
+]

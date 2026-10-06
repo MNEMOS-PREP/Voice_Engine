@@ -29,6 +29,15 @@ earliest.
 
 Nothing is stored. The audio is sent to Groq to be transcribed and dropped
 here; keeping it is FR-11.19's, with consent (day 12).
+
+**The language is detected, not assumed** (FR-11.22, EC-11.10; 2026-10-07,
+`research/codeswitch`). Told "English", Whisper invented English for half of
+eight Hindi recordings ("This is the end of the day.", once the prompt read
+back) — a Hindi answer judged on words never said, which is the penalty the
+spec forbids and fabricated evidence besides. Left to detect, it heard all
+eight as Hindi and wrote them as said, and all eight English recordings came
+back word for word as before. A detection outside the languages students here
+speak (a short "Yes." heard as Welsh) is asked again as English.
 """
 
 from __future__ import annotations
@@ -55,6 +64,29 @@ USER_AGENT = "AI-Interviewer/1.0 (+https://github.com/MNEMOS-PREP)"
 MAX_AUDIO_BYTES = 12 * 1024 * 1024
 #: A word below this confidence is a word nobody should quote.
 LOW_CONFIDENCE = 0.45
+#: "auto" (detect) or a language code to force — "en" is the old behaviour.
+LANGUAGE = os.getenv("M11_ASR_LANGUAGE", "auto")
+#: What a student here may answer in; a detection outside it is retried as
+#: English. Whisper names languages in English ("Hindi"), any case.
+SPOKEN_HERE = frozenset(
+    {
+        "english",
+        "hindi",
+        "urdu",
+        "bengali",
+        "marathi",
+        "gujarati",
+        "punjabi",
+        "tamil",
+        "telugu",
+        "kannada",
+        "malayalam",
+        "odia",
+        "assamese",
+        "nepali",
+        "sanskrit",
+    }
+)
 #: Whisper's hallucination filter: not speech AND unlikely as text.
 NO_SPEECH = 0.6
 UNLIKELY_LOGPROB = -1.0
@@ -129,11 +161,13 @@ def set_transport(transport: Transport | None) -> None:
     _transport = transport or _http
 
 
-def _multipart(audio: bytes, content_type: str, prompt: str | None) -> tuple[bytes, str]:
+def _multipart(
+    audio: bytes, content_type: str, prompt: str | None, language: str | None = None
+) -> tuple[bytes, str]:
     boundary = uuid.uuid4().hex
     fields = [
         ("model", ASR_MODEL),
-        ("language", "en"),
+        *([("language", language)] if language else []),
         ("response_format", "verbose_json"),
         ("timestamp_granularities[]", "word"),
         ("timestamp_granularities[]", "segment"),
@@ -172,7 +206,19 @@ def transcribe(
     keys = ring()
     if not keys:
         raise AsrUnavailable("No Groq key is configured.")
-    body, boundary = _multipart(audio, content_type, prompt_for(context))
+    prompt = prompt_for(context)
+    forced = None if LANGUAGE == "auto" else LANGUAGE
+    result = _ask(keys, audio, content_type, prompt, forced)
+    if forced is None and (result.language or "") not in SPOKEN_HERE:
+        # Detected as a language nobody here answers in: heard again as English.
+        result = _ask(keys, audio, content_type, prompt, "en")
+    return result
+
+
+def _ask(
+    keys: KeyRing, audio: bytes, content_type: str, prompt: str | None, language: str | None
+) -> ASRResult:
+    body, boundary = _multipart(audio, content_type, prompt, language)
     last = "no attempt"
     # Each key once: a pool of keys is a pool of quota (keys.py).
     for _ in range(len(keys)):
@@ -283,7 +329,7 @@ def shape(raw: dict[str, Any], *, latency_ms: int = 0) -> ASRResult:
         text=text,
         words=words,
         duration_ms=round(float(raw.get("duration") or 0.0) * 1000),
-        language=raw.get("language"),
+        language=str(raw["language"]).lower() if raw.get("language") else None,
         mean_confidence=round(mean, 3),
         low_confidence_spans=spans,
         speech_start_ms=words[0].start_ms if words else None,

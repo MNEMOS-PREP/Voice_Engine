@@ -121,6 +121,41 @@ def test_a_refused_key_hands_over_to_the_next(monkeypatch):
     assert result.words[0].word == "A"
 
 
+def test_the_language_is_detected_not_assumed(monkeypatch):
+    """FR-11.22: no language is sent, and a Hindi answer comes back as said,
+    tagged — not as the English Whisper invents when told to expect it."""
+    monkeypatch.setenv("GROQ_API_KEYS", "key-one")
+    hindi = {**RAW, "language": "Hindi", "text": " हैश मैप की को बकेट में रखता है",
+             "words": [{"word": "हैश", "start": 0.4, "end": 0.8}]}
+    bodies: list[bytes] = []
+
+    def transport(url, body, headers, timeout):
+        bodies.append(body)
+        return hindi
+
+    asr.set_transport(transport)
+    result = asr.transcribe(b"RIFF....", "audio/wav")
+    assert len(bodies) == 1 and b'name="language"' not in bodies[0]
+    assert result.language == "hindi"
+    assert result.text == "हैश"
+
+
+def test_a_language_nobody_here_speaks_is_heard_again_as_english(monkeypatch):
+    """A short answer detected as Welsh is asked again, as English."""
+    monkeypatch.setenv("GROQ_API_KEYS", "key-one")
+    bodies: list[bytes] = []
+
+    def transport(url, body, headers, timeout):
+        bodies.append(body)
+        return {**RAW, "language": "Welsh"} if len(bodies) == 1 else RAW
+
+    asr.set_transport(transport)
+    result = asr.transcribe(b"RIFF....", "audio/wav")
+    assert len(bodies) == 2
+    assert b'name="language"\r\n\r\nen\r\n' in bodies[1]
+    assert result.language == "english"
+
+
 def test_every_key_refused_is_unavailable_not_a_crash(monkeypatch):
     monkeypatch.setenv("GROQ_API_KEYS", "only-key")
 
