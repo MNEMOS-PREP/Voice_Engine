@@ -1,0 +1,282 @@
+[
+ {
+  "form": "O(1)",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is O, 1, in the worst case."
+ },
+ {
+  "form": "O(1)",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is O, one, in the worst case."
+ },
+ {
+  "form": "O(1)",
+  "voice": "indictts-017689",
+  "heard": "The time complexity here is O-an in the worst case."
+ },
+ {
+  "form": "O(1)",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is O1 in the worst case."
+ },
+ {
+  "form": "O(1)",
+  "voice": "indictts-063175",
+  "heard": "The time complexity here is O1 in the worst case."
+ },
+ {
+  "form": "O(1)",
+  "voice": "indictts-103607",
+  "heard": "The time complexity here is O1, in the worst case."
+ },
+ {
+  "form": "O(1)",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is all 1 in the worst case."
+ },
+ {
+  "form": "O(n)",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is O, N, in the worst case."
+ },
+ {
+  "form": "O(n)",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is O, N, in the worst case,"
+ },
+ {
+  "form": "O(n)",
+  "voice": "indictts-017689",
+  "heard": "The time complexity here is Rn. In the worst case,"
+ },
+ {
+  "form": "O(n)",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is ON in the worst case."
+ },
+ {
+  "form": "O(n)",
+  "voice": "indictts-063175",
+  "heard": "The tank complexity here is OR in, in the worst case."
+ },
+ {
+  "form": "O(n)",
+  "voice": "indictts-103607",
+  "heard": "The time complexity here is O, N. In the worst case,"
+ },
+ {
+  "form": "O(n)",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is on in the worst case."
+ },
+ {
+  "form": "O(log n)",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is ah log n, in the worst case."
+ },
+ {
+  "form": "O(log n)",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is O log N in the worst case."
+ },
+ {
+  "form": "O(log n)",
+  "voice": "indictts-017689",
+  "heard": "The time complexity here is O log N in the worst case."
+ },
+ {
+  "form": "O(log n)",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is O log in in the worst case."
+ },
+ {
+  "form": "O(log n)",
+  "voice": "indictts-063175",
+  "heard": "The time complexity here is O log N in the worst case."
+ },
+ {
+  "form": "O(log n)",
+  "voice": "indictts-103607",
+  "heard": "The time complexity here is O all oak n in the worst case."
+ },
+ {
+  "form": "O(log n)",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is O log N in the worst case."
+ },
+ {
+  "form": "O(n log n)",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is O n log n in the worst case."
+ },
+ {
+  "form": "O(n log n)",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is O and login in the worst case."
+ },
+ {
+  "form": "O(n log n)",
+  "voice": "indictts-017689",
+  "heard": "The time complexity here is R and log N in the worst case."
+ },
+ {
+  "form": "O(n log n)",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is O n log n. In the worst case,"
+ },
+ {
+  "form": "O(n log n)",
+  "voice": "indictts-063175",
+  "heard": "The PANG complexity here is O in the worst case."
+ },
+ {
+  "form": "O(n log n)",
+  "voice": "indictts-103607",
+  "heard": "The time complexity here is O, N, N, N, N, N, N, in the worst case."
+ },
+ {
+  "form": "O(n log n)",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is O and log n in the worst case."
+ },
+ {
+  "form": "O(n^2)",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is O and 2 in the worst case,"
+ },
+ {
+  "form": "O(n^2)",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is Mn2 in the worst case."
+ },
+ {
+  "form": "O(n^2)",
+  "voice": "indictts-017689",
+  "heard": "The time complexity here is O in 2, in the worst case."
+ },
+ {
+  "form": "O(n^2)",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is O and 2, 2. In the worst case,"
+ },
+ {
+  "form": "O(n^2)",
+  "voice": "indictts-063175",
+  "heard": "The time complexity here is O and 2 in the worst case."
+ },
+ {
+  "form": "O(n^2)",
+  "voice": "indictts-103607",
+  "heard": "The time complexity here is O and 2 in the worst case."
+ },
+ {
+  "form": "O(n^2)",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is on too in the worst case."
+ },
+ {
+  "form": "O(n²)",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is O n-square, in the worst case."
+ },
+ {
+  "form": "O(n²)",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is up and square in the worst case."
+ },
+ {
+  "form": "O(n²)",
+  "voice": "indictts-017689",
+  "heard": "The time complexity here is O, n squared, in the worst case."
+ },
+ {
+  "form": "O(n²)",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is OIC, in the worst case."
+ },
+ {
+  "form": "O(n²)",
+  "voice": "indictts-063175",
+  "heard": "The time complexity here is O n squared in the worst case"
+ },
+ {
+  "form": "O(n²)",
+  "voice": "indictts-103607",
+  "heard": "The pang complexity here is O in square, in the worst case."
+ },
+ {
+  "form": "O(n²)",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is On squared in the worst case"
+ },
+ {
+  "form": "O(V + E)",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is O V plus E in the worst case."
+ },
+ {
+  "form": "O(V + E)",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is O V plus E in the worst case."
+ },
+ {
+  "form": "O(V + E)",
+  "voice": "indictts-017689",
+  "heard": "The time complexity here is O V plus E, in the worst case."
+ },
+ {
+  "form": "O(V + E)",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is O, V plus E, in the worst case."
+ },
+ {
+  "form": "O(V + E)",
+  "voice": "indictts-063175",
+  "heard": "The time complexity here is OAD plus E. In the worst case,"
+ },
+ {
+  "form": "O(V + E)",
+  "voice": "indictts-103607",
+  "heard": "The time complexity here is O, V plus E, in the worst case."
+ },
+ {
+  "form": "O(V + E)",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is OV plus E in the worst case."
+ },
+ {
+  "form": "O(2^n)",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is O2n in the worst case."
+ },
+ {
+  "form": "O(2^n)",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is O2n in the worst case."
+ },
+ {
+  "form": "O(2^n)",
+  "voice": "indictts-017689",
+  "heard": "The time complexity here is O to N in the worst case."
+ },
+ {
+  "form": "O(2^n)",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is O2n in the worst case."
+ },
+ {
+  "form": "O(2^n)",
+  "voice": "indictts-063175",
+  "heard": "The time complexity here is O, twin, in the worst case."
+ },
+ {
+  "form": "O(2^n)",
+  "voice": "indictts-103607",
+  "heard": "The time complexity here is O, 2N, in the worst case."
+ },
+ {
+  "form": "O(2^n)",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is O2N in the worst case."
+ }
+]

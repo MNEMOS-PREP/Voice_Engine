@@ -40,7 +40,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from . import lexicon
+from . import lexicon, notation
 
 log = logging.getLogger("uvicorn.error")
 
@@ -318,9 +318,10 @@ class Engine:
 
     def speak(self, text: str, voice: Voice) -> tuple[bytes, bool, int]:
         """(wav, from_cache, ms). Raises EngineUnavailable when it cannot."""
-        # Words the voices get wrong, respelled (EC-11.11, `lexicon.py`) —
-        # before the cache, so a fixed word is a new line, not the old one.
-        text = punc_norm(lexicon.apply(text, voice.key))
+        # Notation no voice can read, in words (`notation.py`), then words the
+        # voices get wrong, respelled (EC-11.11, `lexicon.py`) — before the
+        # cache, so a fixed word is a new line, not the old one.
+        text = punc_norm(lexicon.apply(notation.say(text), voice.key))
         if not text:
             raise ValueError("nothing to say")
         hit = self.cached(text, voice)

@@ -1,0 +1,177 @@
+[
+ {
+  "form": "O of en",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is OVON in the worst case."
+ },
+ {
+  "form": "O of en",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is O of N, in the worst case,"
+ },
+ {
+  "form": "O of en",
+  "voice": "indictts-017689",
+  "heard": "The time complexity here is O in the worst case."
+ },
+ {
+  "form": "O of en",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is O of E in the worst case."
+ },
+ {
+  "form": "O of en",
+  "voice": "indictts-063175",
+  "heard": "The time complexity here is of an in the worst case."
+ },
+ {
+  "form": "O of en",
+  "voice": "indictts-103607",
+  "heard": "The time complexity here is O of N in the worst case."
+ },
+ {
+  "form": "O of en",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is O in the worst case."
+ },
+ {
+  "form": "O of en log en",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is O , in the worst case."
+ },
+ {
+  "form": "O of en log en",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is O of in log n, in the worst case,"
+ },
+ {
+  "form": "O of en log en",
+  "voice": "indictts-017689",
+  "heard": "The dying complexity here is O in the worst case."
+ },
+ {
+  "form": "O of en log en",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is off and log in in the worst case."
+ },
+ {
+  "form": "O of en log en",
+  "voice": "indictts-063175",
+  "heard": "The time complexity here is O in the worst case."
+ },
+ {
+  "form": "O of en log en",
+  "voice": "indictts-103607",
+  "heard": "The time complexity here is O of n log n. In the worst case,"
+ },
+ {
+  "form": "O of en log en",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is OAuth and log in in the worst case."
+ },
+ {
+  "form": "O of en squared",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is O in the worst case,"
+ },
+ {
+  "form": "O of en squared",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is O of N squared. In the worst case,"
+ },
+ {
+  "form": "O of en squared",
+  "voice": "indictts-017689",
+  "heard": "The time complexity here is O of n squared in the worst case."
+ },
+ {
+  "form": "O of en squared",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is ORF or ORstort in the worst case."
+ },
+ {
+  "form": "O of en squared",
+  "voice": "indictts-063175",
+  "heard": "The time complexity here is O of n squared in the worst case."
+ },
+ {
+  "form": "O of en squared",
+  "voice": "indictts-103607",
+  "heard": "The time complexity here is O in the worst case."
+ },
+ {
+  "form": "O of en squared",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is O in the worst case."
+ },
+ {
+  "form": "O of two to the en",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is O to the n in the worst case."
+ },
+ {
+  "form": "O of two to the en",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is O of 2 to the n, in the worst case."
+ },
+ {
+  "form": "O of two to the en",
+  "voice": "indictts-017689",
+  "heard": "The time complexity here is O of 2 to the n in the worst case."
+ },
+ {
+  "form": "O of two to the en",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is O of 2 to the N in the worst case."
+ },
+ {
+  "form": "O of two to the en",
+  "voice": "indictts-063175",
+  "heard": "The time complexity here is O in the vastis."
+ },
+ {
+  "form": "O of two to the en",
+  "voice": "indictts-103607",
+  "heard": "The time complexity here is O of 2 to the n. In the worst case,"
+ },
+ {
+  "form": "O of two to the en",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is O in the worst case."
+ },
+ {
+  "form": "O of one",
+  "voice": "chatterbox-default",
+  "heard": "The time complexity here is O in the worst case."
+ },
+ {
+  "form": "O of one",
+  "voice": "dailytalk-0",
+  "heard": "The time complexity here is O of 1 in the worst case."
+ },
+ {
+  "form": "O of one",
+  "voice": "indictts-017689",
+  "heard": "The time complexity here is O , in the worst case."
+ },
+ {
+  "form": "O of one",
+  "voice": "indictts-022743",
+  "heard": "The time complexity here is O of 1 in the worst case."
+ },
+ {
+  "form": "O of one",
+  "voice": "indictts-063175",
+  "heard": "the time complexity here is O of 1 in the worst case"
+ },
+ {
+  "form": "O of one",
+  "voice": "indictts-103607",
+  "heard": "The time complexity here is O , in the worst case."
+ },
+ {
+  "form": "O of one",
+  "voice": "indictts-123823",
+  "heard": "The time complexity here is O in the worst case."
+ }
+]
