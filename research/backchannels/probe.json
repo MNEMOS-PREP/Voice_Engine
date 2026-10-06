@@ -1,0 +1,506 @@
+[
+ {
+  "text": "Mm-hm.",
+  "voice": "chatterbox-default",
+  "ms": 2160,
+  "made_ms": 2,
+  "heard": "Mmm. Mmm.",
+  "came_back": false
+ },
+ {
+  "text": "Mm-hm.",
+  "voice": "dailytalk-0",
+  "ms": 1040,
+  "made_ms": 3439,
+  "heard": "Mm-hmm.",
+  "came_back": true
+ },
+ {
+  "text": "Mm-hm.",
+  "voice": "indictts-017689",
+  "ms": 1520,
+  "made_ms": 4383,
+  "heard": "Mm-mm.",
+  "came_back": false
+ },
+ {
+  "text": "Mm-hm.",
+  "voice": "indictts-022743",
+  "ms": 2280,
+  "made_ms": 5575,
+  "heard": "Mm-hmm.",
+  "came_back": true
+ },
+ {
+  "text": "Mm-hm.",
+  "voice": "indictts-063175",
+  "ms": 920,
+  "made_ms": 3256,
+  "heard": "Mm-hmm.",
+  "came_back": true
+ },
+ {
+  "text": "Mm-hm.",
+  "voice": "indictts-103607",
+  "ms": 880,
+  "made_ms": 3261,
+  "heard": "Mm-hmm.",
+  "came_back": true
+ },
+ {
+  "text": "Mm-hm.",
+  "voice": "indictts-123823",
+  "ms": 2000,
+  "made_ms": 5106,
+  "heard": "Mm-hmm. Mm-mm-mm.",
+  "came_back": false
+ },
+ {
+  "text": "Mm-hmm.",
+  "voice": "chatterbox-default",
+  "ms": 2040,
+  "made_ms": 5066,
+  "heard": "Mm. Mm!",
+  "came_back": false
+ },
+ {
+  "text": "Mm-hmm.",
+  "voice": "dailytalk-0",
+  "ms": 1000,
+  "made_ms": 3658,
+  "heard": "Mm-hmm.",
+  "came_back": true
+ },
+ {
+  "text": "Mm-hmm.",
+  "voice": "indictts-017689",
+  "ms": 1120,
+  "made_ms": 3469,
+  "heard": "Mm-mm.",
+  "came_back": false
+ },
+ {
+  "text": "Mm-hmm.",
+  "voice": "indictts-022743",
+  "ms": 1160,
+  "made_ms": 3936,
+  "heard": "M-5",
+  "came_back": false
+ },
+ {
+  "text": "Mm-hmm.",
+  "voice": "indictts-063175",
+  "ms": 1440,
+  "made_ms": 4146,
+  "heard": "Mm-hmm. Mm.",
+  "came_back": false
+ },
+ {
+  "text": "Mm-hmm.",
+  "voice": "indictts-103607",
+  "ms": 1440,
+  "made_ms": 4206,
+  "heard": "Mm-mm.",
+  "came_back": false
+ },
+ {
+  "text": "Mm-hmm.",
+  "voice": "indictts-123823",
+  "ms": 1960,
+  "made_ms": 4861,
+  "heard": "Mm. Mm. Mm.",
+  "came_back": false
+ },
+ {
+  "text": "Mhm.",
+  "voice": "chatterbox-default",
+  "ms": 920,
+  "made_ms": 3284,
+  "heard": "Mm-hmm.",
+  "came_back": true
+ },
+ {
+  "text": "Mhm.",
+  "voice": "dailytalk-0",
+  "ms": 1160,
+  "made_ms": 3621,
+  "heard": "Mm. Muh.",
+  "came_back": false
+ },
+ {
+  "text": "Mhm.",
+  "voice": "indictts-017689",
+  "ms": 760,
+  "made_ms": 3149,
+  "heard": "Mm-hmm.",
+  "came_back": true
+ },
+ {
+  "text": "Mhm.",
+  "voice": "indictts-022743",
+  "ms": 1400,
+  "made_ms": 3878,
+  "heard": "Mm. Mm.",
+  "came_back": false
+ },
+ {
+  "text": "Mhm.",
+  "voice": "indictts-063175",
+  "ms": 960,
+  "made_ms": 3306,
+  "heard": "Mm-hmm.",
+  "came_back": true
+ },
+ {
+  "text": "Mhm.",
+  "voice": "indictts-103607",
+  "ms": 800,
+  "made_ms": 3137,
+  "heard": "this",
+  "came_back": false
+ },
+ {
+  "text": "Mhm.",
+  "voice": "indictts-123823",
+  "ms": 920,
+  "made_ms": 3294,
+  "heard": "Mmm.",
+  "came_back": false
+ },
+ {
+  "text": "Hmm.",
+  "voice": "chatterbox-default",
+  "ms": 760,
+  "made_ms": 2949,
+  "heard": "Hmm.",
+  "came_back": true
+ },
+ {
+  "text": "Hmm.",
+  "voice": "dailytalk-0",
+  "ms": 1680,
+  "made_ms": 4478,
+  "heard": "Hmm, that's slow.",
+  "came_back": false
+ },
+ {
+  "text": "Hmm.",
+  "voice": "indictts-017689",
+  "ms": 680,
+  "made_ms": 2769,
+  "heard": "Mmh.",
+  "came_back": false
+ },
+ {
+  "text": "Hmm.",
+  "voice": "indictts-022743",
+  "ms": 800,
+  "made_ms": 2927,
+  "heard": "Mm-hmm.",
+  "came_back": false
+ },
+ {
+  "text": "Hmm.",
+  "voice": "indictts-063175",
+  "ms": 720,
+  "made_ms": 3020,
+  "heard": "Hmm.",
+  "came_back": true
+ },
+ {
+  "text": "Hmm.",
+  "voice": "indictts-103607",
+  "ms": 640,
+  "made_ms": 2799,
+  "heard": "1.",
+  "came_back": false
+ },
+ {
+  "text": "Hmm.",
+  "voice": "indictts-123823",
+  "ms": 760,
+  "made_ms": 2942,
+  "heard": "Mm.",
+  "came_back": true
+ },
+ {
+  "text": "Okay.",
+  "voice": "chatterbox-default",
+  "ms": 760,
+  "made_ms": 2,
+  "heard": "Okay.",
+  "came_back": true
+ },
+ {
+  "text": "Okay.",
+  "voice": "dailytalk-0",
+  "ms": 720,
+  "made_ms": 2930,
+  "heard": "Okay.",
+  "came_back": true
+ },
+ {
+  "text": "Okay.",
+  "voice": "indictts-017689",
+  "ms": 840,
+  "made_ms": 3241,
+  "heard": "Okay.",
+  "came_back": true
+ },
+ {
+  "text": "Okay.",
+  "voice": "indictts-022743",
+  "ms": 680,
+  "made_ms": 2853,
+  "heard": "Okay.",
+  "came_back": true
+ },
+ {
+  "text": "Okay.",
+  "voice": "indictts-063175",
+  "ms": 640,
+  "made_ms": 2723,
+  "heard": "Okay.",
+  "came_back": true
+ },
+ {
+  "text": "Okay.",
+  "voice": "indictts-103607",
+  "ms": 720,
+  "made_ms": 24,
+  "heard": "Okay.",
+  "came_back": true
+ },
+ {
+  "text": "Okay.",
+  "voice": "indictts-123823",
+  "ms": 840,
+  "made_ms": 3094,
+  "heard": "Okay.",
+  "came_back": true
+ },
+ {
+  "text": "I see.",
+  "voice": "chatterbox-default",
+  "ms": 960,
+  "made_ms": 3275,
+  "heard": "I see.",
+  "came_back": true
+ },
+ {
+  "text": "I see.",
+  "voice": "dailytalk-0",
+  "ms": 1040,
+  "made_ms": 3386,
+  "heard": "I see.",
+  "came_back": true
+ },
+ {
+  "text": "I see.",
+  "voice": "indictts-017689",
+  "ms": 1000,
+  "made_ms": 3312,
+  "heard": "I see.",
+  "came_back": true
+ },
+ {
+  "text": "I see.",
+  "voice": "indictts-022743",
+  "ms": 840,
+  "made_ms": 3070,
+  "heard": "I see.",
+  "came_back": true
+ },
+ {
+  "text": "I see.",
+  "voice": "indictts-063175",
+  "ms": 880,
+  "made_ms": 3053,
+  "heard": "IC.",
+  "came_back": false
+ },
+ {
+  "text": "I see.",
+  "voice": "indictts-103607",
+  "ms": 1000,
+  "made_ms": 3400,
+  "heard": "I see.",
+  "came_back": true
+ },
+ {
+  "text": "I see.",
+  "voice": "indictts-123823",
+  "ms": 880,
+  "made_ms": 3228,
+  "heard": "I see.",
+  "came_back": true
+ },
+ {
+  "text": "Sure.",
+  "voice": "chatterbox-default",
+  "ms": 840,
+  "made_ms": 3026,
+  "heard": "Sure.",
+  "came_back": true
+ },
+ {
+  "text": "Sure.",
+  "voice": "dailytalk-0",
+  "ms": 920,
+  "made_ms": 3216,
+  "heard": "Sure.",
+  "came_back": true
+ },
+ {
+  "text": "Sure.",
+  "voice": "indictts-017689",
+  "ms": 760,
+  "made_ms": 2930,
+  "heard": "Sure.",
+  "came_back": true
+ },
+ {
+  "text": "Sure.",
+  "voice": "indictts-022743",
+  "ms": 720,
+  "made_ms": 3154,
+  "heard": "Sure.",
+  "came_back": true
+ },
+ {
+  "text": "Sure.",
+  "voice": "indictts-063175",
+  "ms": 680,
+  "made_ms": 2824,
+  "heard": "Sure.",
+  "came_back": true
+ },
+ {
+  "text": "Sure.",
+  "voice": "indictts-103607",
+  "ms": 680,
+  "made_ms": 2785,
+  "heard": "Sure.",
+  "came_back": true
+ },
+ {
+  "text": "Sure.",
+  "voice": "indictts-123823",
+  "ms": 760,
+  "made_ms": 3062,
+  "heard": "Sure.",
+  "came_back": true
+ },
+ {
+  "text": "Got it.",
+  "voice": "chatterbox-default",
+  "ms": 680,
+  "made_ms": 2808,
+  "heard": "Got it.",
+  "came_back": true
+ },
+ {
+  "text": "Got it.",
+  "voice": "dailytalk-0",
+  "ms": 680,
+  "made_ms": 2839,
+  "heard": "Got it.",
+  "came_back": true
+ },
+ {
+  "text": "Got it.",
+  "voice": "indictts-017689",
+  "ms": 800,
+  "made_ms": 3025,
+  "heard": "Got it.",
+  "came_back": true
+ },
+ {
+  "text": "Got it.",
+  "voice": "indictts-022743",
+  "ms": 960,
+  "made_ms": 3366,
+  "heard": "Got it.",
+  "came_back": true
+ },
+ {
+  "text": "Got it.",
+  "voice": "indictts-063175",
+  "ms": 720,
+  "made_ms": 3023,
+  "heard": "Good deal.",
+  "came_back": false
+ },
+ {
+  "text": "Got it.",
+  "voice": "indictts-103607",
+  "ms": 880,
+  "made_ms": 3192,
+  "heard": "Got it.",
+  "came_back": true
+ },
+ {
+  "text": "Got it.",
+  "voice": "indictts-123823",
+  "ms": 920,
+  "made_ms": 3188,
+  "heard": "Got it.",
+  "came_back": true
+ },
+ {
+  "text": "Uh-huh.",
+  "voice": "chatterbox-default",
+  "ms": 1040,
+  "made_ms": 3479,
+  "heard": "Uh-huh.",
+  "came_back": true
+ },
+ {
+  "text": "Uh-huh.",
+  "voice": "dailytalk-0",
+  "ms": 1520,
+  "made_ms": 4228,
+  "heard": "The huh? Huh?",
+  "came_back": false
+ },
+ {
+  "text": "Uh-huh.",
+  "voice": "indictts-017689",
+  "ms": 960,
+  "made_ms": 3211,
+  "heard": "Uh-huh.",
+  "came_back": true
+ },
+ {
+  "text": "Uh-huh.",
+  "voice": "indictts-022743",
+  "ms": 1440,
+  "made_ms": 3998,
+  "heard": "Uh-huh. Uh-huh.",
+  "came_back": false
+ },
+ {
+  "text": "Uh-huh.",
+  "voice": "indictts-063175",
+  "ms": 2200,
+  "made_ms": 5451,
+  "heard": "A-hok-da-h-u.",
+  "came_back": false
+ },
+ {
+  "text": "Uh-huh.",
+  "voice": "indictts-103607",
+  "ms": 1760,
+  "made_ms": 4575,
+  "heard": "Uh-huh. Uh-huh.",
+  "came_back": false
+ },
+ {
+  "text": "Uh-huh.",
+  "voice": "indictts-123823",
+  "ms": 1480,
+  "made_ms": 4114,
+  "heard": "Uh-huh. At",
+  "came_back": false
+ }
+]
