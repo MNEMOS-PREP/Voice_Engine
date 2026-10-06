@@ -36,8 +36,15 @@ AGENT = "AI-Interviewer/1.0 (+https://github.com/MNEMOS-PREP)"
 #: The panel's most-heard voice, and an Indian voice for the names.
 VOICES = ("chatterbox-default", "indictts-022743")
 
-#: Respellings to try for a term that did not come back (--retry).
-RESPELL: dict[str, str] = {}
+#: Respellings to try for a term that did not come back (--retry). The first
+#: that comes back right in every voice is the one the lexicon takes.
+RESPELL: dict[str, list[str]] = {
+    # Heard as "Ragavan" / "Raghuavan": the aspirated "gh" flattened.
+    # First pass (one voice pair, "Next, let's talk about …"): "Raa-gha-van"
+    # came back in Chatterbox's own voice, "Raaghavan" and "Raghaavan" in
+    # IndicTTS 022743; "Ragh-havan" and "Raghuvan" in neither.
+    "Raghavan": ["Raghavan", "Raa-gha-van", "Raaghavan", "Raghaavan"],
+}
 
 
 def get(url: str) -> object:
@@ -108,24 +115,26 @@ def terms() -> list[tuple[str, str]]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--retry", action="store_true", help="check the respellings in RESPELL")
+    parser.add_argument("--all-voices", action="store_true", help="every voice in the cast")
+    parser.add_argument("--sentence", default="Next, let's talk about {said}.")
+    parser.add_argument("--out", default=None, help="results file (default probe/retry.json)")
     args = parser.parse_args()
     load_keys()
     ring = KeyRing.from_env("GROQ_API_KEYS", "GROQ_API_KEY")
-    out_path = HERE / ("retry.json" if args.retry else "probe.json")
+    out_path = HERE / (args.out or ("retry.json" if args.retry else "probe.json"))
+    voices_all = [v["key"] for v in get(f"{M11}/v1/voice/cast")["voices"]] if args.all_voices else None
     done = json.loads(out_path.read_text(encoding="utf-8")) if out_path.exists() else {}
-    work = (
-        [(term, "respelling") for term in RESPELL]
-        if args.retry
-        else terms()
-    )
-    for i, (term, kind) in enumerate(work):
-        voices = VOICES if kind == "name" else VOICES[:1]
+    if args.retry:
+        work = [(term, "respelling", said) for term, tries in RESPELL.items() for said in tries]
+    else:
+        work = [(term, kind, term) for term, kind in terms()]
+    for i, (term, kind, said) in enumerate(work):
+        voices = voices_all or (VOICES if kind in ("name", "respelling") else VOICES[:1])
         for voice in voices:
-            key = f"{term}|{voice}"
+            key = f"{term}|{said}|{voice}" if args.retry else f"{term}|{voice}"
             if key in done:
                 continue
-            said = RESPELL.get(term, term) if args.retry else term
-            sentence = f"Next, let's talk about {said}."
+            sentence = args.sentence.format(said=said)
             heard = hear(ring, speak(sentence, voice))
             done[key] = {"term": term, "said": said, "voice": voice, "kind": kind, "heard": heard,
                          "ok": came_back(term, heard)}

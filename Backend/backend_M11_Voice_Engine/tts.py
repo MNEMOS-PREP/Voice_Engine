@@ -320,7 +320,7 @@ class Engine:
         """(wav, from_cache, ms). Raises EngineUnavailable when it cannot."""
         # Words the voices get wrong, respelled (EC-11.11, `lexicon.py`) —
         # before the cache, so a fixed word is a new line, not the old one.
-        text = punc_norm(lexicon.apply(text))
+        text = punc_norm(lexicon.apply(text, voice.key))
         if not text:
             raise ValueError("nothing to say")
         hit = self.cached(text, voice)

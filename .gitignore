@@ -49,3 +49,5 @@ Thumbs.db
 
 # Day 6: the WER runner's downloaded audio and transcripts
 research/wer/cache/
+research/lexicon/*.log
+research/wer/*.log

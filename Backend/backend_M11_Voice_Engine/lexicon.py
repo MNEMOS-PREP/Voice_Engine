@@ -33,10 +33,14 @@ def entries() -> tuple[dict, ...]:
 
 
 @cache
-def _patterns() -> tuple[tuple[re.Pattern[str], str], ...]:
+def _patterns(voice: str | None = None) -> tuple[tuple[re.Pattern[str], str], ...]:
     out = []
+    # An entry naming `voices` is for those voices only: one respelling does
+    # not suit every voice ("Raa-gha-van" comes back right in one voice and
+    # wrong in another — measured, research/lexicon/handover.json).
+    mine = [e for e in entries() if not e.get("voices") or voice in e["voices"]]
     # Longest first, so "HTTPS" is respelled before "HTTP" could be.
-    for entry in sorted(entries(), key=lambda e: -len(e["term"])):
+    for entry in sorted(mine, key=lambda e: -len(e["term"])):
         flags = 0 if entry.get("exact") else re.IGNORECASE
         out.append(
             (re.compile(rf"(?<![\w-]){re.escape(entry['term'])}(?![\w-])", flags), entry["say"])
@@ -44,9 +48,9 @@ def _patterns() -> tuple[tuple[re.Pattern[str], str], ...]:
     return tuple(out)
 
 
-def apply(text: str) -> str:
-    """The line as the voice should read it."""
-    for pattern, say in _patterns():
+def apply(text: str, voice: str | None = None) -> str:
+    """The line as this voice should read it."""
+    for pattern, say in _patterns(voice):
         text = pattern.sub(say, text)
     return text
 

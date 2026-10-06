@@ -400,6 +400,8 @@ class LexiconEntryOut(BaseModel):
     say: str
     exact: bool = False
     why: str | None = None
+    #: The voices this respelling is for; empty means every voice.
+    voices: list[str] = Field(default_factory=list)
 
 
 class FlagIn(BaseModel):
@@ -419,7 +421,7 @@ class FlagCount(BaseModel):
 @router.get("/voice/lexicon", response_model=list[LexiconEntryOut], tags=["voice"])
 def lexicon_table() -> list[LexiconEntryOut]:
     """How the voices say the words they got wrong, and why each is here."""
-    keep = ("term", "say", "exact", "why")
+    keep = ("term", "say", "exact", "why", "voices")
     return [LexiconEntryOut(**{k: e[k] for k in keep if k in e}) for e in lexicon.entries()]
 
 

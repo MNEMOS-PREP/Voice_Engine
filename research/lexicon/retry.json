@@ -1,0 +1,82 @@
+{
+ "Raghavan|Raaghavan|chatterbox-default": {
+  "term": "Raghavan",
+  "said": "Raaghavan",
+  "voice": "chatterbox-default",
+  "kind": "respelling",
+  "heard": " Next, let's talk about Rogovan.",
+  "ok": false
+ },
+ "Raghavan|Raaghavan|indictts-022743": {
+  "term": "Raghavan",
+  "said": "Raaghavan",
+  "voice": "indictts-022743",
+  "kind": "respelling",
+  "heard": " Next, let's talk about Raghavan.",
+  "ok": true
+ },
+ "Raghavan|Raa-gha-van|chatterbox-default": {
+  "term": "Raghavan",
+  "said": "Raa-gha-van",
+  "voice": "chatterbox-default",
+  "kind": "respelling",
+  "heard": " Next, let's talk about Raghavan.",
+  "ok": true
+ },
+ "Raghavan|Raa-gha-van|indictts-022743": {
+  "term": "Raghavan",
+  "said": "Raa-gha-van",
+  "voice": "indictts-022743",
+  "kind": "respelling",
+  "heard": " Next, let's talk about Arwa di Gawaan.",
+  "ok": false
+ },
+ "Raghavan|Ragh-havan|chatterbox-default": {
+  "term": "Raghavan",
+  "said": "Ragh-havan",
+  "voice": "chatterbox-default",
+  "kind": "respelling",
+  "heard": " Next, let's talk about raghaban.",
+  "ok": false
+ },
+ "Raghavan|Ragh-havan|indictts-022743": {
+  "term": "Raghavan",
+  "said": "Ragh-havan",
+  "voice": "indictts-022743",
+  "kind": "respelling",
+  "heard": " Next, let's talk about Raghaven.",
+  "ok": false
+ },
+ "Raghavan|Raghaavan|chatterbox-default": {
+  "term": "Raghavan",
+  "said": "Raghaavan",
+  "voice": "chatterbox-default",
+  "kind": "respelling",
+  "heard": " Next, let's talk about Raqqa Van.",
+  "ok": false
+ },
+ "Raghavan|Raghaavan|indictts-022743": {
+  "term": "Raghavan",
+  "said": "Raghaavan",
+  "voice": "indictts-022743",
+  "kind": "respelling",
+  "heard": " Next, let's talk about Raghavan.",
+  "ok": true
+ },
+ "Raghavan|Raghuvan|chatterbox-default": {
+  "term": "Raghavan",
+  "said": "Raghuvan",
+  "voice": "chatterbox-default",
+  "kind": "respelling",
+  "heard": " Next, let's talk about Raghuvan.",
+  "ok": false
+ },
+ "Raghavan|Raghuvan|indictts-022743": {
+  "term": "Raghavan",
+  "said": "Raghuvan",
+  "voice": "indictts-022743",
+  "kind": "respelling",
+  "heard": " Next, let's talk about Raghuvan.",
+  "ok": false
+ }
+}

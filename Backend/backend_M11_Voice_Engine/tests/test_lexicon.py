@@ -30,6 +30,7 @@ def table(tmp_path, monkeypatch):
                     {"term": "HTTP", "say": "H T T P", "exact": True},
                     {"term": "HTTPS", "say": "H T T P S", "exact": True},
                     {"term": "Dijkstra", "say": "Dike-struh", "why": "heard as 'dijk-stra'"},
+                    {"term": "Raghavan", "say": "Raa-gha-van", "voices": ["chatterbox-default"]},
                 ]
             }
         ),
@@ -46,6 +47,16 @@ def test_a_respelling_replaces_the_whole_word_and_nothing_inside_another(table):
     assert lexicon.apply("HTTP and HTTPS") == "H T T P and H T T P S", "longest first"
     assert lexicon.apply("http is lowercase here") == "http is lowercase here", "exact casing"
     assert lexicon.apply("HTTPServer stays") == "HTTPServer stays"
+
+
+def test_a_respelling_for_one_voice_is_that_voices_only(table):
+    assert lexicon.apply("Dr. Raghavan, over to you.", "chatterbox-default") == (
+        "Dr. Raa-gha-van, over to you."
+    )
+    assert lexicon.apply("Dr. Raghavan, over to you.", "indictts-022743") == (
+        "Dr. Raghavan, over to you."
+    )
+    assert lexicon.apply("Dijkstra", "indictts-022743") == "Dike-struh", "unscoped: every voice"
 
 
 def test_no_table_changes_nothing(tmp_path, monkeypatch):
@@ -76,6 +87,7 @@ def test_the_table_is_readable_by_anyone_signed_in(client, table):
         "say": "Dike-struh",
         "exact": False,
         "why": "heard as 'dijk-stra'",
+        "voices": [],
     } in r.json()
 
 
