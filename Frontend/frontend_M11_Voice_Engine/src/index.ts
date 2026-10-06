@@ -10,6 +10,7 @@ export { m11Routes } from "./routes";
 export { VoiceCheck } from "./components/VoiceCheck";
 export { LatencyLedger } from "./components/LatencyLedger";
 export { FlaggedWords } from "./components/FlaggedWords";
+export { MicCheck } from "./components/MicCheck";
 export { WordFlag } from "./components/WordFlag";
 export {
   m11Keys,

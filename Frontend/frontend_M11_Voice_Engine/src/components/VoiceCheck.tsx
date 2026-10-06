@@ -39,6 +39,7 @@ import { useCast, useDeps, useEngine, useInterviewers } from "../api";
 import type { CastVoice, Interviewer } from "../types";
 import { FlaggedWords } from "./FlaggedWords";
 import { LatencyLedger } from "./LatencyLedger";
+import { MicCheck } from "./MicCheck";
 import { WordFlag } from "./WordFlag";
 
 /** Played when M06 cannot say who the interviewers are. */
@@ -338,6 +339,10 @@ export function VoiceCheck() {
                 <WordFlag />
               </div>
             )}
+          </Card>
+
+          <Card title="Your microphone" icon="mic">
+            <MicCheck />
           </Card>
         </div>
       )}
