@@ -29,10 +29,15 @@ Legend: ✅ done · 🟡 partly done · ⬜ not started
    that…" once, instead of judging garbled words; and FR-11.15: carry the
    `low_confidence_spans` with the answer to M06 and on to M13, which must
    not quote them (an ask of M13).
-2. **Day 6 results:** `research/wer/run_wer.py` (both Groq Whisper models on
-   120 IndicTTS utterances) — re-run it; it resumes from `cache/` and writes
-   `RESULTS.md`. Pick the model by the number. AC-11.4's accent GAP needs
-   Svarah (the user must accept its terms on Hugging Face) or pilot audio.
+2. **Day 6 — done (2026-10-06), see `research/wer/RESULTS.md`:** on 1,785
+   words of Indian-accented English (IndicTTS, 40 speakers × 3 utterances),
+   `whisper-large-v3-turbo` **4.9% WER**, p50 546 ms; `whisper-large-v3`
+   5.2%, 588 ms. **Decided by the number: turbo** (what M11 runs). Most
+   remaining errors are Hindi words inside the stories ("kauaa → kowa",
+   "lomdi → lombri", "roti → rooty") — transliteration, FR-11.22's ground,
+   not English misheard. AC-11.4's accent GAP still needs Svarah (the user
+   must accept its terms on Hugging Face) or pilot audio; AC-11.5 (≤ 12% on
+   pilot audio) looks comfortable on read speech.
 3. **EC-11.11's table:** `research/lexicon/probe.py` (M04's 120 concepts and
    the personas' names, said and read back) — re-run it; it resumes from
    `probe.json`. Respell only the misses, check the respellings (`--retry`),
@@ -604,7 +609,7 @@ Revision 2 removes. Days are the spec's unit — a focused day each.
 | 3 | ✅ Barge-in (2026-10-06): §6.5's energy rule in the browser (`vad.ts`, `useListening`), the stop chain (`bargeIn`), Final Boss's contest, the ledger's `barge_in` stage; 261 ms measured live (Core v0.18.1, M11 `0257db8`, M06 `cc4619c`). Silero moves to day 5 |
 | 4 | ✅ ASR route on Groq `whisper-large-v3-turbo` with word timestamps — confirmed; per turn; browser recognition the caption and the no-key fallback (M11 `2811fb6`, Core v0.19.0, M06 `76daf78`) |
 | 5 | ✅ Smart Turn v3.2 for semantic endpointing, with the adaptive VAD threshold (FR-11.4, FR-11.5) — on M11, features checked against the reference, scored on real speech (M11 `5f3adf1`, Core v0.20.0–1, M06 `7cad60c`). Still owed: 200 labelled endings of students' own answers |
-| 6 | Accent WER on the Svarah benchmark across the ASR candidates (AC-11.4); choose by the number |
+| 6 | 🟡 Accent WER across the ASR candidates; choose by the number — ✅ chosen: `whisper-large-v3-turbo`, 4.9% vs 5.2% on 1,785 words of IndicTTS (`research/wer/RESULTS.md`); ⬜ the gap between accent groups (AC-11.4) needs Svarah's labelled speakers or pilot audio |
 | 7 | ✅ (pulled forward, 2026-10-06) TTS tier 1 is **Chatterbox Turbo via ONNX on the server**, cast per persona and cached (M11 `2aed9bb`, `90063c9`) — the blind listening test's choice, replacing Kokoro. Still open from this row: clause-level streaming (FR-11.7) and the lexicon (EC-11.11) |
 | 8 | TTS tier 2 behind a flag: Groq Orpheus streaming; first-audio p95 against tiers 0 and 1 |
 | 9 | 🟡 ✅ `heard_up_to_ms` truncation (FR-11.9, M06 `7b67a60`); ✅ repeat from cache (FR-11.13, M11's cache); ⬜ clarification on low confidence (FR-11.15, FR-11.16) |
