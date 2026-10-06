@@ -1,4 +1,13 @@
 {
   "about": "How the interviewers' voices say words they get wrong (EC-11.11). An entry is here only because the voice said the term and Whisper did not hear it back, and its respelling WAS heard back (research/lexicon/probe.py). `exact`: only that casing (an acronym).",
-  "entries": []
+  "entries": [
+    {
+      "term": "Raghavan",
+      "say": "Raghaavan",
+      "voices": [
+        "indictts-063175"
+      ],
+      "why": "In 'Doctor Raghavan, over to you.' this voice was heard as 'Aghwawan'; 'Raghaavan' came back right. The other six voices say 'Raghavan' as written and each respelling made some of them worse, so this one is for this voice only (research/lexicon/handover.json)."
+    }
+  ]
 }
