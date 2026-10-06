@@ -18,7 +18,9 @@ import { useEffect, useRef, useState } from "react";
 
 import {
   Button,
+  firstWordLost,
   heardBack,
+  looksLikeBluetooth,
   roomFrom,
   saveNoiseFloor,
   savedNoiseFloor,
@@ -112,6 +114,16 @@ export function MicCheck() {
           ? "We heard most of it. Speaking a little closer to the mic will help."
           : "We could barely make you out. Check that the right microphone is chosen, or try somewhere quieter."
     : null;
+  // EC-11.7: a Bluetooth headset in its calling mode clips the first moment
+  // of speech — known by its name or rate, or seen: the first word is gone.
+  const device = listening.device;
+  const clipped = heard !== null && heard.text !== "" && firstWordLost(SENTENCE, heard.text);
+  const bluetooth = device !== null && looksLikeBluetooth(device.label, device.sampleRate);
+  const headsetAdvice = clipped
+    ? "Your first word didn't come through — Bluetooth headsets often cut the start of speech. Take a breath before you start, or use a wired or built-in mic."
+    : bluetooth && step === "done"
+      ? "This looks like a Bluetooth headset, which can cut off your first word. Take a breath before you start, or use a wired or built-in mic."
+      : null;
 
   return (
     <div className="space-y-3">
@@ -146,6 +158,7 @@ export function MicCheck() {
           )}
         </div>
       )}
+      {headsetAdvice && <p className="text-xs text-session-degraded">{headsetAdvice}</p>}
       {problem && <p className="text-xs text-session-degraded">{problem}</p>}
     </div>
   );
