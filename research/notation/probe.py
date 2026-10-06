@@ -1,4 +1,4 @@
-"""How do the voices say an interviewer's notation? — M11, EC-11.11.
+r"""How do the voices say an interviewer's notation? — M11, EC-11.11.
 
 Questions in M05's bank carry big-O notation ("O(n log n)"), and a voice
 that reads "O(n)" as "on" asks a question nobody can answer. Each form is
@@ -22,9 +22,9 @@ HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parents[1] / "Backend"))
 sys.path.insert(0, str(HERE.parent / "lexicon"))
 
-import urllib.request  # noqa: E402
+import urllib.request
 
-from probe import WHO, get, speak  # noqa: E402  (the lexicon probe's helpers)
+from probe import WHO, get, speak
 
 
 def hear(_ring, audio: bytes) -> str:
@@ -41,7 +41,7 @@ def hear(_ring, audio: bytes) -> str:
         return _json.loads(response.read())["text"]
 
 
-from backend_M11_Voice_Engine.keys import KeyRing, load_keys  # noqa: E402
+from backend_M11_Voice_Engine.keys import KeyRing, load_keys
 
 M11 = "http://127.0.0.1:8111"
 FORMS = [
