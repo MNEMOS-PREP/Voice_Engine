@@ -2,8 +2,8 @@
   M11 - VOICE & CONVERSATION ENGINE   -   REQUIRED KEYS
 ===============================================================================
 
-  None yet. The module boots, the whole test suite passes and the voice check
-  plays with nothing set: the interviewer's voice is the browser's own speech
+  Everything here is optional. The module boots, the whole test suite passes
+  and the voice check plays with nothing set: the interviewer's voice is the browser's own speech
   (spec Revision 2, tier 0), which needs no key and sends nothing anywhere.
 
   Copy this file to keys.txt (gitignored) when a key below is read.
@@ -12,10 +12,11 @@
   SERVER SPEECH RECOGNITION (spec 6.7, build order day 4)
 -------------------------------------------------------------------------------
 
-  NOT READ YET.
+  READ since day 4 (2026-10-06): asr.py, POST /v1/voice/transcribe.
 
   GROQ_API_KEYS     One or more Groq keys, comma-separated - the same keys
-                    M06 already reads from ..\keys.txt.
+                    M06 already reads from ..\keys.txt. A key refused for
+                    quota hands over to the next.
 
                     With it: answers are transcribed by whisper-large-v3-turbo
                     with word timestamps (free tier: 2,000 requests a day).

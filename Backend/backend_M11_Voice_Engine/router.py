@@ -20,11 +20,12 @@ from ai_core.dependencies import DependencyStatus
 from ai_core.guard import require_role
 from ai_core.identity import Principal, Role
 from ai_core.timeutil import utcnow
-from fastapi import APIRouter, Depends, HTTPException, Query, Response
+from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
+from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
 
-from . import ledger, tts
+from . import asr, ledger, tts
 from .access import enforce_access
 from .dependencies import deps
 from .models import LineTiming
@@ -281,6 +282,56 @@ def speak(body: SpeakIn, principal: Principal | None = Depends(enforce_access)) 
             "Cache-Control": "private, max-age=86400",
         },
     )
+
+
+# ─────────────────────────────────────────────────────────────────────────
+#  Hearing the student (spec §6.7, FR-11.3; TODO §7 day 4)
+# ─────────────────────────────────────────────────────────────────────────
+
+
+class AsrStateOut(BaseModel):
+    available: bool
+    model: str
+    reason: str
+
+
+@router.get("/voice/asr", response_model=AsrStateOut, tags=["voice"])
+def asr_state() -> AsrStateOut:
+    """Whether server recognition can run. When it cannot, the browser's own
+    recognition takes the answer, as before day 4."""
+    return AsrStateOut(**asr.state())
+
+
+@router.post("/voice/transcribe", response_model=asr.ASRResult, tags=["voice"])
+async def transcribe(
+    request: Request,
+    context: str | None = Query(default=None, max_length=600),
+    principal: Principal | None = Depends(enforce_access),
+) -> asr.ASRResult:
+    """An answer's audio — the request body itself, `audio/wav` or
+    `audio/webm` — and its words, each with its time (FR-11.3). `context` is
+    the question being answered: it biases the recogniser toward the words
+    the answer is likely to use. Nothing is kept: the audio is transcribed and
+    dropped (keeping it is FR-11.19's, with consent). 503 when recognition
+    cannot run — the browser's own recognition carries the answer instead."""
+    if principal is None:
+        raise HTTPException(status_code=401, detail="Not signed in.")
+    content_type = (request.headers.get("content-type") or "").split(";")[0].strip().lower()
+    if not content_type.startswith("audio/"):
+        raise HTTPException(
+            status_code=415, detail="Send the audio itself, as audio/wav or audio/webm."
+        )
+    audio = await request.body()
+    if len(audio) > asr.MAX_AUDIO_BYTES:
+        raise HTTPException(status_code=413, detail="That answer is too long to transcribe.")
+    try:
+        return await run_in_threadpool(asr.transcribe, audio, content_type, context=context)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+    except asr.AsrUnavailable as exc:
+        raise HTTPException(
+            status_code=503, detail=f"Speech recognition is not available: {exc}"
+        ) from None
 
 
 __all__ = ["router"]

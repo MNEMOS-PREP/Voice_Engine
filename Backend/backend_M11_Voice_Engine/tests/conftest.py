@@ -56,6 +56,24 @@ def no_voice_model(monkeypatch, tmp_path):
 
 
 @pytest.fixture(autouse=True)
+def no_asr_network(monkeypatch):
+    """Server recognition calls Groq: no test does. No key either, unless a
+    test sets one — the developer's keys.txt must not decide a test."""
+    from backend_M11_Voice_Engine import asr
+
+    def refuse(*_args, **_kwargs):
+        raise AssertionError("tests open no sockets")
+
+    monkeypatch.delenv("GROQ_API_KEYS", raising=False)
+    monkeypatch.delenv("GROQ_API_KEY", raising=False)
+    monkeypatch.setattr(asr, "_ring", None)
+    asr.set_transport(refuse)
+    yield
+    asr.set_transport(None)
+    monkeypatch.setattr(asr, "_ring", None)
+
+
+@pytest.fixture(autouse=True)
 def _service_secret(monkeypatch):
     """A known platform secret, so no test reads or writes the developer's
     machine secret under their home directory (Platform_Core v0.12.0)."""

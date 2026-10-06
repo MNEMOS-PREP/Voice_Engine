@@ -21,6 +21,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import MODULE_ID, tts
+from .keys import load_keys
 from .router import router
 
 log = logging.getLogger("uvicorn.error")
@@ -28,6 +29,9 @@ log = logging.getLogger("uvicorn.error")
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
+    # keys.txt (beside the repos, shared with every module) into the
+    # environment — names logged, never values. Server recognition reads it.
+    load_keys()
     # create_all() makes missing TABLES and ignores existing ones, so a model
     # that gained a field leaves an older dev.db one column short; and
     # ensure_schema() adds those columns, additively.
