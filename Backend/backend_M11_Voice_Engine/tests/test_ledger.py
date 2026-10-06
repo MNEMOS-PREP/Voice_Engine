@@ -268,3 +268,6 @@ def test_the_summary_reads_what_was_recorded(client):
     assert body["lines"] == 3 and body["sessions"] == 3
     total = next(s for s in body["stages"] if s["name"] == "total")
     assert (total["p50"], total["p95"], total["met"]) == (1100, 1200, True)
+    # One interview's, for the latency harness.
+    one = client.get(f"/v1/voice/timings/summary?session_id={session}", headers=admin()).json()
+    assert one["lines"] == 1 and one["sessions"] == 1

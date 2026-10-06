@@ -168,12 +168,18 @@ def interview_timings(
 )
 def timings_summary(
     days: int = Query(default=14, ge=1, le=365),
+    session_id: uuid.UUID | None = Query(default=None),
     db: Session = Depends(get_session),
 ) -> SummaryOut:
     """p50 and p95 of every stage across the cohort, against the spec's
-    targets; how many lines never made a sound, and why lines were stopped."""
+    targets; how many lines never made a sound, and why lines were stopped.
+    With `session_id`, one interview's — what the latency harness grades
+    (`scripts/latency_harness.mjs`), against the same targets."""
     since = utcnow() - timedelta(days=days)
-    rows = db.exec(select(LineTiming).where(LineTiming.recorded_at >= since)).all()
+    query = select(LineTiming).where(LineTiming.recorded_at >= since)
+    if session_id is not None:
+        query = query.where(LineTiming.session_id == session_id)
+    rows = db.exec(query).all()
     summary = ledger.summarise(rows)
     return SummaryOut(
         days=days,
