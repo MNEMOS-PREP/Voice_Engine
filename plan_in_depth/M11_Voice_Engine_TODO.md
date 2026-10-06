@@ -1,6 +1,6 @@
 # M11 — TODO · Voice & Conversation Engine
 
-> **Completion: 34%** — 6 of 22 functional requirements met (FR-11.1 capture, 11.4 adaptive endpointing, 11.5 semantic endpointing, 11.8 barge-in, 11.13 repeat from cache, 11.21 a voice per persona), 3 partly (FR-11.3, 11.7, 11.15). **Days 1–5 and 7 of 14 (Revision 2) done, 2026-10-06:** the frame, the voice check, the latency ledger, barge-in from the student's first word, server recognition with word times, knowing when the student has finished (their own pauses, then Smart Turn), and the interviewers' own voices — Chatterbox Turbo, cast per persona, mostly Indian. In M06's room a spoken answer is now heard, written down and sent when the student finishes, and each panelist speaks in their own voice. The spec has a Revision 2 (§0 of the spec): browser-first and free. The requirement count is the spec's own, so this is a measure of scope ahead rather than of progress behind.
+> **Completion: 39%** — 7 of 22 functional requirements met (FR-11.1 capture, 11.4 adaptive endpointing, 11.5 semantic endpointing, 11.8 barge-in, 11.9 what was heard, 11.13 repeat from cache, 11.21 a voice per persona), 3 partly (FR-11.3, 11.7, 11.15). **Days 1–5 and 7 of 14 (Revision 2) done, day 9 half, 2026-10-06:** the frame, the voice check, the latency ledger, barge-in from the student's first word, server recognition with word times, knowing when the student has finished (their own pauses, then Smart Turn), and the interviewers' own voices — Chatterbox Turbo, cast per persona, mostly Indian. In M06's room a spoken answer is now heard, written down and sent when the student finishes, and each panelist speaks in their own voice. The spec has a Revision 2 (§0 of the spec): browser-first and free. The requirement count is the spec's own, so this is a measure of scope ahead rather than of progress behind.
 >
 > _Method: `(met + ½ × partial) ÷ total`, counted from the spec, 2026-08-28. One measure applied the same way to all nineteen modules so they compare; it counts requirements, not screens or gates._
 
@@ -20,6 +20,45 @@ Task list for taking **M11 — Voice & Conversation Engine** to 100% of [M11_Voi
 Legend: ✅ done · 🟡 partly done · ⬜ not started
 
 ---
+
+### 2026-10-06 — Checkpoint: where to pick up
+
+**Next, in order:**
+1. **Day 9, second half — FR-11.16:** when the recogniser is unsure of an
+   answer (mean confidence low), the interviewer says "Sorry, I didn't catch
+   that…" once, instead of judging garbled words; and FR-11.15: carry the
+   `low_confidence_spans` with the answer to M06 and on to M13, which must
+   not quote them (an ask of M13).
+2. **Day 6 results:** `research/wer/run_wer.py` (both Groq Whisper models on
+   120 IndicTTS utterances) — re-run it; it resumes from `cache/` and writes
+   `RESULTS.md`. Pick the model by the number. AC-11.4's accent GAP needs
+   Svarah (the user must accept its terms on Hugging Face) or pilot audio.
+3. **EC-11.11's table:** `research/lexicon/probe.py` (M04's 120 concepts and
+   the personas' names, said and read back) — re-run it; it resumes from
+   `probe.json`. Respell only the misses, check the respellings (`--retry`),
+   then fill `voices/lexicon.json`. 37 of 127 said back right before the
+   pause, no misses yet.
+4. Days 10 (mic check, echo), 11 (calibrated silence, backchannels, note-
+   taking), 12 (answer audio kept with consent; push-to-talk), 14 (latency
+   harness, device matrix).
+
+**Waiting on the user:** Svarah's gate (day 6's gap); Groq Orpheus terms
+(day 8 — optional now that Chatterbox is the voice); the face (day 13);
+consented recordings of real answers (day 5's 200 endings, day 6's gap).
+
+### 2026-10-06 — Day 9, first half: what the student heard
+
+- ✅ **Where the student came in** (`@ai/core` v0.21.0 `2f1e049`): `bargeIn`
+  reports the line being heard, the part being heard and how far through it
+  (`partRanges`, `cutAt`; pure, pinned); a Final Boss contest reports it when
+  it yields.
+- ✅ **M06 records it and both readers use it** (M06 `7b67a60`, FR-11.9):
+  `POST /v1/interviews/{id}/heard`, a `turn.heard` event, once per line. The
+  line of record stays whole; the transcript dims the words the student never
+  heard, with a mark where they came in; the interviewer model reads the line
+  as far as it was heard, marked "[cut off: the student started speaking
+  here]", so a follow-up does not assume a question they never finished
+  hearing. Snapped to whole words. 448 pass.
 
 ### 2026-10-06 — Day 5: has the student finished?
 
@@ -441,7 +480,7 @@ Spec §4, verbatim. This is the authoritative list.
 | FR-11.6 | ⬜ Speculative LLM prefill on stabilised partial transcripts | P1 |
 | FR-11.7 | 🟡 Streaming TTS with clause-level first chunk — M11's voice a sentence at a time, asked in speaking order so the first plays while the next is made; not yet cut at the first clause | P0 |
 | FR-11.8 | ✅ Barge-in: full stop of LLM + TTS + playback within 350 ms — the detector stops playback, the queue and the requests; 261 ms first word → silent, 1 ms after the decision (day 3). Lines land whole, so no model stream is running to cancel | P0 |
-| FR-11.9 | ⬜ Truncate the interviewer turn at `heard_up_to_ms` on barge-in | P0 |
+| FR-11.9 | ✅ Truncate the interviewer turn at `heard_up_to_ms` on barge-in — the cut (part and fraction) recorded on the turn; the transcript dims the rest and the interviewer model reads the line as heard (day 9, M06 `7b67a60`) | P0 |
 | FR-11.10 | ⬜ Calibrated silence per persona/mode with no UI change | P0 |
 | FR-11.11 | ⬜ Backchannels on a separate bus, disabled in Final Boss | P1 |
 | FR-11.12 | ⬜ Note-taking pauses | P1 |
@@ -568,7 +607,7 @@ Revision 2 removes. Days are the spec's unit — a focused day each.
 | 6 | Accent WER on the Svarah benchmark across the ASR candidates (AC-11.4); choose by the number |
 | 7 | ✅ (pulled forward, 2026-10-06) TTS tier 1 is **Chatterbox Turbo via ONNX on the server**, cast per persona and cached (M11 `2aed9bb`, `90063c9`) — the blind listening test's choice, replacing Kokoro. Still open from this row: clause-level streaming (FR-11.7) and the lexicon (EC-11.11) |
 | 8 | TTS tier 2 behind a flag: Groq Orpheus streaming; first-audio p95 against tiers 0 and 1 |
-| 9 | `heard_up_to_ms` truncation (FR-11.9), repeat from cache (FR-11.13), clarification on low confidence (FR-11.15, FR-11.16) |
+| 9 | 🟡 ✅ `heard_up_to_ms` truncation (FR-11.9, M06 `7b67a60`); ✅ repeat from cache (FR-11.13, M11's cache); ⬜ clarification on low confidence (FR-11.15, FR-11.16) |
 | 10 | Mic check with a live transcription round trip and a noise floor (FR-11.2); echo detection (EC-11.8) |
 | 11 | Calibrated silence, backchannels and note-taking pauses from the persona files (FR-11.10 to FR-11.12) |
 | 12 | Per-turn audio stored with consent, aligned to the transcript clock (FR-11.19); the push-to-talk ladder (FR-11.17) |
