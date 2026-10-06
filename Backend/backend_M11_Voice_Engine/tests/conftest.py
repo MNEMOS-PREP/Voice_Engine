@@ -56,6 +56,18 @@ def no_voice_model(monkeypatch, tmp_path):
 
 
 @pytest.fixture(autouse=True)
+def no_turn_model(monkeypatch):
+    """Smart Turn downloads and loads in a thread: no test does. A test that
+    wants one stands a fake in with `turn.set_classifier`."""
+    from backend_M11_Voice_Engine import turn
+
+    monkeypatch.setenv("M11_TURN", "off")
+    turn.set_classifier(None)
+    yield
+    turn.set_classifier(None)
+
+
+@pytest.fixture(autouse=True)
 def no_asr_network(monkeypatch):
     """Server recognition calls Groq: no test does. No key either, unless a
     test sets one — the developer's keys.txt must not decide a test."""

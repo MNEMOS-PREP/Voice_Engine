@@ -6,7 +6,9 @@ is narrower than the spec's list — said here rather than papered over:
 
     stage               from → to                         spec target (p95)
     ------------------  --------------------------------  -----------------
-    total               answer sent → first audio         1,200 ms  AC-11.1
+    end_to_audio        speech ended → first audio        1,200 ms  AC-11.1
+    endpoint            speech ended → answer sent        —  (the wait for "finished")
+    total               answer sent → first audio         1,200 ms  (a typed turn's end)
     first_token         answer sent → first token         350 ms (with prefill)
     line_ready          answer sent → line on screen      —
     tts_first_audio     line on screen → first audio      250 ms
@@ -14,6 +16,11 @@ is narrower than the spec's list — said here rather than papered over:
     barge_in            student began → interviewer quiet 600 ms (250 + 350)
     heard_up_to         first audio → stop asked          —  (FR-11.9's input)
     spoken              first audio → line finished       —
+
+Since day 5 a spoken answer carries where its speech ended, so AC-11.1 is
+measured as the spec states it — end of speech to first audio — and `total`
+(from the send) stays, unbudgeted, for typed answers, which have no such
+moment.
 
 `barge_in` (day 3) is the student's side of a stop: from their first loud
 frame to the interviewer falling silent — the 250 ms that make it speech
@@ -54,8 +61,16 @@ class Stage:
 
 STAGES: tuple[Stage, ...] = (
     Stage(
-        "total", "answer_sent_at", "first_audio_at", "Answer sent → first audio", 1200, "AC-11.1"
+        "end_to_audio",
+        "speech_ended_at",
+        "first_audio_at",
+        "Speech ended → first audio",
+        1200,
+        "AC-11.1",
     ),
+    Stage("endpoint", "speech_ended_at", "answer_sent_at", "Speech ended → answer sent"),
+    # The same budget, from the send: a typed answer's turn ends when it is sent.
+    Stage("total", "answer_sent_at", "first_audio_at", "Answer sent → first audio", 1200),
     Stage("first_token", "answer_sent_at", "first_token_at", "Answer sent → first token", 350),
     Stage("line_ready", "answer_sent_at", "landed_at", "Answer sent → line on screen"),
     Stage("tts_first_audio", "landed_at", "first_audio_at", "Line on screen → first audio", 250),

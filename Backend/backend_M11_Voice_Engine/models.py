@@ -39,6 +39,8 @@ class LineTiming(SQLModel, table=True):
     # between marks of one line are read, so client clock skew cancels out.
     answer_sent_at: float | None = None
     first_token_at: float | None = None
+    #: Day 5: where a spoken answer's speech ended — AC-11.1's start.
+    speech_ended_at: float | None = None
     landed_at: float
     first_audio_at: float | None = None
     ended_at: float | None = None

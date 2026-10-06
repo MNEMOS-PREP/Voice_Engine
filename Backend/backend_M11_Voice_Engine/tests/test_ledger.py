@@ -36,6 +36,7 @@ def line(**marks) -> dict:
         "heard_chars": 120,
         "answer_sent_at": T0,
         "first_token_at": T0 + 300,
+        "speech_ended_at": None,
         "landed_at": T0 + 900,
         "first_audio_at": T0 + 1100,
         "ended_at": T0 + 6100,
@@ -62,7 +63,7 @@ def row(**marks) -> LineTiming:
 
 def test_stages_are_the_differences_the_spec_budget_names():
     stages = ledger.stages_of(row())
-    assert stages["total"] == 1100  # answer sent → first audio (AC-11.1)
+    assert stages["total"] == 1100  # answer sent → first audio (a typed turn's end)
     assert stages["first_token"] == 300
     assert stages["line_ready"] == 900
     assert stages["tts_first_audio"] == 200  # line on screen → first audio
@@ -77,6 +78,18 @@ def test_a_line_cut_short_says_how_long_the_stop_took_and_how_much_was_heard():
     assert stages["stop"] == 40  # AC-11.2 measures this
     assert stages["heard_up_to"] == 1500  # first audio → stop asked
     assert stages["spoken"] is None
+
+
+def test_a_spoken_answer_is_timed_from_the_end_of_its_speech():
+    """Day 5, AC-11.1 as the spec states it: speech ended at -900 ms (the
+    turn was judged finished and written down meanwhile), first audio at
+    +1,100 — two seconds, of which 900 ms were the wait for "finished"."""
+    stages = ledger.stages_of(row(speech_ended_at=T0 - 900))
+    assert stages["end_to_audio"] == 2000
+    assert stages["endpoint"] == 900
+    assert stages["total"] == 1100
+    typed = ledger.stages_of(row())
+    assert typed["end_to_audio"] is None and typed["endpoint"] is None
 
 
 def test_a_barge_in_is_timed_from_the_students_first_word():
@@ -148,8 +161,10 @@ def test_the_summary_holds_each_stage_to_its_target():
     rows = [row(first_audio_at=T0 + 1100 + i * 10, ended_at=T0 + 9000) for i in range(20)]
     by_name = {s.name: s for s in ledger.summarise(rows).stages}
     total = by_name["total"]
-    assert total.n == 20 and total.target_ms == 1200 and total.gate == "AC-11.1"
+    assert total.n == 20 and total.target_ms == 1200 and total.gate is None
     assert total.p95 == 1280 and total.met is False
+    # AC-11.1 is measured from where speech ended — typed lines have none.
+    assert by_name["end_to_audio"].gate == "AC-11.1" and by_name["end_to_audio"].n == 0
     tts = by_name["tts_first_audio"]
     assert (tts.p50, tts.p95, tts.met) == (290, 380, False)  # 250 ms is the budget
     assert by_name["line_ready"].met is None  # measured, not budgeted

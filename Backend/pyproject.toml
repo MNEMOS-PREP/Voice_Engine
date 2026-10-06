@@ -24,7 +24,8 @@ dev = [
     "ruff>=0.6",
 ]
 # The interviewer's voice on the server (tts.py): Chatterbox Turbo's ONNX
-# export — no PyTorch. Optional: without it the module runs, /v1/voice/engine
+# export — no PyTorch. The same packages run the turn model (turn.py, Smart
+# Turn v3.2, 8 MB): "has the student finished?". Optional: without it the module runs, /v1/voice/engine
 # says "off", and the browser's own voice speaks instead. The model (~2.5 GB)
 # downloads from Hugging Face on first load.
 tts = [

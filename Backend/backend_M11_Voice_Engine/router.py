@@ -25,7 +25,7 @@ from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
 
-from . import asr, ledger, tts
+from . import asr, ledger, tts, turn
 from .access import enforce_access
 from .dependencies import deps
 from .models import LineTiming
@@ -64,6 +64,8 @@ class LineTimingIn(BaseModel):
     heard_chars: int | None = Field(default=None, ge=0, le=50_000)
     answer_sent_at: Mark = None
     first_token_at: Mark = None
+    #: Day 5: where a spoken answer's speech ended (AC-11.1's start).
+    speech_ended_at: Mark = None
     landed_at: float
     first_audio_at: Mark = None
     ended_at: Mark = None
@@ -332,6 +334,60 @@ async def transcribe(
         raise HTTPException(
             status_code=503, detail=f"Speech recognition is not available: {exc}"
         ) from None
+
+
+# ─────────────────────────────────────────────────────────────────────────
+#  Has the student finished? (spec §6.3, FR-11.5; TODO §7 day 5)
+# ─────────────────────────────────────────────────────────────────────────
+
+
+class TurnStateOut(BaseModel):
+    state: Literal["off", "loading", "ready", "failed"]
+    reason: str
+    model: str
+
+
+class TurnOut(BaseModel):
+    #: Smart Turn's probability that the speech before the silence is a
+    #: finished turn; `finished` is it over 0.5.
+    probability: float
+    finished: bool
+    latency_ms: int
+
+
+@router.get("/voice/turn", response_model=TurnStateOut, tags=["voice"])
+def turn_state() -> TurnStateOut:
+    """Whether the turn model is ready. When it is not, the browser ends a
+    turn on silence alone (the adaptive threshold, FR-11.4)."""
+    c = turn.classifier()
+    return TurnStateOut(state=c.state, reason=c.reason, model=turn.FILE)
+
+
+@router.post("/voice/turn", response_model=TurnOut, tags=["voice"])
+async def turn_finished(
+    request: Request, principal: Principal | None = Depends(enforce_access)
+) -> TurnOut:
+    """The last seconds of the student's speech up to a silence — 16 kHz
+    16-bit mono WAV, the body itself — and whether it sounds finished. Nothing
+    is kept. 503 when the model cannot answer."""
+    if principal is None:
+        raise HTTPException(status_code=401, detail="Not signed in.")
+    content_type = (request.headers.get("content-type") or "").split(";")[0].strip().lower()
+    if content_type not in ("audio/wav", "audio/x-wav", "audio/wave"):
+        raise HTTPException(status_code=415, detail="Send 16 kHz 16-bit mono WAV.")
+    data = await request.body()
+    if len(data) > 2 * 1024 * 1024:
+        raise HTTPException(status_code=413, detail="Send the last few seconds, not the answer.")
+    try:
+        audio = turn.read_wav(data)
+        probability, ms = await run_in_threadpool(turn.classifier().finished, audio)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+    except turn.TurnUnavailable as exc:
+        raise HTTPException(status_code=503, detail=f"The turn model is not ready: {exc}") from None
+    return TurnOut(
+        probability=round(probability, 4), finished=probability > turn.THRESHOLD, latency_ms=ms
+    )
 
 
 __all__ = ["router"]
