@@ -1,6 +1,6 @@
 # M11 — TODO · Voice & Conversation Engine
 
-> **Completion: 9%** — 0 of 22 functional requirements met, 4 partly (FR-11.7, 11.8, 11.13, 11.21). **Days 1–2 of 14 (Revision 2) done, 2026-10-05:** the repo's frame, the voice check and the latency ledger; the browser voice client moved from M06 to `@ai/core` v0.14.0 as M11's code, so the four FRs it partly meets are counted here now (§1b). The spec has a Revision 2 (§0 of the spec): browser-first and free. The requirement count is the spec's own, so this is a measure of scope ahead rather than of progress behind.
+> **Completion: 20%** — 3 of 22 functional requirements met (FR-11.8 barge-in, 11.13 repeat from cache, 11.21 a voice per persona), 3 partly (FR-11.1, 11.4, 11.7). **Days 1–3 and 7 of 14 (Revision 2) done, 2026-10-06:** the frame, the voice check, the latency ledger, barge-in measured from the student's first word, and the interviewers' own voices — Chatterbox Turbo on the server, cast per persona after a blind listening test, mostly Indian. M06's panel speaks in them, each panelist in their own voice. The spec has a Revision 2 (§0 of the spec): browser-first and free. The requirement count is the spec's own, so this is a measure of scope ahead rather than of progress behind.
 >
 > _Method: `(met + ½ × partial) ÷ total`, counted from the spec, 2026-08-28. One measure applied the same way to all nineteen modules so they compare; it counts requirements, not screens or gates._
 
@@ -20,6 +20,101 @@ Task list for taking **M11 — Voice & Conversation Engine** to 100% of [M11_Voi
 Legend: ✅ done · 🟡 partly done · ⬜ not started
 
 ---
+
+### 2026-10-06 — Day 3: barge-in, measured from the student's first word
+
+- ✅ **The mic, listening** (`@ai/core` v0.18.0 `734f2f8`, v0.18.1 `d63a4c8`):
+  `useListening` opens the microphone with echo cancellation, noise
+  suppression and gain control, cuts it into 20 ms frames on the audio thread
+  (an AudioWorklet from a Blob; an analyser where there is none), and says
+  when speech starts — dated from its first loud frame — and ends. Nothing is
+  recorded or sent: the frames are levels, read and dropped.
+- ✅ **The rule is the spec's own** (§6.5, `vad.ts`, pure, 8 tests): 12 dB over
+  the noise floor, sustained 250 ms (EC-11.14), dips between syllables
+  forgiven. The floor follows the room down fast and up slow, never on speech,
+  so a talker does not raise the bar against themselves; the bar rises 6 dB
+  while the interviewer speaks (Trap 5 — echo cancellation leaves some); loud
+  but FLAT energy (a fan switching on) is learned as the room, because
+  syllables rise and fall and noise does not.
+- **Decided: energy, not Silero, for the stop.** §6.5's barge-in rule is
+  energy; it needs no model download and works on the demo laptop with no
+  network. Silero (and Smart Turn) stay for endpointing — day 5 — where
+  telling a pause from an end is the hard part.
+- ✅ **`bargeIn(startedAt, { contest })`** stops every line still to be heard —
+  the sentence playing, those queued, those still being asked of M11 (Trap 3:
+  a stop that only silenced the speaker resumes mid-sentence) — and records
+  `speech_started_at`. In our design a line lands whole before it is spoken,
+  so there is no model stream to cancel; with v0.17.1's ordered requests, at
+  most one sentence is being made, and nothing after it is asked for.
+- ✅ **Final Boss contests, once a round** (§6.5; spec open decision 2 —
+  **decided: on**, for the user's "test you, stress you"): the interviewer
+  finishes up to 1.5 s before yielding. The line says `contested`, and the
+  ledger lists it as its own stage, against no budget — the first live one
+  read 1,763 ms against `barge_in`'s 600 before that.
+- ✅ **The ledger** (Voice_Engine `0257db8`): `speech_started_at`, `contested`;
+  stages `barge_in` (first word → silent, 600 ms = 250 + 350) and `contested`.
+  45 tests.
+- ✅ **M06's room: "Talk freely"** (M06 `cc4619c`): the mic open while the
+  interviewer speaks; starting to talk stops them and starts dictation into
+  the box. Off unless the student turns it on (remembered); a level meter;
+  a blocked mic says how to allow it.
+- **Measured live** (headless Edge, a fake microphone — room tone, then a
+  voice at 6 s — over a panel's opening, M11's voices): Mock — first word to
+  silence **261 ms** (speech decided at 260 ms, stopped in 1 ms; 56 of 221
+  characters heard). Final Boss — the contest held 1.5 s, then stopped in 1 ms.
+- **Next: day 4**, server ASR with word timestamps — the student's answer as
+  audio, so the end of speech, not the send button, starts the clock.
+
+### 2026-10-06 — The panel speaks, each in their own voice
+
+- ✅ **M06's panel** (FR-6.3; M06 `d8a86ec`, `18c8c66`, `6e51c0a`): seated from
+  the personas' data, introduced at the start, handing over in two voices,
+  an expert's follow-up and the take-back, someone sitting in on a panel of
+  one. Every line records who said it, part by part.
+- ✅ **Each part in its speaker's voice** (`@ai/core` v0.17.0 `cacf1bb`):
+  `speak([{ text, personaId, voiceId, id }, …])` says every sentence in its own
+  speaker's voice — M11's cast voice, or the browser voice their `voice_id`
+  picks; the ledger keeps the line as one line; `speakingPart` lights the
+  right face. Heard live: Priya (`chatterbox-default`), Arjun
+  (`indictts-022743`), Vikram (`indictts-063175`) in one opening.
+- ✅ **Fixed: "Dr. Raghavan" was split after "Dr."** — a voice said "Dr." alone
+  and paused, and M11 made two clips. A title's full stop no longer ends a
+  sentence, and is said "Doctor".
+- ✅ **Fixed: a line's first sentence waited behind its last** (v0.17.1
+  `5e2ac60`). Every sentence was asked of M11 at once; M11 makes one at a
+  time and which request won its lock was a race — a panel's opening waited
+  five seconds while "Expect a follow-up or two." was made first. Sentences
+  are now asked in speaking order, each when the one before is made; the
+  next is made while the first plays. Throughput unchanged.
+
+### 2026-10-06 — Day 7 pulled forward: the interviewers' own voices
+
+- ✅ **Chatterbox Turbo on the server, via ONNX** (Voice_Engine `2aed9bb`):
+  `tts.py` runs ResembleAI's ONNX export with no PyTorch, sampling as the
+  PyTorch model does (temperature 0.8, top-p 0.95) — the model card's greedy
+  loop spoke slower. `GET /v1/voice/engine` (off / loading / ready / failed),
+  `GET /v1/voice/cast`, `POST /v1/voice/speak` (one sentence → 24 kHz WAV in
+  the cast voice; signed-in callers; 503 until ready, so the browser voice
+  speaks meanwhile). Every sentence is cached in memory and on disk: said
+  once, instant after — which is what makes "repeat" (FR-11.13) instant.
+  Synthesis is one at a time; two at once on a CPU only make both late. The
+  model loads in the background at boot (~22 s).
+- ✅ **The cast** (`voices/cast.json`, the user's picks after the blind
+  test): Meera → IndicTTS 123823, Sunita → 017689, Arjun → 022743,
+  Dr. Raghavan → 103607, Vikram → 063175 (all IndicTTS, IIT Madras, CC BY
+  4.0, recorded for speech synthesis), Priya → Chatterbox's own voice, Kabir →
+  DailyTalk speaker 0 (CC BY-SA, academic use). Seven personas, seven voices
+  (FR-11.21). `ATTRIBUTION.md` credits each; the voice check shows the credits
+  and says the voices are AI (India's IT Rules 2026 label synthetic audio).
+- ✅ **The voice check speaks in them** (Voice_Engine `90063c9`): each
+  interviewer in the voice students will hear, with whether it is ready.
+- **Measured on this laptop** (i7-1260P, fp32): ready in 22 s; a line ~2.1×
+  real time (Arjun's greeting 4.8 s); a cached line 0 ms. **The user's call:
+  speed does not matter now — better machines later.** Live lines need a GPU
+  box or the speculative pre-rendering idea in §0; neither is done.
+- **Decided: Chatterbox replaces Kokoro / HeadTTS as tier 1** — the blind
+  listening test chose it for sounding human, which is the user's measure
+  ("not about accent — whether it sounds human").
 
 ### 2026-10-05 — Day 2: the latency ledger, and the first honest numbers
 
@@ -240,7 +335,7 @@ licence or hardware rules it out.
 
 | | |
 |---|---|
-| Status | **Day 1 of 14 (Revision 2).** The frame and one screen (`/voice`); no voice route yet. The browser voice client is M11's code in `@ai/core` (v0.14.0). |
+| Status | **Days 1–3 and 7 of 14 (Revision 2).** The frame, the voice check (`/voice`), the latency ledger, barge-in, and the interviewers' own voices (Chatterbox Turbo on the server, cast per persona). The voice client is M11's code in `@ai/core` (v0.18.1). |
 | Spec | Written, and the source of every row below. |
 | Scope | 22 functional requirements (18 of them P0), 9 acceptance metrics (4 release-blocking), 15 edge cases. |
 
@@ -268,19 +363,19 @@ Spec §4, verbatim. This is the authoritative list.
 
 | FR | | Priority |
 |---|---|---|
-| FR-11.1 | ⬜ WebRTC audio capture with echo cancellation and noise suppression | P0 |
+| FR-11.1 | 🟡 WebRTC audio capture with echo cancellation and noise suppression — Revision 2: `getUserMedia` with echo cancellation, noise suppression and gain control (`useListening`, day 3); no utterance audio captured yet (day 4) | P0 |
 | FR-11.2 | ⬜ Real mic check with a live transcription round-trip | P0 |
 | FR-11.3 | ⬜ Streaming ASR with word-level timestamps | P0 |
-| FR-11.4 | ⬜ VAD-based endpointing with a per-speaker adaptive threshold | P0 |
+| FR-11.4 | 🟡 VAD-based endpointing with a per-speaker adaptive threshold — the detector (§6.5's rule, a moving floor, `vad.ts`) runs and drives barge-in; ending a turn by it is day 5 | P0 |
 | FR-11.5 | ⬜ Semantic endpointing to avoid cutting incomplete utterances | P0 |
 | FR-11.6 | ⬜ Speculative LLM prefill on stabilised partial transcripts | P1 |
-| FR-11.7 | 🟡 Streaming TTS with clause-level first chunk — a sentence at a time, not streamed (§1b) | P0 |
-| FR-11.8 | 🟡 Barge-in: full stop of LLM + TTS + playback within 350 ms — playback stops when the mic opens; no VAD, not measured (§1b) | P0 |
+| FR-11.7 | 🟡 Streaming TTS with clause-level first chunk — M11's voice a sentence at a time, asked in speaking order so the first plays while the next is made; not yet cut at the first clause | P0 |
+| FR-11.8 | ✅ Barge-in: full stop of LLM + TTS + playback within 350 ms — the detector stops playback, the queue and the requests; 261 ms first word → silent, 1 ms after the decision (day 3). Lines land whole, so no model stream is running to cancel | P0 |
 | FR-11.9 | ⬜ Truncate the interviewer turn at `heard_up_to_ms` on barge-in | P0 |
 | FR-11.10 | ⬜ Calibrated silence per persona/mode with no UI change | P0 |
 | FR-11.11 | ⬜ Backchannels on a separate bus, disabled in Final Boss | P1 |
 | FR-11.12 | ⬜ Note-taking pauses | P1 |
-| FR-11.13 | 🟡 Repeat-last-utterance from cache — said again, interrupting; re-synthesised, not cached audio (§1b) | P0 |
+| FR-11.13 | ✅ Repeat-last-utterance from cache — M11 caches every sentence it makes (memory and disk), so a repeat is instant; said by whoever asked it | P0 |
 | FR-11.14 | ⬜ Mid-turn modality switch preserving the partial transcript | P0 |
 | FR-11.15 | ⬜ Low-confidence spans marked and excluded from evidence citation | P0 |
 | FR-11.16 | ⬜ Natural clarification behaviour on low ASR confidence | P1 |
@@ -288,7 +383,7 @@ Spec §4, verbatim. This is the authoritative list.
 | FR-11.18 | ⬜ Live captions always on | P0 |
 | FR-11.19 | ⬜ Per-turn audio stored, aligned to the transcript clock | P0 |
 | FR-11.20 | ⬜ p95 end-of-speech → first audio byte < 1.2 s | P0 |
-| FR-11.21 | 🟡 Distinct voice per persona; no cloning of real people — one voice per `voice_id`, paced by manner; Edge's two en-IN voices are shared, and `/voice` says so | P0 |
+| FR-11.21 | ✅ Distinct voice per persona; no cloning of real people — seven personas, seven cast voices from speakers recorded for speech synthesis under CC BY (IndicTTS) / CC BY-SA (DailyTalk), each credited; no celebrity or character voice; labelled AI | P0 |
 | FR-11.22 | ⬜ Code-switch tolerance without penalty | P0 |
 
 ---
@@ -397,11 +492,11 @@ Revision 2 removes. Days are the spec's unit — a focused day each.
 |---|---|
 | 1 | ✅ Repo scaffold — `module.json`, ports from PORTS.txt, identity — and M06's `voice-core.ts` / `voice.ts` as the client baseline (moved to `@ai/core` v0.14.0; the voice check at `/voice`) |
 | 2 | ✅ The latency ledger (`TurnTiming`) in the browser from day one; measure M06's browser voice honestly: first audio after a line lands, stop time after the mic (Core v0.15.0, M11 `1f8ffe1`; p95 answer → audio 1.41 s, cold start 2–3 s, stop 6–9 ms) |
-| 3 | Browser VAD (Silero via `ricky0123/vad`): the student starting to speak stops playback client-side, and the server is told to cancel |
+| 3 | ✅ Barge-in (2026-10-06): §6.5's energy rule in the browser (`vad.ts`, `useListening`), the stop chain (`bargeIn`), Final Boss's contest, the ledger's `barge_in` stage; 261 ms measured live (Core v0.18.1, M11 `0257db8`, M06 `cc4619c`). Silero moves to day 5 |
 | 4 | ASR route on Groq `whisper-large-v3-turbo` with word timestamps (confirm the API returns word granularity); browser recognition stays as the no-key fallback |
 | 5 | Smart Turn v3.2 for semantic endpointing, with the adaptive VAD threshold (FR-11.4, FR-11.5); checked on 200 labelled endings of real answers |
 | 6 | Accent WER on the Svarah benchmark across the ASR candidates (AC-11.4); choose by the number |
-| 7 | TTS tier 1: Kokoro via HeadTTS, opt-in and cached; clause-level streaming (FR-11.7); the `voice_id` → per-tier voice map; the lexicon (EC-11.11) grown from `voice-core.ts`'s table |
+| 7 | ✅ (pulled forward, 2026-10-06) TTS tier 1 is **Chatterbox Turbo via ONNX on the server**, cast per persona and cached (M11 `2aed9bb`, `90063c9`) — the blind listening test's choice, replacing Kokoro. Still open from this row: clause-level streaming (FR-11.7) and the lexicon (EC-11.11) |
 | 8 | TTS tier 2 behind a flag: Groq Orpheus streaming; first-audio p95 against tiers 0 and 1 |
 | 9 | `heard_up_to_ms` truncation (FR-11.9), repeat from cache (FR-11.13), clarification on low confidence (FR-11.15, FR-11.16) |
 | 10 | Mic check with a live transcription round trip and a noise floor (FR-11.2); echo detection (EC-11.8) |
