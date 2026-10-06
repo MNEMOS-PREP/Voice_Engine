@@ -1,6 +1,6 @@
 # M11 — TODO · Voice & Conversation Engine
 
-> **Completion: 20%** — 3 of 22 functional requirements met (FR-11.8 barge-in, 11.13 repeat from cache, 11.21 a voice per persona), 3 partly (FR-11.1, 11.4, 11.7). **Days 1–3 and 7 of 14 (Revision 2) done, 2026-10-06:** the frame, the voice check, the latency ledger, barge-in measured from the student's first word, and the interviewers' own voices — Chatterbox Turbo on the server, cast per persona after a blind listening test, mostly Indian. M06's panel speaks in them, each panelist in their own voice. The spec has a Revision 2 (§0 of the spec): browser-first and free. The requirement count is the spec's own, so this is a measure of scope ahead rather than of progress behind.
+> **Completion: 34%** — 6 of 22 functional requirements met (FR-11.1 capture, 11.4 adaptive endpointing, 11.5 semantic endpointing, 11.8 barge-in, 11.13 repeat from cache, 11.21 a voice per persona), 3 partly (FR-11.3, 11.7, 11.15). **Days 1–5 and 7 of 14 (Revision 2) done, 2026-10-06:** the frame, the voice check, the latency ledger, barge-in from the student's first word, server recognition with word times, knowing when the student has finished (their own pauses, then Smart Turn), and the interviewers' own voices — Chatterbox Turbo, cast per persona, mostly Indian. In M06's room a spoken answer is now heard, written down and sent when the student finishes, and each panelist speaks in their own voice. The spec has a Revision 2 (§0 of the spec): browser-first and free. The requirement count is the spec's own, so this is a measure of scope ahead rather than of progress behind.
 >
 > _Method: `(met + ½ × partial) ÷ total`, counted from the spec, 2026-08-28. One measure applied the same way to all nineteen modules so they compare; it counts requirements, not screens or gates._
 
@@ -20,6 +20,76 @@ Task list for taking **M11 — Voice & Conversation Engine** to 100% of [M11_Voi
 Legend: ✅ done · 🟡 partly done · ⬜ not started
 
 ---
+
+### 2026-10-06 — Day 5: has the student finished?
+
+- ✅ **The speaker's own pauses** (FR-11.4, `@ai/core` v0.20.0 `0006f45`,
+  `endpoint.ts`, pure, 7 tests): a silence ends a turn once it has lasted
+  `550 + 1.2 × (their mean pause − 250)` ms, within 400–1,400 (§6.2) —
+  learned from pauses they came back from, across the session.
+- ✅ **Does it sound finished?** (FR-11.5, Voice_Engine `5f3adf1`, `turn.py`):
+  at that moment **Smart Turn v3.2** (Pipecat, BSD-2; a Whisper-Tiny encoder,
+  8.7 MB int8 ONNX, ~25 ms on this CPU) hears the last 8 s; "not finished"
+  waits 600 ms more and asks again, never past 2.5 s of silence (§6.3).
+  Without the model, silence alone decides. It hears the waveform, not a
+  transcript: no API call, and it runs before recognition.
+- **Decided: Smart Turn on the server, not in the browser.** M11 already
+  runs onnxruntime; one 8 MB model on the server beats onnxruntime-web and a
+  model download in every browser, and works on the demo laptop offline.
+- **Its preprocessing, checked rather than trusted:** the reference
+  implementation (fetched from Pipecat's repo) left-pads to 8 s and uses
+  `transformers`' Whisper feature extractor. Reproduced in numpy; compared
+  with the real extractor in a throwaway venv: **within 4.5e-6** on speech,
+  noise and tones. The test pins numbers taken from it.
+- **Checked on real speech:** the seven human reference recordings, cut at
+  Whisper's word times — after "and / the / of…" median **0.03** (53 of 57
+  heard as unfinished); at sentence ends median **0.86** (10 of 15 finished;
+  the misses are mid-paragraph sentence ends where the reader goes on — when
+  an interviewer should wait). Chopped synthetic speech fooled it: that was
+  the wrong test, kept out of the suite. **Still owed** (the spec's "200
+  labelled endings of real answers"): students' own answers — needs
+  recordings, with consent (day 12).
+- ✅ **A spoken turn, start to finish** (`useTurnTaking`): listens, decides,
+  and hands the room the whole turn — one transcription per turn, not per
+  breath (more accurate, and fewer calls against a free tier's minute).
+- ✅ **M06's room sends a spoken answer when the student finishes** (M06
+  `7cad60c`) — nobody presses a button to stop talking in a spoken interview.
+  Without the recogniser, the words wait in the box for "Answer".
+- ✅ **AC-11.1 measured as the spec states it** (Core v0.20.1 `cb0f99c`): a
+  spoken answer carries `speech_ended_at`; the ledger's `end_to_audio` (end
+  of speech → first audio) is the gate, `endpoint` shows the wait for
+  "finished", `total` keeps the budget from the send for typed answers.
+- **Live** (headless Edge, a fake microphone over a panel's opening): the
+  student cut in (261 ms) and finished; Smart Turn: finished, 0.87, 61 ms;
+  Whisper: the whole turn, 469 ms; sent; the next line played — **~1.9 s
+  from the end of speech** (AC-11.1 asks 1.2 s: the 550 ms silence, the
+  model, recognition, M06's step and synthesis add up; speed is the user's
+  "later, on a better machine").
+
+### 2026-10-06 — Day 4: the student's words, with the time of each
+
+- ✅ **Confirmed: Groq returns word timestamps** (the build order asked):
+  `verbose_json` with `timestamp_granularities[]=word` and `segment` gives
+  each word's start and end, and each segment's `avg_logprob` and
+  `no_speech_prob`; 12 s of audio in ~0.5 s.
+- ✅ **`POST /v1/voice/transcribe`** (Voice_Engine `2811fb6`, `asr.py`): an
+  answer's audio in, spec §5's `ASRResult` out — word times clamped so they
+  never run backwards (Whisper's alignment overlaps); each word takes its
+  segment's confidence, and runs of unsure words become
+  `low_confidence_spans` (FR-11.15's marking); Whisper's text over silence
+  ("Thank you.") dropped by the standard filter; the question as Whisper's
+  prompt, so "Dijkstra" comes out as Dijkstra; a key refused for quota hands
+  over to the next. Nothing is stored. `GET /v1/voice/asr`. The shared
+  `keys.txt` loads at boot (names only; `keys.py`, the seventh copy —
+  PLATFORM_TODO §2). 12 tests, none open a socket.
+- ✅ **The browser keeps the audio for a moment** (Core v0.19.0 `822cfdb`):
+  the listener's audio thread also keeps the last minutes at 16 kHz, and
+  `audioBetween` cuts exactly what was said — from 300 ms before the
+  detector decided, where the first word is — as a WAV. **Decided: WAV from
+  our own audio thread, not MediaRecorder's WebM**: a WebM cut mid-stream
+  loses its header and the recogniser cannot read it.
+- **Live:** 4.5 s of a fake student's speech, cut in the browser,
+  transcribed in 450 ms.
 
 ### 2026-10-06 — Day 3: barge-in, measured from the student's first word
 
@@ -363,11 +433,11 @@ Spec §4, verbatim. This is the authoritative list.
 
 | FR | | Priority |
 |---|---|---|
-| FR-11.1 | 🟡 WebRTC audio capture with echo cancellation and noise suppression — Revision 2: `getUserMedia` with echo cancellation, noise suppression and gain control (`useListening`, day 3); no utterance audio captured yet (day 4) | P0 |
+| FR-11.1 | ✅ WebRTC audio capture with echo cancellation and noise suppression — Revision 2's form: `getUserMedia` with echo cancellation, noise suppression and gain control (`useListening`, day 3), and the answer's audio cut from the same audio thread and sent per turn (day 4) | P0 |
 | FR-11.2 | ⬜ Real mic check with a live transcription round-trip | P0 |
-| FR-11.3 | ⬜ Streaming ASR with word-level timestamps | P0 |
-| FR-11.4 | 🟡 VAD-based endpointing with a per-speaker adaptive threshold — the detector (§6.5's rule, a moving floor, `vad.ts`) runs and drives barge-in; ending a turn by it is day 5 | P0 |
-| FR-11.5 | ⬜ Semantic endpointing to avoid cutting incomplete utterances | P0 |
+| FR-11.3 | 🟡 Streaming ASR with word-level timestamps — word times from Whisper per turn (day 4); the live, streaming caption is the browser's own recognition, so the words of record are not streamed | P0 |
+| FR-11.4 | ✅ VAD-based endpointing with a per-speaker adaptive threshold — §6.2's formula over the speaker's own pauses, learned across the session (`endpoint.ts`, day 5) | P0 |
+| FR-11.5 | ✅ Semantic endpointing to avoid cutting incomplete utterances — Smart Turn v3.2 on M11 (`turn.py`); "not finished" waits longer, capped at 2.5 s (day 5) | P0 |
 | FR-11.6 | ⬜ Speculative LLM prefill on stabilised partial transcripts | P1 |
 | FR-11.7 | 🟡 Streaming TTS with clause-level first chunk — M11's voice a sentence at a time, asked in speaking order so the first plays while the next is made; not yet cut at the first clause | P0 |
 | FR-11.8 | ✅ Barge-in: full stop of LLM + TTS + playback within 350 ms — the detector stops playback, the queue and the requests; 261 ms first word → silent, 1 ms after the decision (day 3). Lines land whole, so no model stream is running to cancel | P0 |
@@ -377,12 +447,12 @@ Spec §4, verbatim. This is the authoritative list.
 | FR-11.12 | ⬜ Note-taking pauses | P1 |
 | FR-11.13 | ✅ Repeat-last-utterance from cache — M11 caches every sentence it makes (memory and disk), so a repeat is instant; said by whoever asked it | P0 |
 | FR-11.14 | ⬜ Mid-turn modality switch preserving the partial transcript | P0 |
-| FR-11.15 | ⬜ Low-confidence spans marked and excluded from evidence citation | P0 |
+| FR-11.15 | 🟡 Low-confidence spans marked and excluded from evidence citation — marked in every `ASRResult` (day 4); not yet carried with the answer to M06 and M13, which must not cite them | P0 |
 | FR-11.16 | ⬜ Natural clarification behaviour on low ASR confidence | P1 |
 | FR-11.17 | ⬜ Bandwidth degradation ladder down to push-to-talk | P0 |
 | FR-11.18 | ⬜ Live captions always on | P0 |
 | FR-11.19 | ⬜ Per-turn audio stored, aligned to the transcript clock | P0 |
-| FR-11.20 | ⬜ p95 end-of-speech → first audio byte < 1.2 s | P0 |
+| FR-11.20 | ⬜ p95 end-of-speech → first audio byte < 1.2 s — measured as stated since day 5 (`end_to_audio`); one live turn: ~1.9 s | P0 |
 | FR-11.21 | ✅ Distinct voice per persona; no cloning of real people — seven personas, seven cast voices from speakers recorded for speech synthesis under CC BY (IndicTTS) / CC BY-SA (DailyTalk), each credited; no celebrity or character voice; labelled AI | P0 |
 | FR-11.22 | ⬜ Code-switch tolerance without penalty | P0 |
 
@@ -493,8 +563,8 @@ Revision 2 removes. Days are the spec's unit — a focused day each.
 | 1 | ✅ Repo scaffold — `module.json`, ports from PORTS.txt, identity — and M06's `voice-core.ts` / `voice.ts` as the client baseline (moved to `@ai/core` v0.14.0; the voice check at `/voice`) |
 | 2 | ✅ The latency ledger (`TurnTiming`) in the browser from day one; measure M06's browser voice honestly: first audio after a line lands, stop time after the mic (Core v0.15.0, M11 `1f8ffe1`; p95 answer → audio 1.41 s, cold start 2–3 s, stop 6–9 ms) |
 | 3 | ✅ Barge-in (2026-10-06): §6.5's energy rule in the browser (`vad.ts`, `useListening`), the stop chain (`bargeIn`), Final Boss's contest, the ledger's `barge_in` stage; 261 ms measured live (Core v0.18.1, M11 `0257db8`, M06 `cc4619c`). Silero moves to day 5 |
-| 4 | ASR route on Groq `whisper-large-v3-turbo` with word timestamps (confirm the API returns word granularity); browser recognition stays as the no-key fallback |
-| 5 | Smart Turn v3.2 for semantic endpointing, with the adaptive VAD threshold (FR-11.4, FR-11.5); checked on 200 labelled endings of real answers |
+| 4 | ✅ ASR route on Groq `whisper-large-v3-turbo` with word timestamps — confirmed; per turn; browser recognition the caption and the no-key fallback (M11 `2811fb6`, Core v0.19.0, M06 `76daf78`) |
+| 5 | ✅ Smart Turn v3.2 for semantic endpointing, with the adaptive VAD threshold (FR-11.4, FR-11.5) — on M11, features checked against the reference, scored on real speech (M11 `5f3adf1`, Core v0.20.0–1, M06 `7cad60c`). Still owed: 200 labelled endings of students' own answers |
 | 6 | Accent WER on the Svarah benchmark across the ASR candidates (AC-11.4); choose by the number |
 | 7 | ✅ (pulled forward, 2026-10-06) TTS tier 1 is **Chatterbox Turbo via ONNX on the server**, cast per persona and cached (M11 `2aed9bb`, `90063c9`) — the blind listening test's choice, replacing Kokoro. Still open from this row: clause-level streaming (FR-11.7) and the lexicon (EC-11.11) |
 | 8 | TTS tier 2 behind a flag: Groq Orpheus streaming; first-audio p95 against tiers 0 and 1 |
