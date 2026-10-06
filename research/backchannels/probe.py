@@ -74,9 +74,8 @@ def main() -> None:
                 }
             )
             r = rows[-1]
-            print(
-                f"{text:9} {voice:20} {r['ms']:5} ms  {'ok ' if r['came_back'] else 'MISS'}  {heard!r}"
-            )
+            verdict = "ok " if r["came_back"] else "MISS"
+            print(f"{text:9} {voice:20} {r['ms']:5} ms  {verdict}  {heard!r}")
     (HERE / "probe.json").write_text(json.dumps(rows, indent=1), encoding="utf-8")
     print()
     for text in CANDIDATES:
