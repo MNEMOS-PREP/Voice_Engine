@@ -11,8 +11,16 @@ is narrower than the spec's list — said here rather than papered over:
     line_ready          answer sent → line on screen      —
     tts_first_audio     line on screen → first audio      250 ms
     stop                stop asked → browser says stopped 350 ms    AC-11.2
+    barge_in            student began → interviewer quiet 600 ms (250 + 350)
     heard_up_to         first audio → stop asked          —  (FR-11.9's input)
     spoken              first audio → line finished       —
+
+`barge_in` (day 3) is the student's side of a stop: from their first loud
+frame to the interviewer falling silent — the 250 ms that make it speech
+(§6.5, EC-11.14) plus the stop itself. AC-11.2 is `stop`, measured from the
+decision; this one is what the student lives through. A Final Boss contest
+(the interviewer finishing up to 1.5 s first, §6.5) is deliberate, so it is
+counted as `contested` instead, against no budget.
 
 "Answer sent" stands in for the spec's end of speech while recognition is the
 browser's: the student presses send. VAD (day 3) and server ASR (day 4) move
@@ -52,6 +60,19 @@ STAGES: tuple[Stage, ...] = (
     Stage("line_ready", "answer_sent_at", "landed_at", "Answer sent → line on screen"),
     Stage("tts_first_audio", "landed_at", "first_audio_at", "Line on screen → first audio", 250),
     Stage("stop", "stop_requested_at", "stopped_at", "Stop asked → stopped", 350, "AC-11.2"),
+    Stage(
+        "barge_in",
+        "speech_started_at",
+        "stopped_at",
+        "Student began speaking → interviewer quiet",
+        600,
+    ),
+    Stage(
+        "contested",
+        "speech_started_at",
+        "stopped_at",
+        "Student began speaking → interviewer yielded (Final Boss)",
+    ),
     Stage("heard_up_to", "first_audio_at", "stop_requested_at", "Heard before the stop"),
     Stage("spoken", "first_audio_at", "ended_at", "Line spoken in full"),
 )
@@ -73,6 +94,11 @@ def stages_of(row: LineTiming) -> dict[str, int | None]:
     # A stop before any audio is not a heard-up-to of zero; nothing played.
     if row.first_audio_at is None:
         out["heard_up_to"] = None
+    # A deliberate contest is not a slow barge-in, and a barge-in is not one.
+    if row.contested:
+        out["barge_in"] = None
+    else:
+        out["contested"] = None
     return out
 
 

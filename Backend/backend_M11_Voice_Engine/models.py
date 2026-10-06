@@ -45,6 +45,12 @@ class LineTiming(SQLModel, table=True):
     stop_requested_at: float | None = None
     stopped_at: float | None = None
     stop_reason: str | None = Field(default=None, index=True)
+    #: Barge-in (day 3): when the student began speaking over the line — its
+    #: first loud frame, before the 250 ms that made it count (§6.5).
+    speech_started_at: float | None = None
+    #: The interviewer finished up to 1.5 s before yielding, on purpose
+    #: (Final Boss, §6.5): not a slow stop.
+    contested: bool = False
     blocked: bool = False
     error: str | None = None
     recorded_at: datetime = Field(default_factory=utcnow, index=True)

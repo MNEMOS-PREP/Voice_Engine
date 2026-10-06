@@ -69,6 +69,10 @@ class LineTimingIn(BaseModel):
     stop_requested_at: Mark = None
     stopped_at: Mark = None
     stop_reason: StopReason | None = None
+    #: Barge-in (day 3): when the student began speaking over the line.
+    speech_started_at: Mark = None
+    #: Final Boss finished up to 1.5 s before yielding (§6.5), on purpose.
+    contested: bool = False
     blocked: bool = False
     error: str | None = Field(default=None, max_length=100)
 

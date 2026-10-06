@@ -7,8 +7,10 @@
  * route refuses students anyway (`require_role`).
  *
  * What it can see is what the browser can see today. "Answer sent" stands in
- * for the end of speech until VAD (day 3) and server ASR (day 4) find where
- * speech really ended; the table says so rather than labelling it otherwise.
+ * for the end of speech until server ASR (day 4) and endpointing (day 5) find
+ * where speech really ended; the table says so rather than labelling it
+ * otherwise. Since day 3 a barge-in is timed from the student's first loud
+ * frame (`useListening`), and a Final Boss contest is its own stage.
  */
 
 import { useState } from "react";
@@ -124,8 +126,10 @@ export function LatencyLedger() {
             </p>
           )}
           <p className="mt-2 text-xs leading-relaxed text-ink-faint">
-            "Answer sent" stands in for the end of speech until the voice detector and server
-            recognition arrive; "stopped" is when the browser reported the line stopped.
+            "Answer sent" stands in for the end of speech until server recognition and
+            endpointing arrive; a barge-in is timed from the student's first word, and a Final
+            Boss contest is listed apart, since it waits on purpose. "Stopped" is when the
+            browser reported the line stopped.
           </p>
         </>
       )}

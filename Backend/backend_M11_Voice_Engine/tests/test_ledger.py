@@ -42,6 +42,8 @@ def line(**marks) -> dict:
         "stop_requested_at": None,
         "stopped_at": None,
         "stop_reason": None,
+        "speech_started_at": None,
+        "contested": False,
         "blocked": False,
         "error": None,
     }
@@ -75,6 +77,42 @@ def test_a_line_cut_short_says_how_long_the_stop_took_and_how_much_was_heard():
     assert stages["stop"] == 40  # AC-11.2 measures this
     assert stages["heard_up_to"] == 1500  # first audio → stop asked
     assert stages["spoken"] is None
+
+
+def test_a_barge_in_is_timed_from_the_students_first_word():
+    """Day 3: the student began at +2,300 ms; 250 ms later it counted as
+    speech and the stop was asked; the interviewer was quiet 40 ms after."""
+    stages = ledger.stages_of(
+        row(
+            ended_at=None,
+            speech_started_at=T0 + 2300,
+            stop_requested_at=T0 + 2560,
+            stopped_at=T0 + 2600,
+            stop_reason="barge_in",
+        )
+    )
+    assert stages["barge_in"] == 300
+    assert stages["stop"] == 40
+    assert stages["heard_up_to"] == 1460
+    assert stages["contested"] is None
+
+
+def test_a_final_boss_contest_is_not_a_slow_barge_in():
+    """§6.5: Final Boss finishes up to 1.5 s before yielding, on purpose.
+    Found on the first live one: 1,763 ms read against a 600 ms budget."""
+    stages = ledger.stages_of(
+        row(
+            ended_at=None,
+            speech_started_at=T0 + 2300,
+            stop_requested_at=T0 + 4060,
+            stopped_at=T0 + 4061,
+            stop_reason="barge_in",
+            contested=True,
+        )
+    )
+    assert stages["barge_in"] is None
+    assert stages["contested"] == 1761
+    assert stages["stop"] == 1
 
 
 def test_a_line_stopped_before_any_audio_heard_nothing_rather_than_zero():
