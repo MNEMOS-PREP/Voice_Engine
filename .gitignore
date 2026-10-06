@@ -51,3 +51,5 @@ Thumbs.db
 research/wer/cache/
 research/lexicon/*.log
 research/wer/*.log
+# Spoken answers kept with consent (FR-11.19) - never committed
+Backend/.kept_audio/

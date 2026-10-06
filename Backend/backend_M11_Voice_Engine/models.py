@@ -74,4 +74,22 @@ class LexiconFlag(SQLModel, table=True):
     flagged_at: datetime = Field(default_factory=utcnow, index=True)
 
 
-__all__ = ["LexiconFlag", "LineTiming"]
+class KeptAnswer(SQLModel, table=True):
+    """A spoken answer kept with the student's consent (FR-11.19, `kept.py`)."""
+
+    __tablename__ = "m11_kept_answer"
+
+    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
+    session_id: uuid.UUID = Field(index=True)
+    #: M06's turn this audio answered.
+    turn_id: uuid.UUID = Field(index=True)
+    candidate_id: str | None = Field(default=None, index=True)
+    duration_ms: int = 0
+    #: When the speech began and ended, on the page's clock — the ledger's —
+    #: so the audio lines up with the interview's other marks.
+    started_at: float | None = None
+    ended_at: float | None = None
+    kept_at: datetime = Field(default_factory=utcnow, index=True)
+
+
+__all__ = ["KeptAnswer", "LexiconFlag", "LineTiming"]

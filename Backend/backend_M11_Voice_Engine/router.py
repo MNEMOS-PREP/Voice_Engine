@@ -25,10 +25,10 @@ from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
 
-from . import asr, ledger, lexicon, tts, turn
+from . import asr, kept, ledger, lexicon, tts, turn
 from .access import enforce_access
 from .dependencies import deps
-from .models import LexiconFlag, LineTiming
+from .models import KeptAnswer, LexiconFlag, LineTiming
 
 router = APIRouter(prefix="/v1", dependencies=[Depends(enforce_access)])
 
@@ -468,6 +468,104 @@ def lexicon_flags(db: Session = Depends(get_session)) -> list[FlagCount]:
         for word, rows in by_word.items()
     ]
     return sorted(out, key=lambda f: (-f.flags, f.word))
+
+
+# ─────────────────────────────────────────────────────────────────────────
+#  Spoken answers, kept with consent (FR-11.19; TODO §7 day 12)
+# ─────────────────────────────────────────────────────────────────────────
+
+
+class KeptAnswerOut(BaseModel):
+    turn_id: uuid.UUID
+    duration_ms: int
+    started_at: float | None
+    ended_at: float | None
+
+
+@router.post(
+    "/voice/{session_id}/audio", response_model=KeptAnswerOut, status_code=201, tags=["voice"]
+)
+async def keep_answer(
+    session_id: uuid.UUID,
+    request: Request,
+    turn_id: uuid.UUID = Query(),
+    consent: str = Query(default="no"),
+    started_at: float | None = Query(default=None),
+    ended_at: float | None = Query(default=None),
+    principal: Principal | None = Depends(enforce_access),
+    db: Session = Depends(get_session),
+) -> KeptAnswerOut:
+    """One spoken answer's audio (16 kHz WAV, the body itself), kept beside
+    the turn it answered. Only with the student's say-so — `consent=yes` —
+    or nothing is written."""
+    if principal is None:
+        raise HTTPException(status_code=401, detail="Not signed in.")
+    if consent != "yes":
+        raise HTTPException(
+            status_code=403, detail="Answers are kept only when the student chooses to keep them."
+        )
+    data = await request.body()
+    if len(data) > kept.MAX_BYTES:
+        raise HTTPException(status_code=413, detail="That answer is too long to keep.")
+    try:
+        duration = kept.duration_ms(data)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+    kept.save(session_id, turn_id, data)
+    row = db.exec(
+        select(KeptAnswer).where(KeptAnswer.session_id == session_id, KeptAnswer.turn_id == turn_id)
+    ).first() or KeptAnswer(session_id=session_id, turn_id=turn_id)
+    row.duration_ms = duration
+    row.started_at = started_at
+    row.ended_at = ended_at
+    row.candidate_id = principal.candidate_id if principal.role is Role.student else None
+    db.add(row)
+    db.commit()
+    return KeptAnswerOut(
+        turn_id=turn_id, duration_ms=duration, started_at=started_at, ended_at=ended_at
+    )
+
+
+@router.get("/voice/{session_id}/audio", response_model=list[KeptAnswerOut], tags=["voice"])
+def kept_answers(session_id: uuid.UUID, db: Session = Depends(get_session)) -> list[KeptAnswerOut]:
+    """The interview's kept answers, in the order they were said."""
+    rows = db.exec(
+        select(KeptAnswer).where(KeptAnswer.session_id == session_id).order_by(KeptAnswer.kept_at)
+    ).all()
+    return [
+        KeptAnswerOut(
+            turn_id=r.turn_id,
+            duration_ms=r.duration_ms,
+            started_at=r.started_at,
+            ended_at=r.ended_at,
+        )
+        for r in rows
+        if kept.path_for(session_id, r.turn_id).exists()
+    ]
+
+
+@router.get("/voice/{session_id}/audio/{turn_id}", tags=["voice"])
+def kept_answer_audio(session_id: uuid.UUID, turn_id: uuid.UUID) -> Response:
+    """One kept answer, to play back beside its words."""
+    path = kept.path_for(session_id, turn_id)
+    if not path.exists():
+        raise HTTPException(status_code=404, detail="That answer was not kept.")
+    return Response(
+        content=path.read_bytes(),
+        media_type="audio/wav",
+        headers={"Cache-Control": "private, no-store"},
+    )
+
+
+@router.delete("/voice/{session_id}/audio", status_code=204, tags=["voice"])
+def forget_kept_answers(session_id: uuid.UUID, db: Session = Depends(get_session)) -> Response:
+    """Delete every kept answer of this interview — the files, not just
+    the rows."""
+    for row in db.exec(select(KeptAnswer).where(KeptAnswer.session_id == session_id)).all():
+        db.delete(row)
+    db.commit()
+    kept.forget(session_id)
+    return Response(status_code=204)
 
 
 __all__ = ["router"]

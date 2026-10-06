@@ -32,7 +32,7 @@ from ai_core.identity import Principal
 from fastapi import Depends, Request
 from sqlmodel import Session, select
 
-from .models import LineTiming
+from .models import KeptAnswer, LineTiming
 
 
 def interview_owner(db: Session, session_id: str) -> str | None:
@@ -47,7 +47,16 @@ def interview_owner(db: Session, session_id: str) -> str | None:
         .order_by(LineTiming.recorded_at)
         .limit(1)
     ).first()
-    return first
+    if first is not None:
+        return first
+    # An interview spoken with the voice off has no line on the ledger: its
+    # first kept answer says whose it is, by the same rule.
+    return db.exec(
+        select(KeptAnswer.candidate_id)
+        .where(KeptAnswer.session_id == sid, KeptAnswer.candidate_id.is_not(None))  # type: ignore[union-attr]
+        .order_by(KeptAnswer.kept_at)
+        .limit(1)
+    ).first()
 
 
 def enforce_access(request: Request, db: Session = Depends(get_session)) -> Principal | None:

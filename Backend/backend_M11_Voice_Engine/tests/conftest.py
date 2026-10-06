@@ -56,6 +56,14 @@ def no_voice_model(monkeypatch, tmp_path):
 
 
 @pytest.fixture(autouse=True)
+def kept_in_tmp(monkeypatch, tmp_path):
+    """Kept answers go under the test's own folder, never the real one."""
+    from backend_M11_Voice_Engine import kept
+
+    monkeypatch.setattr(kept, "KEPT_DIR", tmp_path / "kept")
+
+
+@pytest.fixture(autouse=True)
 def no_turn_model(monkeypatch):
     """Smart Turn downloads and loads in a thread: no test does. A test that
     wants one stands a fake in with `turn.set_classifier`."""
