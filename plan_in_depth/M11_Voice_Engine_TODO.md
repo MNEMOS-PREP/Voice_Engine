@@ -38,11 +38,15 @@ Legend: ✅ done · 🟡 partly done · ⬜ not started
    not English misheard. AC-11.4's accent GAP still needs Svarah (the user
    must accept its terms on Hugging Face) or pilot audio; AC-11.5 (≤ 12% on
    pilot audio) looks comfortable on read speech.
-3. **EC-11.11's table:** `research/lexicon/probe.py` (M04's 120 concepts and
-   the personas' names, said and read back) — re-run it; it resumes from
-   `probe.json`. Respell only the misses, check the respellings (`--retry`),
-   then fill `voices/lexicon.json`. 37 of 127 said back right before the
-   pause, no misses yet.
+3. **EC-11.11's table — probed (2026-10-06, `research/lexicon/probe.json`):**
+   125 of 127 came back right — all 120 of M04's concept names (DNS, TCP,
+   ACID, SOLID, NoSQL… included) and every persona name but one:
+   **"Raghavan"** was heard as "Ragavan" (Priya's voice) and "Raghuavan"
+   (Arjun's) — the aspirated "gh" flattened, in a name said at every
+   hand-over to Dr. Raghavan. Next: put candidate respellings in `RESPELL`
+   and run `probe.py --retry`; an entry goes in `voices/lexicon.json` only if
+   its respelling comes back as "Raghavan". Until then the table is empty —
+   correctly: nothing else needs it.
 4. Days 10 (mic check, echo), 11 (calibrated silence, backchannels, note-
    taking), 12 (answer audio kept with consent; push-to-talk), 14 (latency
    harness, device matrix).
