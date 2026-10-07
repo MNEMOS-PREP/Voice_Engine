@@ -1,4 +1,5 @@
-# Run from Backend: PYTHONPATH=. .venvScriptspython ..esearchisteningine_bench.py 3 plan
+# Run from Backend/:  PYTHONPATH=. .venv/Scripts/python ../research/listening/line_bench.py 3 plan
+esearchisteningine_bench.py 3 plan
 """A line as the room hears it: planned at once, asked for in order, played back to back.
 
 usage: python line_bench.py [ROWS] [plan|noplan]
