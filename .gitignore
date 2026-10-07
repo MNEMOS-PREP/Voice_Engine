@@ -53,3 +53,7 @@ research/lexicon/*.log
 research/wer/*.log
 # Spoken answers kept with consent (FR-11.19) - never committed
 Backend/.kept_audio/
+
+# The face builder (scripts/build_face.py): LAM checkout, weights and its venv.
+# Gigabytes, rebuilt by the script; never committed.
+.face_builder/

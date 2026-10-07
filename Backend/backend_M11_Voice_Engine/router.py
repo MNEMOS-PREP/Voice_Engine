@@ -233,6 +233,22 @@ class SpeakIn(BaseModel):
     voice_id: str | None = Field(default=None, max_length=40)
     #: A voice by its key — the voice check plays a specific one.
     voice: str | None = Field(default=None, max_length=64)
+    #: The browser's id for the line this sentence is part of (`plan`).
+    line: str | None = Field(default=None, max_length=64)
+
+
+class PlanIn(BaseModel):
+    """A whole line's sentences, the moment the line arrives: M11 starts
+    making them side by side, three at a time, and `speak` collects each."""
+
+    line: str = Field(min_length=1, max_length=64)
+    sentences: list[SpeakIn] = Field(min_length=1, max_length=24)
+
+
+class DropIn(BaseModel):
+    """Lines the browser stopped (a barge-in, a repeat)."""
+
+    lines: list[str] = Field(min_length=1, max_length=32)
 
 
 @router.get("/voice/engine", response_model=EngineOut, tags=["voice"])
@@ -273,7 +289,7 @@ def speak(body: SpeakIn, principal: Principal | None = Depends(enforce_access)) 
     e = tts.engine()
     voice = e.cast.resolve(persona_id=body.persona_id, voice_id=body.voice_id, voice=body.voice)
     try:
-        audio, cached, ms = e.speak(body.text, voice)
+        audio, cached, ms = e.speak(body.text, voice, line=body.line)
     except tts.EngineUnavailable as exc:
         raise HTTPException(
             status_code=503, detail=f"The interviewer's voice is not ready: {exc}"
@@ -290,6 +306,33 @@ def speak(body: SpeakIn, principal: Principal | None = Depends(enforce_access)) 
             "Cache-Control": "private, max-age=86400",
         },
     )
+
+
+@router.post("/voice/plan", status_code=202, tags=["voice"])
+def plan_line(
+    body: PlanIn, principal: Principal | None = Depends(enforce_access)
+) -> dict[str, int]:
+    """Start making a line's sentences now, side by side (2026-10-07). The
+    browser still asks for each in order (`/voice/speak`); by then most are
+    made. Nothing to wait for here: 202 at once."""
+    if principal is None:
+        raise HTTPException(status_code=401, detail="Not signed in.")
+    e = tts.engine()
+    sentences = [
+        (s.text, e.cast.resolve(persona_id=s.persona_id, voice_id=s.voice_id, voice=s.voice))
+        for s in body.sentences
+    ]
+    return {"planned": e.plan(sentences, body.line)}
+
+
+@router.post("/voice/drop", tags=["voice"])
+def drop_lines(
+    body: DropIn, principal: Principal | None = Depends(enforce_access)
+) -> dict[str, int]:
+    """The browser stopped these lines: what is not yet started is not made."""
+    if principal is None:
+        raise HTTPException(status_code=401, detail="Not signed in.")
+    return {"dropped": tts.engine().drop(body.lines)}
 
 
 # ─────────────────────────────────────────────────────────────────────────

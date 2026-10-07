@@ -17,8 +17,16 @@ Three things make it usable before that machine exists:
 * **A line said once is never made again.** Every line is cached in memory
   and on disk, keyed by engine, voice and text — greetings, transitions and
   "repeat the question" are instant after the first time.
-* **One at a time.** Synthesis is serialised: on a CPU, two at once only make
-  both late.
+* **Three sentences at once** (2026-10-07). Speech is a language model choosing
+  ~25 tokens per second of audio, one token at a time, and on a CPU each step
+  is mostly reading the model's weights: stepping three sentences together
+  costs little more than one. Measured on this laptop: 13 tokens/s alone, 27
+  with three, faster than speech. A line's sentences are planned the moment
+  it arrives (`plan`), made side by side, each joining as another finishes,
+  and turned into audio on a second thread while the next ones are made. Each
+  voice's conditioning, the same prefix before every sentence, is run through
+  the model once, at load: 1.1 s per sentence saved. The browser asks for the
+  sentences in order, as before; most are made by the time it asks.
 
 The cast — who speaks for whom — is data (`voices/cast.json`), with each
 voice's source, licence and credit (`voices/ATTRIBUTION.md`).
@@ -27,10 +35,13 @@ voice's source, licence and credit (`voices/ATTRIBUTION.md`).
 from __future__ import annotations
 
 import hashlib
+import heapq
 import io
+import itertools
 import json
 import logging
 import os
+import queue
 import re
 import threading
 import time
@@ -194,6 +205,28 @@ def sample_next(
     return int(rng.choice(probs.size, p=probs))
 
 
+#: Threads for the language model. ONNX Runtime's default is one per physical
+#: core, and on a hybrid CPU (this laptop: 4 fast cores, 8 efficiency cores)
+#: every operation is then split across the slow cores too and waits for them:
+#: 7x slower than real time, measured 2026-10-07. With the decoder running
+#: beside it (below), 4 and 4 measured best (research/listening/threads.md).
+THREADS = int(os.getenv("M11_TTS_THREADS", "4"))
+
+
+def session_options(onnxruntime: Any, name: str) -> Any:
+    """How each model runs: `THREADS` threads; the token lookup on one, idle
+    rather than spinning, so it never takes cores from the language model."""
+    options = onnxruntime.SessionOptions()
+    if name == "embed_tokens":
+        options.intra_op_num_threads = 1
+        options.add_session_config_entry("session.intra_op.allow_spinning", "0")
+    elif name == "conditional_decoder" and DECODER_THREADS > 0:
+        options.intra_op_num_threads = DECODER_THREADS
+    elif THREADS > 0:
+        options.intra_op_num_threads = THREADS
+    return options
+
+
 def to_wav(samples: Any, rate: int = SAMPLE_RATE) -> bytes:
     """16-bit PCM WAV, which every browser plays."""
     import numpy as np
@@ -208,17 +241,70 @@ def to_wav(samples: Any, rate: int = SAMPLE_RATE) -> bytes:
     return out.getvalue()
 
 
+def _pad_right(value: Any, width: int) -> Any:
+    """A cache tensor [batch, heads, length, dim] widened with zeros at the end."""
+    import numpy as np
+
+    pad = np.zeros(value.shape[:2] + (width - value.shape[2], value.shape[3]), dtype=value.dtype)
+    return np.concatenate([value, pad], axis=2)
+
+
 # ─────────────────────────────────────────────────────────────────────────
 #  The engine
 # ─────────────────────────────────────────────────────────────────────────
+
+#: Sentences made at once. Measured on this laptop's CPU (2026-10-07,
+#: research/listening/threads.md): 1 row 13 tokens/s, 2 rows 20, 3 rows 27,
+#: then flat (6 rows 28) — so three. A bigger machine wants more.
+ROWS = int(os.getenv("M11_TTS_ROWS", "3"))
+
+#: Seconds of the voice's reference the decoder is given with every sentence.
+#: It was all of it (10 s), re-read for each sentence: 3 s of a 5.8 s
+#: sentence's decoding. 4 s cuts that by a third with the voice unchanged —
+#: speaker-embedding similarity to the reference 0.894, against 0.900 with
+#: 10 s and 0.522 for a different voice (threads.md, 2026-10-07).
+DECODER_PROMPT_S = float(os.getenv("M11_TTS_DECODER_PROMPT_S", "4"))
+#: Threads for the decoder, which runs beside the language model.
+DECODER_THREADS = int(os.getenv("M11_TTS_DECODER_THREADS", "4"))
 
 
 class EngineUnavailable(RuntimeError):
     """The server voice cannot speak right now; the browser voice should."""
 
 
+class _Job:
+    """One sentence to make, and the lines that want it."""
+
+    def __init__(self, seq: int, key: str, text: str, voice: Voice) -> None:
+        self.seq, self.key, self.text, self.voice = seq, key, text, voice
+        #: The browser's line ids it belongs to; "*" is a caller with no line,
+        #: who is never dropped.
+        self.lines: set[str] = set()
+        self.done = threading.Event()
+        self.wav: bytes | None = None
+        self.error: str | None = None
+
+    def __lt__(self, other: _Job) -> bool:  # the queue: first planned, first made
+        return self.seq < other.seq
+
+    def result(self) -> bytes:
+        self.done.wait()
+        if self.wav is None:
+            raise EngineUnavailable(self.error or "the sentence was not made")
+        return self.wav
+
+
+class _Row:
+    """A sentence being made: its job, its speech tokens so far, and how many
+    entries of the model's cache are its own (rows are padded on the right)."""
+
+    def __init__(self, job: _Job, length: int, max_new: int) -> None:
+        self.job, self.length, self.max_new = job, length, max_new
+        self.tokens: list[int] = []
+
+
 class Engine:
-    """Loads once in the background; then speaks, one line at a time."""
+    """Loads once in the background; then speaks, three sentences at a time."""
 
     def __init__(self, cast: Cast, precision: str | None = None) -> None:
         self.cast = cast
@@ -232,6 +318,17 @@ class Engine:
         self._sessions: dict[str, Any] = {}
         self._tokenizer: Any = None
         self._rng: Any = None
+        # Parallel making (2026-10-07): the queue, what is being made, and the
+        # model's cache of each voice's conditioning.
+        self._jobs = threading.Condition()
+        self._queue: list[_Job] = []
+        self._inflight: dict[str, _Job] = {}
+        self._seq = itertools.count()
+        # Finished rows wait here in speaking order, not finishing order: a short
+        # second sentence must not be decoded before the first.
+        self._decode: queue.PriorityQueue[tuple[int, int, _Row]] = queue.PriorityQueue()
+        self._prefix: dict[str, dict[str, Any]] = {}
+        self._kv: list[tuple[str, Any]] = []
 
     # ── lifecycle ────────────────────────────────────────────────────────
 
@@ -272,7 +369,9 @@ class Engine:
 
             for name in ("speech_encoder", "embed_tokens", "language_model", "conditional_decoder"):
                 dtype = self.precision if name == "language_model" else "fp32"
-                self._sessions[name] = onnxruntime.InferenceSession(graph(name, dtype))
+                self._sessions[name] = onnxruntime.InferenceSession(
+                    graph(name, dtype), session_options(onnxruntime, name)
+                )
             self._tokenizer = Tokenizer.from_file(hf_hub_download(MODEL_ID, "tokenizer.json"))
             self._rng = np.random.default_rng()
             for voice in self.cast.voices.values():
@@ -282,14 +381,44 @@ class Engine:
                         f"{voice.file.name} is {rate} Hz; voices are stored at {SAMPLE_RATE}"
                     )
                 audio = audio[: SAMPLE_RATE * 15][np.newaxis, :].astype(np.float32)
-                self._conds[voice.key] = tuple(
-                    self._sessions["speech_encoder"].run(None, {"audio_values": audio})
+                cond, prompt, spk_emb, spk_feat = self._sessions["speech_encoder"].run(
+                    None, {"audio_values": audio}
                 )
+                # The decoder's share of the reference: its last DECODER_PROMPT_S
+                # seconds (25 speech tokens and 50 mel frames a second).
+                keep = max(1, int(DECODER_PROMPT_S * 25))
+                self._conds[voice.key] = (
+                    cond,
+                    prompt[:, -keep:],
+                    spk_emb,
+                    spk_feat[:, -2 * keep :],
+                )
+            self._begin()
             self.state, self.reason = "ready", f"{len(self._conds)} voices, {self.precision}"
             log.info("M11 TTS ready in %.0fs: %s", time.perf_counter() - t0, self.reason)
         except Exception as exc:  # noqa: BLE001 - a failed load is a state, not a crash
             self.state, self.reason = "failed", f"{type(exc).__name__}: {exc}"
             log.warning("M11 TTS failed to load: %s", self.reason)
+
+    def _begin(self) -> None:
+        """With the models loaded: each voice's conditioning run once, and the
+        two threads that make speech started."""
+        import numpy as np
+
+        lm = self._sessions["language_model"]
+        self._kv = [
+            (x.name, np.float16 if x.type == "tensor(float16)" else np.float32)
+            for x in lm.get_inputs()
+            if "past_key_values" in x.name
+        ]
+        # Every sentence starts with its voice's conditioning: run it once.
+        for key, (cond, *_) in self._conds.items():
+            n = cond.shape[1]
+            self._prefix[key] = self._run_lm(
+                cond, self._empty(1), np.ones((1, n), np.int64), np.arange(n)[np.newaxis, :]
+            )[1]
+        threading.Thread(target=self._make_loop, name="m11-tts-make", daemon=True).start()
+        threading.Thread(target=self._decode_loop, name="m11-tts-decode", daemon=True).start()
 
     # ── speaking ─────────────────────────────────────────────────────────
 
@@ -316,12 +445,49 @@ class Engine:
         while len(self._memory) > 256:
             self._memory.popitem(last=False)
 
-    def speak(self, text: str, voice: Voice) -> tuple[bytes, bool, int]:
+    @staticmethod
+    def prepare(text: str, voice: Voice) -> str:
+        """The words as the voice will say them. Notation no voice can read,
+        in words (`notation.py`), then words the voices get wrong, respelled
+        (EC-11.11, `lexicon.py`) — before the cache, so a fixed word is a new
+        line, not the old one."""
+        return punc_norm(lexicon.apply(notation.say(text), voice.key))
+
+    def plan(self, sentences: list[tuple[str, Voice]], line: str) -> int:
+        """Start making a line's sentences now, in order, without waiting for
+        any of them; `speak` collects each. Returns how many were new."""
+        if not self._prefix or self.state != "ready":
+            return 0
+        made = 0
+        for raw, voice in sentences:
+            text = self.prepare(raw, voice)
+            if text and self.cached(text, voice) is None:
+                made += self._enqueue(text, voice, line)[1]
+        return made
+
+    def drop(self, lines: list[str]) -> int:
+        """The browser stopped these lines (a barge-in, a repeat): their
+        sentences not yet started are not made. Started ones finish, cached."""
+        wanted = set(lines)
+        dropped: list[_Job] = []
+        with self._jobs:
+            for job in self._queue:
+                job.lines -= wanted
+                if not job.lines:
+                    dropped.append(job)
+            if dropped:
+                self._queue = [job for job in self._queue if job.lines]
+                heapq.heapify(self._queue)
+                for job in dropped:
+                    self._inflight.pop(job.key, None)
+        for job in dropped:
+            job.error = "dropped"
+            job.done.set()
+        return len(dropped)
+
+    def speak(self, text: str, voice: Voice, line: str | None = None) -> tuple[bytes, bool, int]:
         """(wav, from_cache, ms). Raises EngineUnavailable when it cannot."""
-        # Notation no voice can read, in words (`notation.py`), then words the
-        # voices get wrong, respelled (EC-11.11, `lexicon.py`) — before the
-        # cache, so a fixed word is a new line, not the old one.
-        text = punc_norm(lexicon.apply(notation.say(text), voice.key))
+        text = self.prepare(text, voice)
         if not text:
             raise ValueError("nothing to say")
         hit = self.cached(text, voice)
@@ -330,6 +496,10 @@ class Engine:
         if self.state != "ready":
             raise EngineUnavailable(self.reason)
         t0 = time.perf_counter()
+        if self._prefix:
+            job, _ = self._enqueue(text, voice, line or "*")
+            return job.result(), False, round((time.perf_counter() - t0) * 1000)
+        # No parallel making (a fake engine in tests): one at a time, here.
         with self._lock:
             hit = self.cached(text, voice)  # made while this request waited
             if hit is not None:
@@ -343,6 +513,183 @@ class Engine:
         except OSError as exc:
             log.info("M11 TTS cache not written: %s", exc)
         return data, False, round((time.perf_counter() - t0) * 1000)
+
+    # ── making, in parallel ──────────────────────────────────────────────
+
+    def _enqueue(self, text: str, voice: Voice, line: str) -> tuple[_Job, bool]:
+        """The job for this sentence: the one already planned, or a new one."""
+        key = self.cache_key(text, voice)
+        with self._jobs:
+            job = self._inflight.get(key)
+            if job is not None:
+                job.lines.add(line)
+                return job, False
+            job = _Job(next(self._seq), key, text, voice)
+            job.lines.add(line)
+            self._inflight[key] = job
+            heapq.heappush(self._queue, job)
+            self._jobs.notify()
+            return job, True
+
+    def _empty(self, batch: int) -> dict[str, Any]:
+        import numpy as np
+
+        return {
+            name: np.zeros([batch, NUM_KV_HEADS, 0, HEAD_DIM], dtype=dt) for name, dt in self._kv
+        }
+
+    def _run_lm(
+        self, embeds: Any, past: dict[str, Any], mask: Any, pos: Any
+    ) -> tuple[Any, dict[str, Any]]:
+        logits, *present = self._sessions["language_model"].run(
+            None, dict(inputs_embeds=embeds, attention_mask=mask, position_ids=pos, **past)
+        )
+        return logits, {name: value for (name, _), value in zip(self._kv, present, strict=True)}
+
+    def _make_loop(self) -> None:
+        """The language model's thread: up to ROWS sentences stepped together.
+
+        The model's attention (onnxruntime's GroupQueryAttention) reads each
+        row's length from the mask and its cache from the start of the row,
+        so rows of different lengths share a batch padded on the RIGHT — the
+        same logits as alone, checked to the last digit (threads.md)."""
+        rows: list[_Row] = []
+        kv: dict[str, Any] = {}
+        while True:
+            with self._jobs:
+                while not rows and not self._queue:
+                    self._jobs.wait()
+                joining = []
+                while self._queue and len(rows) + len(joining) < ROWS:
+                    joining.append(heapq.heappop(self._queue))
+            try:
+                for job in joining:
+                    kv = self._join(kv, rows, job)
+                if rows:
+                    kv = self._step(kv, rows)
+            except Exception as exc:  # noqa: BLE001 - a failed step fails its sentences, not the thread
+                log.warning("M11 TTS step failed: %s", exc)
+                for job in [row.job for row in rows] + joining:
+                    self._fail(job, f"{type(exc).__name__}: {exc}")
+                rows, kv = [], {}
+
+    def _join(self, kv: dict[str, Any], rows: list[_Row], job: _Job) -> dict[str, Any]:
+        """Start a sentence on its voice's cached conditioning and add its row."""
+        import numpy as np
+
+        if job.done.is_set():
+            return kv
+        prefix = self._prefix[job.voice.key]
+        start = next(iter(prefix.values())).shape[2]
+        ids = np.array([self._tokenizer.encode(job.text).ids], dtype=np.int64)
+        embeds = self._sessions["embed_tokens"].run(None, {"input_ids": ids})[0]
+        n = start + ids.shape[1]
+        logits, own = self._run_lm(
+            embeds, prefix, np.ones((1, n), np.int64), np.arange(start, n)[np.newaxis, :]
+        )
+        row = _Row(job, length=n, max_new=min(1000, 60 + len(job.text) * 4))
+        row.tokens.append(sample_next(logits[:, -1, :], np.array([], dtype=np.int64), self._rng))
+        if row.tokens[-1] == STOP_SPEECH:
+            self._decode.put((job.seq, id(row), row))
+            return kv
+        rows.append(row)
+        if len(rows) == 1:
+            return own
+        width = next(iter(kv.values())).shape[2]
+        if n < width:
+            own = {name: _pad_right(value, width) for name, value in own.items()}
+        elif n > width:
+            kv = {name: _pad_right(value, n) for name, value in kv.items()}
+        return {name: np.concatenate([kv[name], own[name]], axis=0) for name in kv}
+
+    def _step(self, kv: dict[str, Any], rows: list[_Row]) -> dict[str, Any]:
+        """One token for every row; finished rows go to the decoder."""
+        import numpy as np
+
+        width = next(iter(kv.values())).shape[2]
+        ids = np.array([[row.tokens[-1]] for row in rows], dtype=np.int64)
+        embeds = self._sessions["embed_tokens"].run(None, {"input_ids": ids})[0]
+        mask = np.zeros((len(rows), width + 1), dtype=np.int64)
+        for b, row in enumerate(rows):
+            mask[b, : row.length + 1] = 1
+        pos = np.array([[row.length] for row in rows], dtype=np.int64)
+        logits, kv = self._run_lm(embeds, kv, mask, pos)
+        finished = []
+        for b, row in enumerate(rows):
+            row.length += 1
+            said = np.array(row.tokens, dtype=np.int64)
+            row.tokens.append(sample_next(logits[b : b + 1, -1, :], said, self._rng))
+            if row.tokens[-1] == STOP_SPEECH or len(row.tokens) >= row.max_new:
+                finished.append(b)
+        if not finished:
+            return kv
+        for b in finished:
+            self._decode.put((rows[b].job.seq, id(rows[b]), rows[b]))
+        keep = [b for b in range(len(rows)) if b not in finished]
+        rows[:] = [rows[b] for b in keep]
+        if not rows:
+            return {}
+        # The cache keeps only what the longest remaining row needs.
+        longest = max(row.length for row in rows)
+        return {name: value[keep][:, :, :longest] for name, value in kv.items()}
+
+    def _decode_loop(self) -> None:
+        """The decoder's thread: a finished sentence's tokens to audio, while
+        the language model makes the next ones."""
+        import numpy as np
+
+        while True:
+            _, _, row = self._decode.get()
+            job = row.job
+            try:
+                speech = np.array(row.tokens, dtype=np.int64)
+                if speech.size and speech[-1] == STOP_SPEECH:
+                    speech = speech[:-1]
+                speech = speech[speech < START_SPEECH]  # drop anything outside the codec
+                _, prompt, spk_emb, spk_feat = self._conds[job.voice.key]
+                tokens = np.concatenate(
+                    [
+                        prompt,
+                        speech[np.newaxis, :],
+                        np.full((1, 3), SILENCE_TOKEN, dtype=np.int64),
+                    ],
+                    axis=1,
+                )
+                wav = (
+                    self._sessions["conditional_decoder"]
+                    .run(
+                        None,
+                        dict(
+                            speech_tokens=tokens,
+                            speaker_embeddings=spk_emb,
+                            speaker_features=spk_feat,
+                        ),
+                    )[0]
+                    .squeeze(axis=0)
+                )
+                self._finish(job, to_wav(self._watermark(wav)))
+            except Exception as exc:  # noqa: BLE001
+                self._fail(job, f"{type(exc).__name__}: {exc}")
+
+    def _finish(self, job: _Job, data: bytes) -> None:
+        self._remember(job.key, data)
+        try:
+            (CACHE_DIR / job.voice.key).mkdir(parents=True, exist_ok=True)
+            (CACHE_DIR / job.voice.key / f"{job.key}.wav").write_bytes(data)
+        except OSError as exc:
+            log.info("M11 TTS cache not written: %s", exc)
+        with self._jobs:
+            self._inflight.pop(job.key, None)
+        job.wav = data
+        job.done.set()
+
+    def _fail(self, job: _Job, reason: str) -> None:
+        with self._jobs:
+            self._inflight.pop(job.key, None)
+        job.error = reason
+        job.done.set()
+
+    # ── the reference: one sentence alone (tests' fakes replace it) ───────
 
     def _synthesize(self, text: str, voice: Voice) -> Any:
         import numpy as np
