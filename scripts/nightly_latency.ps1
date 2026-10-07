@@ -55,8 +55,13 @@ New-Item -ItemType Directory -Force -Path $Out | Out-Null
 
 function Write-History($entry) {
   $line = $entry | ConvertTo-Json -Compress -Depth 6
-  Add-Content -Path $History -Value $line -Encoding UTF8
+  # No byte-order mark: Windows PowerShell's -Encoding UTF8 writes one, and a
+  # JSON-lines reader then fails on the first line.
+  [System.IO.File]::AppendAllText($History, $line + "`n", (New-Object System.Text.UTF8Encoding $false))
 }
+
+# The harness's exit code, in words (latency_harness.mjs, its last line).
+$Verdicts = @{ 0 = "within budget"; 1 = "over budget"; 2 = "error" }
 
 function Test-Up($url) {
   try { $r = Invoke-WebRequest -Uri $url -UseBasicParsing -TimeoutSec 5; return $r.StatusCode -eq 200 }
@@ -87,7 +92,10 @@ foreach ($net in @("good", "2g")) {
   $report = Get-ChildItem -Path $runs -Filter "latency-*.json" |
     Where-Object { $before -notcontains $_.FullName } |
     Sort-Object LastWriteTime -Descending | Select-Object -First 1
-  $entry = [ordered]@{ at = $now; network = $net; exit = $code }
+  $verdict = $Verdicts[[int]$code]
+  if (-not $verdict) { $verdict = "error" }
+  # On 2G, exit 1 can also mean the room never moved to hold-to-talk.
+  $entry = [ordered]@{ at = $now; network = $net; exit = $code; verdict = $verdict }
   if ($report) {
     $r = Get-Content -Raw -Path $report.FullName | ConvertFrom-Json
     $stages = [ordered]@{}
@@ -101,7 +109,9 @@ foreach ($net in @("good", "2g")) {
     $entry.asides = $r.asides_played
     $entry.hold_to_talk = $r.hold_to_talk
     $entry.errors = @($r.errors).Count
+    # AC-11.7 over the nights: each answer's prefills tried and used.
+    $entry.prefill = $r.prefill
   }
   Write-History $entry
-  Write-Output ("{0}: exit {1}" -f $net, $code)
+  Write-Output ("{0}: {1} (exit {2})" -f $net, $verdict, $code)
 }
