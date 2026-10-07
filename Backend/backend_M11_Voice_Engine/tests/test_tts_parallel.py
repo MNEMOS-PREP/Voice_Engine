@@ -264,3 +264,28 @@ def test_speak_collects_a_planned_sentence(client, engine):
         headers=who,
     )
     assert r.status_code == 200 and r.headers["content-type"] == "audio/wav"
+
+
+def test_a_long_first_sentence_is_made_alone_only_when_the_next_can_still_be_ready(engine):
+    voice = engine.cast.resolve(persona_id="professor")
+    with engine._jobs:  # look at the queue before the model takes from it
+        engine.plan(
+            [
+                ("Let's practise defending one line from your resume.", voice),
+                ("Two minutes.", voice),
+            ],
+            "long-first",
+        )
+        engine.plan(
+            [
+                ("Thanks, that's clear.", voice),
+                ("What would you change about the harness today?", voice),
+            ],
+            "short-first",
+        )
+        lead = {job.text: job.lead for job in engine._queue}
+    # A long first sentence and a short next one: the first alone, heard sooner.
+    assert lead["Let's practise defending one line from your resume."] is True
+    assert lead["Two minutes."] is False
+    # A short first sentence and a longer next one: together, or a gap follows it.
+    assert lead["Thanks, that's clear."] is False

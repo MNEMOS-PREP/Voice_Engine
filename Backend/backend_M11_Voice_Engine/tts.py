@@ -280,6 +280,9 @@ class _Job:
         #: The browser's line ids it belongs to; "*" is a caller with no line,
         #: who is never dropped.
         self.lines: set[str] = set()
+        #: The first sentence of a planned line, made alone until its words are
+        #: chosen (`plan` decides when that pays).
+        self.lead = False
         self.done = threading.Event()
         self.wav: bytes | None = None
         self.error: str | None = None
@@ -458,11 +461,22 @@ class Engine:
         any of them; `speak` collects each. Returns how many were new."""
         if not self._prefix or self.state != "ready":
             return 0
+        pieces = [(self.prepare(raw, voice), voice) for raw, voice in sentences]
+        todo = [
+            (text, voice) for text, voice in pieces if text and self.cached(text, voice) is None
+        ]
+        # The first sentence alone gets its audio sooner (two more rows slow
+        # each of its steps by ~40%), and the rest start the moment its words
+        # are chosen. That pays when the next piece can still be made while the
+        # first is decoded and heard: measured, when it is at most half as long
+        # (threads.md). Otherwise all start together.
+        lead = False
+        if todo and pieces and todo[0][0] == pieces[0][0]:
+            following = todo[1][0] if len(todo) > 1 else ""
+            lead = len(following) <= len(todo[0][0]) / 2
         made = 0
-        for raw, voice in sentences:
-            text = self.prepare(raw, voice)
-            if text and self.cached(text, voice) is None:
-                made += self._enqueue(text, voice, line)[1]
+        for i, (text, voice) in enumerate(todo):
+            made += self._enqueue(text, voice, line, lead=lead and i == 0)[1]
         return made
 
     def drop(self, lines: list[str]) -> int:
@@ -516,7 +530,9 @@ class Engine:
 
     # ── making, in parallel ──────────────────────────────────────────────
 
-    def _enqueue(self, text: str, voice: Voice, line: str) -> tuple[_Job, bool]:
+    def _enqueue(
+        self, text: str, voice: Voice, line: str, lead: bool = False
+    ) -> tuple[_Job, bool]:
         """The job for this sentence: the one already planned, or a new one."""
         key = self.cache_key(text, voice)
         with self._jobs:
@@ -525,6 +541,7 @@ class Engine:
                 job.lines.add(line)
                 return job, False
             job = _Job(next(self._seq), key, text, voice)
+            job.lead = lead
             job.lines.add(line)
             self._inflight[key] = job
             heapq.heappush(self._queue, job)
@@ -560,8 +577,17 @@ class Engine:
                 while not rows and not self._queue:
                     self._jobs.wait()
                 joining = []
-                while self._queue and len(rows) + len(joining) < ROWS:
-                    joining.append(heapq.heappop(self._queue))
+                # A line's first sentence is made alone: two more rows would
+                # slow each of its steps by ~40%, and it is the one the student
+                # is waiting for. The rest join the moment its words are chosen,
+                # and its decoding runs beside them.
+                leading = any(row.job.lead for row in rows)
+                while self._queue and len(rows) + len(joining) < ROWS and not leading:
+                    job = heapq.heappop(self._queue)
+                    joining.append(job)
+                    if job.lead:
+                        leading = True
+                        break
             try:
                 for job in joining:
                     kv = self._join(kv, rows, job)
