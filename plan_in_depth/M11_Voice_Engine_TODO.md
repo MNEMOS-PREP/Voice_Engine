@@ -21,6 +21,45 @@ Legend: ✅ done · 🟡 partly done · ⬜ not started
 
 ---
 
+### 2026-10-08 — Day 13: the faces (spec §15.6, decided); more Indian voices
+
+The user decided §15.6: *"add faces to the interviews with perfect lip
+syncing"* — option B, built.
+
+- ✅ **The lip sync is the voice's own audio** (`face.py`, `a339fb6`,
+  `b2f8cc3`): wav2arkit (Apache-2.0, ONNX on M11's CPU — 0.3 s for a
+  4.6-second sentence) turns each sentence into 52 ARKit blendshapes at
+  30 fps, a light zero-phase smoothing and the mouth's channels a little
+  emphasised for a small tile. Frames are keyed like the audio (`X-Face`,
+  the cache key of the *prepared* text), made as the sentence is, and
+  `GET /v1/voice/face/{key}` waits up to 3 s for frames still being made.
+- ✅ **The heads** (`scripts/make_faces.py`, `scripts/build_face.py`): one
+  AI-generated portrait per interviewer (FLUX.1-schnell Q4 through
+  stable-diffusion.cpp on this laptop's Iris Xe, Vulkan, weights streamed
+  from disk), lifted into ~20,000 Gaussians on a FLAME head by LAM
+  (Apache-2.0) on the CPU, placed on the rig from its own FBX. About eight
+  minutes a head; built locally, gitignored, served as
+  `/v1/voice/faces/{persona}.zip`. Every portrait is generated, never a real
+  person's, and every head is labelled AI.
+- ✅ **In the browser** (Core v0.27.0 → v0.28.0, `TalkingHead`, `faceDriver`):
+  gsplat-flame-avatar-renderer (MIT) draws each head; every frame is all 52
+  channels at the audio element's `currentTime` plus one frame, interpolated
+  between the 30 fps frames; blinks seeded per persona; nods into stressed
+  words and while listening. Not the spec sketch's way in two places: the
+  frames are made on M11, not by onnxruntime-web in the browser, and the eyes
+  follow the rig's idle clip rather than the renderer's camera look-at.
+- ✅ **Measured, not assumed:** in the live room the mouth each head was given
+  matched the frame for the audio's own time exactly once playback started
+  (a test-side hook on the renderer, nothing in the product); offline, over
+  eight voices, M11's frames open the mouth a median 83 ms before the sound
+  and close it a median 89 ms after, as natural speech does.
+- ✅ **Seven more Indian voices** (`62c4a0b`, `research/listening/
+  add_indian_voices.py`): IndicTTS English speakers 7–13 (CC BY 4.0), four
+  higher and three lower; 37 of the 39 interviewers speak in an Indian voice,
+  a foreign accent only for the two the team cast (Priya, Kabir). A
+  read-back probe (`research/listening/probe_voices.py`) passed all nine
+  probed: WER ≤ 0.18, 3.0–4.1 words a second.
+
 ### 2026-10-07 (evening) — Checkpoint: where to pick up
 
 **Finish first (an hour, no new code):**
@@ -52,7 +91,7 @@ Legend: ✅ done · 🟡 partly done · ⬜ not started
 - **The user's decisions:**
   - Svarah's terms on Hugging Face (AC-11.4, the accent gap).
   - Groq Orpheus terms (day 8; optional now that Chatterbox is the voice).
-  - The face (day 13, spec §15.6).
+  - ~~The face (day 13, spec §15.6)~~ — decided and built 2026-10-08 (above).
   - Consented recordings of real students. These give Smart Turn its 200
     endings, AC-11.5's WER, and real Hinglish for FR-11.22.
 - **Real students (a pilot), measured rather than built:**
@@ -595,7 +634,7 @@ licence or hardware rules it out.
 
 | | |
 |---|---|
-| Status | **95% — every day of the build order that is M11's own work is done (2026-10-07).** Left: FR-11.20 on a faster machine, the nightly sat once and registered, and the "Later" list (hardware, the user's decisions, real students, M18). The voice client is M11's code in `@ai/core` (v0.25.0). |
+| Status | **95% — every day of the build order that is M11's own work is done (2026-10-07).** Left: FR-11.20 on a faster machine, the nightly sat once and registered, and the "Later" list (hardware, the user's decisions, real students, M18). The voice client is M11's code in `@ai/core` (v0.28.0, with the faces). |
 | Spec | Written, and the source of every row below. |
 | Scope | 22 functional requirements (18 of them P0), 9 acceptance metrics (4 release-blocking), 15 edge cases. |
 

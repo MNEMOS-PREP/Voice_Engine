@@ -1,0 +1,164 @@
+[
+  {
+    "voice": "indictts-133931",
+    "line": 0,
+    "wer": 0.0,
+    "words_per_s": 3.1,
+    "seconds": 5.48,
+    "made_s": 22.7,
+    "heard": "Walk me through how a hash map finds a key and what happens when two keys collide."
+  },
+  {
+    "voice": "indictts-133931",
+    "line": 1,
+    "wer": 0.0,
+    "words_per_s": 3.29,
+    "seconds": 6.08,
+    "made_s": 16.4,
+    "heard": "That's a good start. Can you tell me what you would change if the data no longer fits in memory?"
+  },
+  {
+    "voice": "indictts-083391",
+    "line": 0,
+    "wer": 0.059,
+    "words_per_s": 3.17,
+    "seconds": 5.36,
+    "made_s": 14.2,
+    "heard": "Walk me through how a hush map finds a key and what happens when two keys collide."
+  },
+  {
+    "voice": "indictts-083391",
+    "line": 1,
+    "wer": 0.0,
+    "words_per_s": 3.33,
+    "seconds": 6.0,
+    "made_s": 16.0,
+    "heard": "That's a good start. Can you tell me what you would change if the data no longer fits in memory?"
+  },
+  {
+    "voice": "indictts-048013",
+    "line": 0,
+    "wer": 0.0,
+    "words_per_s": 3.06,
+    "seconds": 5.56,
+    "made_s": 14.9,
+    "heard": "Walk me through how a hash map finds a key and what happens when two keys collide."
+  },
+  {
+    "voice": "indictts-048013",
+    "line": 1,
+    "wer": 0.0,
+    "words_per_s": 3.47,
+    "seconds": 5.76,
+    "made_s": 15.3,
+    "heard": "That's a good start. Can you tell me what you would change if the data no longer fits in memory?"
+  },
+  {
+    "voice": "indictts-002527",
+    "line": 0,
+    "wer": 0.176,
+    "words_per_s": 2.99,
+    "seconds": 5.68,
+    "made_s": 15.3,
+    "heard": "Walk me through how HashMap finds a key and what happens when two keys collide."
+  },
+  {
+    "voice": "indictts-002527",
+    "line": 1,
+    "wer": 0.0,
+    "words_per_s": 3.21,
+    "seconds": 6.24,
+    "made_s": 16.7,
+    "heard": "that's a good start can you tell me what you would change if the data no longer fits in memory"
+  },
+  {
+    "voice": "indictts-012635",
+    "line": 0,
+    "wer": 0.0,
+    "words_per_s": 3.06,
+    "seconds": 5.56,
+    "made_s": 14.8,
+    "heard": "Walk me through how a hash map finds a key and what happens when two keys collide."
+  },
+  {
+    "voice": "indictts-012635",
+    "line": 1,
+    "wer": 0.0,
+    "words_per_s": 3.45,
+    "seconds": 5.8,
+    "made_s": 16.1,
+    "heard": "That's a good start. Can you tell me what you would change if the data no longer fits in memory?"
+  },
+  {
+    "voice": "indictts-128877",
+    "line": 0,
+    "wer": 0.059,
+    "words_per_s": 3.22,
+    "seconds": 5.28,
+    "made_s": 14.8,
+    "heard": "Walk me through how a hash mob finds a key and what happens when two keys collide."
+  },
+  {
+    "voice": "indictts-128877",
+    "line": 1,
+    "wer": 0.0,
+    "words_per_s": 3.18,
+    "seconds": 6.28,
+    "made_s": 17.2,
+    "heard": "That's a good start. Can you tell me what you would change if the data no longer fits in memory?"
+  },
+  {
+    "voice": "indictts-144039",
+    "line": 0,
+    "wer": 0.118,
+    "words_per_s": 3.46,
+    "seconds": 4.92,
+    "made_s": 13.1,
+    "heard": "Walk me through how a HashMap finds a key and what happens when two keys collide."
+  },
+  {
+    "voice": "indictts-144039",
+    "line": 1,
+    "wer": 0.0,
+    "words_per_s": 4.1,
+    "seconds": 4.88,
+    "made_s": 13.6,
+    "heard": "That's a good start. Can you tell me what you would change if the data no longer fits in memory?"
+  },
+  {
+    "voice": "indictts-123823",
+    "line": 0,
+    "wer": 0.0,
+    "words_per_s": 3.17,
+    "seconds": 5.36,
+    "made_s": 15.1,
+    "heard": "Walk me through how a hash map finds a key and what happens when two keys collide."
+  },
+  {
+    "voice": "indictts-123823",
+    "line": 1,
+    "wer": 0.0,
+    "words_per_s": 3.79,
+    "seconds": 5.28,
+    "made_s": 19.0,
+    "heard": "That's a good start. Can you tell me what you would change if the data no longer fits in memory?"
+  },
+  {
+    "voice": "indictts-022743",
+    "line": 0,
+    "wer": 0.0,
+    "words_per_s": 3.63,
+    "seconds": 4.68,
+    "made_s": 16.3,
+    "heard": "Walk me through how a hash map finds a key and what happens when two keys collide."
+  },
+  {
+    "voice": "indictts-022743",
+    "line": 1,
+    "wer": 0.0,
+    "words_per_s": 4.0,
+    "seconds": 5.0,
+    "made_s": 19.7,
+    "heard": "That's a good start. Can you tell me what you would change if the data no longer fits in memory?"
+  }
+]
