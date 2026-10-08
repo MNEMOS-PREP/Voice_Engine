@@ -202,8 +202,72 @@ def _shim_chumpy() -> None:
 # ── 1. the face fit: crop, matte, landmarks, FLAME ───────────────────────────
 
 
-def fit_face(portrait: Path, work: Path) -> Path:
-    """Fit FLAME to the portrait. Returns the export folder LAM reads."""
+class PortraitRejected(SystemExit):
+    """The portrait will not make a good head (`portrait_check`): exit 3, so
+    `make_faces.py` asks for another one."""
+
+    def __init__(self, reasons: list[str]) -> None:
+        super().__init__(3)
+        self.reasons = reasons
+
+
+#: What a portrait must be for a head to look right in the room (2026-10-09),
+#: measured on the 68 landmarks of the 1024-pixel head crop: mouth closed,
+#: both eyes open, facing the camera, level. Calibrated on the team's ten
+#: Avatar_Lab portraits (`scripts/faces/check_portraits.py`): the team's
+#: widest are a mouth gap of 0.022, eyes 0.256, facing 0.013 and a 1.2-degree
+#: tilt; the first cast's smiles with teeth measured 0.036 to 0.068, and its
+#: one turned head 0.184.
+CHECK = {
+    "mouth_open_max": 0.03,  # inner-lip gap / nose-bridge-to-chin
+    "eye_open_min": 0.20,  # eye aspect ratio, each eye
+    "facing_within": 0.05,  # nose tip off the face's centre, share of its width
+    "tilt_max_deg": 4.0,  # the line through the eyes
+}
+
+
+def portrait_check(landmarks: np.ndarray) -> dict:
+    """Mouth, eyes, facing and tilt from 68 landmarks (iBUG order)."""
+    p = np.asarray(landmarks, dtype=np.float64)[:, :2]
+    face_height = np.linalg.norm(p[8] - p[27])
+    mouth = float(np.linalg.norm(p[66] - p[62]) / face_height)
+
+    def eye(first: int) -> float:
+        e = p[first : first + 6]
+        return float(
+            (np.linalg.norm(e[1] - e[5]) + np.linalg.norm(e[2] - e[4])) / (2 * np.linalg.norm(e[0] - e[3]))
+        )
+
+    eyes = (eye(36), eye(42))
+    facing = float((p[30, 0] - p[0, 0]) / (p[16, 0] - p[0, 0]) - 0.5)
+    tilt = float(np.degrees(np.arctan2(p[45, 1] - p[36, 1], p[45, 0] - p[36, 0])))
+    reasons = []
+    if mouth > CHECK["mouth_open_max"]:
+        reasons.append(f"mouth open ({mouth:.3f})")
+    if min(eyes) < CHECK["eye_open_min"]:
+        reasons.append(f"eyes not open ({min(eyes):.3f})")
+    if abs(facing) > CHECK["facing_within"]:
+        reasons.append(f"not facing the camera ({facing:+.3f})")
+    if abs(tilt) > CHECK["tilt_max_deg"]:
+        reasons.append(f"head tilted ({tilt:+.1f} deg)")
+    return {
+        "ok": not reasons,
+        "reasons": reasons,
+        "mouth_open": round(mouth, 4),
+        "eyes_open": [round(v, 4) for v in eyes],
+        "facing": round(facing, 4),
+        "tilt_deg": round(tilt, 2),
+    }
+
+
+def fit_face(portrait: Path, work: Path, *, check_only: bool = False, accept_any: bool = False) -> Path | None:
+    """Fit FLAME to the portrait. Returns the export folder LAM reads.
+
+    On the way: the still (`work/still.png`, the head crop with its
+    background removed — what the room shows until the 3D head is ready) and
+    the portrait's check (`work/check.json`). A portrait that fails the check
+    is rejected before the slow part, unless `accept_any`. `check_only` stops
+    once both are written."""
     import cv2
     import torch
     import torchvision
@@ -236,6 +300,7 @@ def fit_face(portrait: Path, work: Path) -> Path:
         frame, top=box[1], left=box[0], height=box[3] - box[1], width=box[2] - box[0]
     )
     crop = torchvision.transforms.functional.resize(crop, (1024, 1024), antialias=True)
+    unmatted = crop.clone()
 
     log("separating the head from the background")
     matting = StyleMatteEngine(device="cpu", human_matting_path=str(TRACKING / "matting" / "stylematte_synth.pt"))
@@ -244,6 +309,10 @@ def fit_face(portrait: Path, work: Path) -> Path:
     cv2.imwrite(str(preprocess / "images" / "00000.png"), image)
     cv2.imwrite(str(preprocess / "mask" / "00000.png"), np.array(mask.cpu() * 255.0).astype(np.uint8))
     cv2.imwrite(str(preprocess / "alpha_maps" / "00000.jpg"), np.full_like(image, 255))
+    # The still: the crop's own colours, its background made transparent.
+    alpha = np.clip(np.array(mask.cpu()).squeeze() * 255.0, 0, 255).astype(np.uint8)
+    rgb = unmatted.permute(1, 2, 0).numpy().astype(np.uint8)
+    cv2.imwrite(str(work / "still.png"), np.dstack([rgb[:, :, (2, 1, 0)], alpha]))
 
     log("placing 68 landmarks")
     faces = FaceBoxesDetector("FaceBoxes", str(TRACKING / "FaceBoxesV2.pth"), False, "cpu")
@@ -261,6 +330,14 @@ def fit_face(portrait: Path, work: Path) -> Path:
     normalised = np.zeros((landmarks.shape[0], 3))
     normalised[:, :2] = landmarks / 1024
     np.savez(preprocess / "landmark2d" / "landmarks.npz", bounding_box=[], face_landmark_2d=normalised[None, ...])
+
+    verdict = portrait_check(landmarks)
+    (work / "check.json").write_text(json.dumps(verdict, indent=2), encoding="utf-8")
+    log(f"portrait check: {'ok' if verdict['ok'] else '; '.join(verdict['reasons'])}")
+    if check_only:
+        return None
+    if not verdict["ok"] and not accept_any:
+        raise PortraitRejected(verdict["reasons"])
 
     log("fitting FLAME to the landmarks (650 steps)")
     text = yaml.safe_load((LAM / "configs" / "vhap_tracking" / "base_tracking_config.yaml").read_text())
@@ -485,10 +562,10 @@ def ply_bytes(gaussians) -> bytes:
         return path.read_bytes()
 
 
-def pack(persona: str, files: dict[str, bytes], meta: dict) -> Path:
+def pack(persona: str, files: dict[str, bytes], meta: dict, out: Path = FACES) -> Path:
     """<persona>.zip: one folder, as the renderer expects."""
-    FACES.mkdir(parents=True, exist_ok=True)
-    target = FACES / f"{persona}.zip"
+    out.mkdir(parents=True, exist_ok=True)
+    target = out / f"{persona}.zip"
     buffer = io.BytesIO()
     with zipfile.ZipFile(buffer, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
         archive.writestr(zipfile.ZipInfo(f"{persona}/"), b"")
@@ -499,11 +576,33 @@ def pack(persona: str, files: dict[str, bytes], meta: dict) -> Path:
     return target
 
 
+#: The still's size: a tile is ~360 px wide at most, twice that on a sharp phone.
+STILL_PX = 512
+
+
+def write_still(work: Path, persona: str, out: Path = FACES) -> Path:
+    """<persona>.webp: the head crop with its background removed — the photo
+    the room shows until the 3D head is ready, and the interviewer's picture
+    everywhere else."""
+    from PIL import Image
+
+    out.mkdir(parents=True, exist_ok=True)
+    target = out / f"{persona}.webp"
+    with Image.open(work / "still.png") as image:
+        still = image.convert("RGBA").resize((STILL_PX, STILL_PX), Image.LANCZOS)
+        still.save(target, "WEBP", quality=88, method=6)
+    return target
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("portrait", type=Path, help="a front-facing head-and-shoulders portrait")
     parser.add_argument("--persona", required=True, help="the M06 persona id the face is for")
     parser.add_argument("--keep", action="store_true", help="keep the work folder (the fit, the crop)")
+    parser.add_argument("--check-only", action="store_true", help="check the portrait (and make its still); no head")
+    parser.add_argument("--still-only", action="store_true", help="make the still for an existing head; no head")
+    parser.add_argument("--accept-any", action="store_true", help="build even from a portrait that fails the check")
+    parser.add_argument("--out", type=Path, default=FACES, help="where the head and its still go")
     args = parser.parse_args()
 
     portrait = args.portrait.resolve()
@@ -511,7 +610,7 @@ def main() -> None:
         raise SystemExit(f"No such portrait: {portrait}")
     for need in (WEIGHTS / "model.safetensors", TRACKING / "FaceBoxesV2.pth", RIG / "skin.glb", RIG / "animation.glb"):
         if not need.exists():
-            raise SystemExit(f"Missing {need}. Run scripts/face_builder_setup.ps1 first.")
+            raise SystemExit(f"Missing {need}. See scripts/faces/README.md for the setup.")
 
     started = time.time()
     work = BUILDER / "work" / args.persona
@@ -525,7 +624,15 @@ def main() -> None:
         image.convert("RGB").save(source)
 
     prepare_lam()
-    export = fit_face(source, work)
+    if args.check_only or args.still_only:
+        fit_face(source, work, check_only=True)
+        print("CHECK " + json.dumps(json.loads((work / "check.json").read_text(encoding="utf-8"))), flush=True)
+        if args.still_only:
+            log(f"{write_still(work, args.persona, args.out).name} written")
+        if not args.keep:
+            shutil.rmtree(work, ignore_errors=True)
+        return
+    export = fit_face(source, work, accept_any=args.accept_any)
     gaussians, head, flame = lift(export)
     template = flame.v_template_up.cpu().numpy().astype(np.float64)
     skin, order = rig_with(head, template)
@@ -543,7 +650,8 @@ def main() -> None:
         "made_with": "LAM-20K (3DAIGC, CC BY-NC 4.0) on FLAME 2023 (MPI, non-commercial); build_face.py",
         "ai_generated": True,
     }
-    target = pack(args.persona, files, meta)
+    target = pack(args.persona, files, meta, args.out)
+    write_still(work, args.persona, args.out)
     if not args.keep:
         shutil.rmtree(work, ignore_errors=True)
     log(f"{target.name}: {target.stat().st_size / 1e6:.1f} MB in {time.time() - started:.0f} s")

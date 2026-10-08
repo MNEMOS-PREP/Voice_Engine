@@ -17,6 +17,15 @@ Three things make it usable before that machine exists:
 * **A line said once is never made again.** Every line is cached in memory
   and on disk, keyed by engine, voice and text — greetings, transitions and
   "repeat the question" are instant after the first time.
+* **Lines made before they are said** (2026-10-09). The user, after a mock:
+  "gaps in speech, awkward pauses, sometimes if the text is too long". On
+  this CPU speech is made barely faster than it is spoken, so a line made
+  when it is needed keeps the student waiting. Most of what an interviewer
+  says is known before it is said — the next question, the hand-over — and
+  the room plans those as WARM lines while the student answers: made only
+  while nothing is being said, set aside the moment a live line arrives, and
+  promoted the moment one is asked for. `plan` says which sentences of a
+  line are made already, so the room knows what it need not wait for.
 * **Three sentences at once** (2026-10-07). Speech is a language model choosing
   ~25 tokens per second of audio, one token at a time, and on a CPU each step
   is mostly reading the model's weights: stepping three sentences together
@@ -283,6 +292,8 @@ class _Job:
         #: The first sentence of a planned line, made alone until its words are
         #: chosen (`plan` decides when that pays).
         self.lead = False
+        #: A line the room expects to say, not one being said (2026-10-09).
+        self.warm = False
         self.done = threading.Event()
         self.wav: bytes | None = None
         self.error: str | None = None
@@ -325,11 +336,13 @@ class Engine:
         # model's cache of each voice's conditioning.
         self._jobs = threading.Condition()
         self._queue: list[_Job] = []
+        #: Warm sentences: made only while no live one waits or is being made.
+        self._warm: list[_Job] = []
         self._inflight: dict[str, _Job] = {}
         self._seq = itertools.count()
         # Finished rows wait here in speaking order, not finishing order: a short
-        # second sentence must not be decoded before the first.
-        self._decode: queue.PriorityQueue[tuple[int, int, _Row]] = queue.PriorityQueue()
+        # second sentence must not be decoded before the first. Live before warm.
+        self._decode: queue.PriorityQueue[tuple[bool, int, int, _Row]] = queue.PriorityQueue()
         self._prefix: dict[str, dict[str, Any]] = {}
         self._kv: list[tuple[str, Any]] = []
 
@@ -465,14 +478,21 @@ class Engine:
         line, not the old one."""
         return punc_norm(lexicon.apply(notation.say(text), voice.key))
 
-    def plan(self, sentences: list[tuple[str, Voice]], line: str) -> int:
+    def plan(
+        self, sentences: list[tuple[str, Voice]], line: str, warm: bool = False
+    ) -> tuple[int, list[bool]]:
         """Start making a line's sentences now, in order, without waiting for
-        any of them; `speak` collects each. Returns how many were new."""
-        if not self._prefix or self.state != "ready":
-            return 0
+        any of them; `speak` collects each. Returns how many were new, and
+        which of the sentences were made already. A `warm` line is one the
+        room expects to say: made only while no live line waits."""
         pieces = [(self.prepare(raw, voice), voice) for raw, voice in sentences]
+        ready = [bool(text) and self.cached(text, voice) is not None for text, voice in pieces]
+        if not self._prefix or self.state != "ready":
+            return 0, ready
         todo = [
-            (text, voice) for text, voice in pieces if text and self.cached(text, voice) is None
+            (text, voice)
+            for (text, voice), made in zip(pieces, ready, strict=True)
+            if text and not made
         ]
         # The first sentence alone gets its audio sooner (two more rows slow
         # each of its steps by ~40%), and the rest start the moment its words
@@ -480,13 +500,13 @@ class Engine:
         # first is decoded and heard: measured, when it is at most half as long
         # (threads.md). Otherwise all start together.
         lead = False
-        if todo and pieces and todo[0][0] == pieces[0][0]:
+        if todo and pieces and todo[0][0] == pieces[0][0] and not warm:
             following = todo[1][0] if len(todo) > 1 else ""
             lead = len(following) <= len(todo[0][0]) / 2
         made = 0
         for i, (text, voice) in enumerate(todo):
-            made += self._enqueue(text, voice, line, lead=lead and i == 0)[1]
-        return made
+            made += self._enqueue(text, voice, line, lead=lead and i == 0, warm=warm)[1]
+        return made, ready
 
     def drop(self, lines: list[str]) -> int:
         """The browser stopped these lines (a barge-in, a repeat): their
@@ -494,15 +514,18 @@ class Engine:
         wanted = set(lines)
         dropped: list[_Job] = []
         with self._jobs:
-            for job in self._queue:
-                job.lines -= wanted
-                if not job.lines:
-                    dropped.append(job)
-            if dropped:
-                self._queue = [job for job in self._queue if job.lines]
-                heapq.heapify(self._queue)
-                for job in dropped:
-                    self._inflight.pop(job.key, None)
+            for waiting in (self._queue, self._warm):
+                gone = []
+                for job in waiting:
+                    job.lines -= wanted
+                    if not job.lines:
+                        gone.append(job)
+                if gone:
+                    waiting[:] = [job for job in waiting if job.lines]
+                    heapq.heapify(waiting)
+                    dropped += gone
+            for job in dropped:
+                self._inflight.pop(job.key, None)
         for job in dropped:
             job.error = "dropped"
             job.done.set()
@@ -540,20 +563,29 @@ class Engine:
     # ── making, in parallel ──────────────────────────────────────────────
 
     def _enqueue(
-        self, text: str, voice: Voice, line: str, lead: bool = False
+        self, text: str, voice: Voice, line: str, lead: bool = False, warm: bool = False
     ) -> tuple[_Job, bool]:
-        """The job for this sentence: the one already planned, or a new one."""
+        """The job for this sentence: the one already planned, or a new one. A
+        warm one asked for live is promoted: it is being waited for now."""
         key = self.cache_key(text, voice)
         with self._jobs:
             job = self._inflight.get(key)
             if job is not None:
                 job.lines.add(line)
+                if job.warm and not warm:
+                    job.warm = False
+                    if job in self._warm:
+                        self._warm.remove(job)
+                        heapq.heapify(self._warm)
+                        heapq.heappush(self._queue, job)
+                        self._jobs.notify()
                 return job, False
             job = _Job(next(self._seq), key, text, voice)
             job.lead = lead
+            job.warm = warm
             job.lines.add(line)
             self._inflight[key] = job
-            heapq.heappush(self._queue, job)
+            heapq.heappush(self._warm if warm else self._queue, job)
             self._jobs.notify()
             return job, True
 
@@ -583,21 +615,34 @@ class Engine:
         kv: dict[str, Any] = {}
         while True:
             with self._jobs:
-                while not rows and not self._queue:
+                while not rows and not self._queue and not self._warm:
                     self._jobs.wait()
                 joining = []
+                # A live sentence waiting: warm rows make way (they start again
+                # later) — the student is waiting for this one, not for them.
+                evict = [b for b, row in enumerate(rows) if row.job.warm] if self._queue else []
+                for b in evict:
+                    if not rows[b].job.done.is_set():
+                        heapq.heappush(self._warm, rows[b].job)
+                staying = [row for b, row in enumerate(rows) if b not in evict]
                 # A line's first sentence is made alone: two more rows would
                 # slow each of its steps by ~40%, and it is the one the student
                 # is waiting for. The rest join the moment its words are chosen,
                 # and its decoding runs beside them.
-                leading = any(row.job.lead for row in rows)
-                while self._queue and len(rows) + len(joining) < ROWS and not leading:
+                leading = any(row.job.lead for row in staying)
+                while self._queue and len(staying) + len(joining) < ROWS and not leading:
                     job = heapq.heappop(self._queue)
                     joining.append(job)
                     if job.lead:
                         leading = True
                         break
+                # Warm sentences only while nothing live waits or is being made.
+                if not self._queue and not joining and all(row.job.warm for row in staying):
+                    while self._warm and len(staying) + len(joining) < ROWS:
+                        joining.append(heapq.heappop(self._warm))
             try:
+                if evict:
+                    kv = self._without(kv, rows, evict)
                 for job in joining:
                     kv = self._join(kv, rows, job)
                 if rows:
@@ -607,6 +652,16 @@ class Engine:
                 for job in [row.job for row in rows] + joining:
                     self._fail(job, f"{type(exc).__name__}: {exc}")
                 rows, kv = [], {}
+
+    def _without(self, kv: dict[str, Any], rows: list[_Row], gone: list[int]) -> dict[str, Any]:
+        """Rows taken out of the batch (warm ones, making way); the cache keeps
+        the rest, as when rows finish."""
+        keep = [b for b in range(len(rows)) if b not in gone]
+        rows[:] = [rows[b] for b in keep]
+        if not rows:
+            return {}
+        longest = max(row.length for row in rows)
+        return {name: value[keep][:, :, :longest] for name, value in kv.items()}
 
     def _join(self, kv: dict[str, Any], rows: list[_Row], job: _Job) -> dict[str, Any]:
         """Start a sentence on its voice's cached conditioning and add its row."""
@@ -625,7 +680,7 @@ class Engine:
         row = _Row(job, length=n, max_new=min(1000, 60 + len(job.text) * 4))
         row.tokens.append(sample_next(logits[:, -1, :], np.array([], dtype=np.int64), self._rng))
         if row.tokens[-1] == STOP_SPEECH:
-            self._decode.put((job.seq, id(row), row))
+            self._decode.put((job.warm, job.seq, id(row), row))
             return kv
         rows.append(row)
         if len(rows) == 1:
@@ -659,7 +714,7 @@ class Engine:
         if not finished:
             return kv
         for b in finished:
-            self._decode.put((rows[b].job.seq, id(rows[b]), rows[b]))
+            self._decode.put((rows[b].job.warm, rows[b].job.seq, id(rows[b]), rows[b]))
         keep = [b for b in range(len(rows)) if b not in finished]
         rows[:] = [rows[b] for b in keep]
         if not rows:
@@ -674,7 +729,7 @@ class Engine:
         import numpy as np
 
         while True:
-            _, _, row = self._decode.get()
+            *_, row = self._decode.get()
             job = row.job
             try:
                 speech = np.array(row.tokens, dtype=np.int64)

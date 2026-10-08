@@ -270,6 +270,15 @@ def head_path(persona: str) -> Path | None:
     return path if path.exists() else None
 
 
+def still_path(persona: str) -> Path | None:
+    """The interviewer's photo (2026-10-09): the head's own portrait crop,
+    its background removed (`build_face.write_still`). The room shows it
+    until the 3D head is ready, and it is their picture everywhere else —
+    never a drawn face."""
+    path = FACES_DIR / f"{persona}.webp"
+    return path if path.exists() else None
+
+
 def heads() -> list[dict]:
     """Every built head, with what its zip says about itself."""
     import zipfile
@@ -292,6 +301,7 @@ def heads() -> list[dict]:
                 "gaussians": meta.get("gaussians"),
                 "made_with": meta.get("made_with"),
                 "ai_generated": bool(meta.get("ai_generated", True)),
+                "still": still_path(path.stem) is not None,
             }
         )
     return out

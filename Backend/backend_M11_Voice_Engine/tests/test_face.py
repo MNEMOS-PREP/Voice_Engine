@@ -171,6 +171,23 @@ def test_heads_are_listed_with_what_they_say_about_themselves(client, tmp_path, 
     assert client.get("/v1/voice/faces/professor.zip").status_code == 404
 
 
+def test_each_head_has_a_photo_for_before_it_is_ready(client, tmp_path, monkeypatch):
+    """2026-10-09, the user: no drawn faces in an interview. The photo is the
+    head's own portrait, served beside it, and the listing says who has one."""
+    monkeypatch.setattr(face, "FACES_DIR", tmp_path / "faces")
+    (tmp_path / "faces").mkdir()
+    (tmp_path / "faces" / "bar_raiser.zip").write_bytes(head_zip("bar_raiser"))
+    (tmp_path / "faces" / "professor.zip").write_bytes(head_zip("professor"))
+    (tmp_path / "faces" / "bar_raiser.webp").write_bytes(b"RIFF0000WEBPVP8 ")
+    listed = {f["persona"]: f["still"] for f in client.get("/v1/voice/faces").json()["faces"]}
+    assert listed == {"bar_raiser": True, "professor": False}
+    photo = client.get("/v1/voice/faces/bar_raiser.webp")
+    assert photo.status_code == 200 and photo.headers["content-type"] == "image/webp"
+    assert "max-age" in photo.headers["cache-control"]
+    assert client.get("/v1/voice/faces/professor.webp").status_code == 404
+    assert client.get("/v1/voice/faces/..%2Fsecret.webp").status_code in (404, 422)
+
+
 def test_a_sentence_with_notation_keeps_its_face(client, fake_voice, fake_face):
     """The audio is keyed on the text as said ("order N", not "O(n)"): so is
     its face, or the browser asks for frames under a key nothing has."""

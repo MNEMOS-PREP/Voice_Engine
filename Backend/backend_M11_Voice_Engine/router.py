@@ -13,7 +13,7 @@ from __future__ import annotations
 
 import uuid
 from datetime import timedelta
-from typing import Literal
+from typing import Any, Literal
 
 from ai_core.db import get_session
 from ai_core.dependencies import DependencyStatus
@@ -243,6 +243,9 @@ class PlanIn(BaseModel):
 
     line: str = Field(min_length=1, max_length=64)
     sentences: list[SpeakIn] = Field(min_length=1, max_length=24)
+    #: "warm": a line the room expects to say (the next question, while the
+    #: student answers) — made only while no live line waits (2026-10-09).
+    priority: Literal["live", "warm"] = "live"
 
 
 class DropIn(BaseModel):
@@ -345,7 +348,7 @@ def face_frames(
 def faces() -> dict:
     """The interviewers who have a face (2026-10-08): a 3D head from one
     AI-generated portrait each, never a real person's, labelled as AI (spec
-    §15.6). Anyone not listed is drawn instead."""
+    §15.6), and (`still`) the photo shown before the head is ready."""
     return {
         "faces": face.heads(),
         "note": "AI-generated faces: each from an AI portrait, never a real person.",
@@ -365,13 +368,28 @@ def face_head(persona: str = Path(pattern=r"^[a-z][a-z0-9_]{1,40}$")) -> Respons
     )
 
 
+@router.get("/voice/faces/{persona}.webp", tags=["voice"], response_class=Response)
+def face_still(persona: str = Path(pattern=r"^[a-z][a-z0-9_]{1,40}$")) -> Response:
+    """One interviewer's photo: their portrait, background removed (AI-generated,
+    never a real person's). What the room shows before the 3D head is ready."""
+    path = face.still_path(persona)
+    if path is None:
+        raise HTTPException(status_code=404, detail="This interviewer has no photo yet.")
+    return Response(
+        content=path.read_bytes(),
+        media_type="image/webp",
+        headers={"Cache-Control": "public, max-age=86400"},
+    )
+
+
 @router.post("/voice/plan", status_code=202, tags=["voice"])
 def plan_line(
     body: PlanIn, principal: Principal | None = Depends(enforce_access)
-) -> dict[str, int]:
+) -> dict[str, Any]:
     """Start making a line's sentences now, side by side (2026-10-07). The
     browser still asks for each in order (`/voice/speak`); by then most are
-    made. Nothing to wait for here: 202 at once."""
+    made. Nothing to wait for here: 202 at once — with which sentences were
+    made already (`ready`), so the room need not wait for them (2026-10-09)."""
     if principal is None:
         raise HTTPException(status_code=401, detail="Not signed in.")
     e = tts.engine()
@@ -379,7 +397,8 @@ def plan_line(
         (s.text, e.cast.resolve(persona_id=s.persona_id, voice_id=s.voice_id, voice=s.voice))
         for s in body.sentences
     ]
-    return {"planned": e.plan(sentences, body.line)}
+    planned, ready = e.plan(sentences, body.line, warm=body.priority == "warm")
+    return {"planned": planned, "ready": ready}
 
 
 @router.post("/voice/drop", tags=["voice"])

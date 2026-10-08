@@ -167,7 +167,7 @@ def test_a_planned_line_is_made_three_at_a_time_and_each_sentence_is_its_own(eng
     # The fake model is so fast it could finish a sentence before the next is
     # planned; hold the queue until the whole line is in it, as a real line is.
     with engine._jobs:
-        assert engine.plan([(s, voice) for s in line], "line-1") == len(line)
+        assert engine.plan([(s, voice) for s in line], "line-1")[0] == len(line)
     for text in line:
         data, _, _ = engine.speak(text, voice, line="line-1")
         words = len(engine.prepare(text, voice).split())
@@ -183,7 +183,7 @@ def test_a_sentence_planned_and_then_asked_for_is_made_once(engine):
     engine.plan([("Tell me about your project.", voice)], "line-2")
     engine.speak("Tell me about your project.", voice, line="line-2")
     assert engine.speak("Tell me about your project.", voice, line="line-2")[1] is True
-    assert engine.plan([("Tell me about your project.", voice)], "line-3") == 0
+    assert engine.plan([("Tell me about your project.", voice)], "line-3") == (0, [True])
     assert len(engine._sessions["conditional_decoder"].order) == 1
 
 
@@ -238,7 +238,7 @@ def test_plan_and_drop_are_for_signed_in_callers(client, engine):
     body = {"line": "l1", "sentences": [{"text": "Hello there.", "persona_id": "professor"}]}
     assert client.post("/v1/voice/plan", json=body).status_code == 401
     r = client.post("/v1/voice/plan", json=body, headers=student(uuid.uuid4()))
-    assert r.status_code == 202 and r.json() == {"planned": 1}
+    assert r.status_code == 202 and r.json() == {"planned": 1, "ready": [False]}
     r = client.post("/v1/voice/drop", json={"lines": ["l1"]}, headers=student(uuid.uuid4()))
     assert r.status_code == 200 and "dropped" in r.json()
     assert client.post("/v1/voice/drop", json={"lines": ["l1"]}).status_code == 401
@@ -289,3 +289,76 @@ def test_a_long_first_sentence_is_made_alone_only_when_the_next_can_still_be_rea
     assert lead["Two minutes."] is False
     # A short first sentence and a longer next one: together, or a gap follows it.
     assert lead["Thanks, that's clear."] is False
+
+
+# ── warm lines (2026-10-09) ──────────────────────────────────────────────
+
+
+def test_a_warm_line_waits_for_the_live_one(engine):
+    """The next question, made while the student answers, never ahead of a
+    line being said: planned at the same moment, the live line is made first."""
+    voice = engine.cast.resolve(persona_id="professor")
+    warm = [f"Warm sentence {w} with some words." for w in ("one", "two", "three")]
+    with engine._jobs:  # both in the queue before the model takes from either
+        engine.plan([(s, voice) for s in warm], "next-question", warm=True)
+        engine.plan([("Live words now.", voice)], "being-said")
+        assert [job.text for job in engine._queue] == ["Live words now."]
+        assert all(job.warm for job in engine._warm) and len(engine._warm) == 3
+    engine.speak("Live words now.", voice, line="being-said")
+    for text in warm:
+        engine.speak(text, voice, line="next-question")
+    order = engine._sessions["conditional_decoder"].order
+    live_len = 3 * len(engine.prepare("Live words now.", voice).split()) - 1
+    assert order[0] == live_len, order
+
+
+def test_a_warm_sentence_asked_for_is_made_at_once(engine, monkeypatch):
+    """The student finished sooner than expected: the warm sentence is wanted
+    now, and becomes live rather than waiting behind anything."""
+    voice = engine.cast.resolve(persona_id="professor")
+    with engine._jobs:
+        engine.plan([("Expected question here.", voice)], "next", warm=True)
+        job = engine._warm[0]
+        engine._enqueue(engine.prepare("Expected question here.", voice), voice, "now")
+        assert job.warm is False and job in engine._queue and job not in engine._warm
+    data, _, _ = engine.speak("Expected question here.", voice, line="now")
+    assert seconds(data) > 0
+
+
+def test_warm_rows_make_way_for_a_live_sentence(engine, monkeypatch):
+    """Warm sentences being made when a live one arrives are set aside (and
+    made later): the live one is not slowed by them."""
+    voice = engine.cast.resolve(persona_id="professor")
+    original = engine._step
+    started = threading.Event()
+    release = threading.Event()
+
+    def step(kv, rows):
+        if rows and all(row.job.warm for row in rows):
+            started.set()
+            release.wait(5)
+        return original(kv, rows)
+
+    monkeypatch.setattr(engine, "_step", step)
+    words = ("one", "two", "three")
+    warm = [f"A long warm sentence number {w} that takes a while to make." for w in words]
+    engine.plan([(s, voice) for s in warm], "next", warm=True)
+    assert started.wait(5), "the warm rows began"
+    engine.plan([("Live line.", voice)], "said")
+    release.set()
+    engine.speak("Live line.", voice, line="said")
+    for text in warm:
+        engine.speak(text, voice, line="next")
+    batches = engine._sessions["language_model"].batches
+    order = engine._sessions["conditional_decoder"].order
+    live_len = 3 * len(engine.prepare("Live line.", voice).split()) - 1
+    assert order[0] == live_len, order
+    assert len(order) == 4, "the warm sentences were made too, afterwards"
+    assert batches, batches
+
+
+def test_plan_says_which_sentences_are_made_already(engine):
+    voice = engine.cast.resolve(persona_id="professor")
+    engine.speak("Already said once.", voice)
+    planned, ready = engine.plan([("Already said once.", voice), ("Something new.", voice)], "l")
+    assert ready == [True, False] and planned == 1
