@@ -36,11 +36,13 @@ syncing"* — option B, built.
 - ✅ **The heads** (`scripts/make_faces.py`, `scripts/build_face.py`): one
   AI-generated portrait per interviewer (FLUX.1-schnell Q4 through
   stable-diffusion.cpp on this laptop's Iris Xe, Vulkan, weights streamed
-  from disk), lifted into ~20,000 Gaussians on a FLAME head by LAM
-  (Apache-2.0) on the CPU, placed on the rig from its own FBX. About eight
-  minutes a head; built locally, gitignored, served as
-  `/v1/voice/faces/{persona}.zip`. Every portrait is generated, never a real
-  person's, and every head is labelled AI.
+  from disk), lifted into ~20,000 Gaussians on a FLAME head by LAM on the
+  CPU, placed on the rig from its own FBX. About eight minutes a head; built
+  locally (setup once: `scripts/face_builder_setup.ps1`), gitignored, served
+  as `/v1/voice/faces/{persona}.zip`. Every portrait is generated, never a
+  real person's, and every head is labelled AI. **Academic use only:** LAM's
+  code is Apache-2.0 but its weights are CC BY-NC 4.0, and FLAME 2023 is
+  under MPI's non-commercial licence (the faces' `ATTRIBUTION.md`).
 - ✅ **In the browser** (Core v0.27.0 → v0.28.0, `TalkingHead`, `faceDriver`):
   gsplat-flame-avatar-renderer (MIT) draws each head; every frame is all 52
   channels at the audio element's `currentTime` plus one frame, interpolated
