@@ -42,6 +42,11 @@ import { LatencyLedger } from "./LatencyLedger";
 import { MicCheck } from "./MicCheck";
 import { WordFlag } from "./WordFlag";
 
+/** "Dr. Raghavan" sorts under R, as people look for him. */
+function sortName(name: string): string {
+  return name.replace(/^(Dr\.|Professor|Prof\.)\s+/, "");
+}
+
 /** Played when M06 cannot say who the interviewers are. */
 const SAMPLE: Interviewer = {
   id: "sample",
@@ -230,7 +235,13 @@ export function VoiceCheck() {
   };
   const credits = [...new Map((castInfo.data?.voices ?? []).map((v) => [v.credit, v.licence])).entries()];
 
-  const people = interviewers.data?.length ? interviewers.data : interviewers.isError ? [SAMPLE] : [];
+  // By name: thirty-nine of them now (2026-10-07), and in file order a
+  // student looking for "Meera" had to read the whole list.
+  const people = interviewers.data?.length
+    ? [...interviewers.data].sort((a, b) => sortName(a.name).localeCompare(sortName(b.name)))
+    : interviewers.isError
+      ? [SAMPLE]
+      : [];
   const chosen = useMemo(() => voicesByPerson(people, voices), [people, voices]);
   const shared = sharedNote(people, chosen);
   const natural = voices.some((v) => /\b(natural|neural)\b/i.test(v.name) && v.lang.replace("_", "-") === "en-IN");
