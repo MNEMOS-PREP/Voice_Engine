@@ -8,7 +8,7 @@ recorded, and never as anyone real.
 
 | Voice | File | Source | Licence | Credit |
 |---|---|---|---|---|
-| Indian voices 1, 3, 4, 5, 6 | `indictts-*.flac` | IndicTTS — English recorded by native speakers of Indian languages **for speech synthesis**; a MeitY-funded consortium led by IIT Madras | CC BY 4.0 | IndicTTS, SMT Lab, IIT Madras |
+| Indian voices 1 and 3-13 | `indictts-*.flac` | IndicTTS — English recorded by native speakers of Indian languages **for speech synthesis**; a MeitY-funded consortium led by IIT Madras | CC BY 4.0 | IndicTTS, SMT Lab, IIT Madras |
 | Conversational voice A | `dailytalk-0.flac` | DailyTalk — dialogues recorded for conversational text-to-speech | CC BY-SA 4.0, academic use | DailyTalk, Lee et al., ICASSP 2023 |
 | Chatterbox voice | `chatterbox-default.flac` | Chatterbox Turbo's built-in voice, re-referenced from its own output | MIT | Chatterbox, Resemble AI |
 
