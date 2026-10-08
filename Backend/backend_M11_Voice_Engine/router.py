@@ -298,7 +298,9 @@ def speak(body: SpeakIn, principal: Principal | None = Depends(enforce_access)) 
         raise HTTPException(status_code=422, detail=str(exc)) from None
     # The face's frames for this sentence (`face.py`), made off this request
     # from the audio just made; the browser asks for them by this key.
-    key = e.cache_key(body.text, voice)
+    # Keyed as the audio is: on the text as said (lexicon and notation
+    # applied), not as sent — or a sentence with "O(n)" has no face.
+    key = e.cache_key(e.prepare(body.text, voice), voice)
     face.engine().prepare(key, audio)
     return Response(
         content=audio,
@@ -325,7 +327,9 @@ def face_frames(
     if principal is None:
         raise HTTPException(status_code=401, detail="Not signed in.")
     engine = face.engine()
-    frames = engine.cached(key)
+    # Made a moment ago and still being made: the browser asks as soon as
+    # the audio arrives, so wait for it rather than answer "none".
+    frames = engine.cached(key) or engine.wait(key, timeout=3.0)
     if frames is not None:
         return frames
     audio = tts.engine().audio_by_key(key)

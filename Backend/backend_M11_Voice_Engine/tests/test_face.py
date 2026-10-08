@@ -169,3 +169,36 @@ def test_heads_are_listed_with_what_they_say_about_themselves(client, tmp_path, 
     served = client.get("/v1/voice/faces/bar_raiser.zip")
     assert served.status_code == 200 and served.headers["content-type"] == "application/zip"
     assert client.get("/v1/voice/faces/professor.zip").status_code == 404
+
+
+def test_a_sentence_with_notation_keeps_its_face(client, fake_voice, fake_face):
+    """The audio is keyed on the text as said ("order N", not "O(n)"): so is
+    its face, or the browser asks for frames under a key nothing has."""
+    said = client.post(
+        "/v1/voice/speak",
+        json={"text": "Is that O(n log n) in the worst case?", "persona_id": "bar_raiser"},
+        headers=student(uuid.uuid4()),
+    )
+    key = said.headers["x-face"]
+    voice = tts.Cast.load().voices[said.headers["x-voice"]]
+    prepared = fake_voice.prepare("Is that O(n log n) in the worst case?", voice)
+    assert key == fake_voice.cache_key(prepared, voice)
+    assert client.get(f"/v1/voice/face/{key}", headers=student(uuid.uuid4())).status_code == 200
+
+
+def test_frames_still_being_made_are_waited_for(tmp_path):
+    import threading
+
+    gate = threading.Event()
+
+    class Slow(FakeFace):
+        def infer(self, samples):
+            gate.wait(2)
+            return super().infer(samples)
+
+    engine = Slow(tmp_path)
+    face.FaceEngine.prepare(engine, "k" * 40, wav(0.5))  # the real one: off-thread
+    assert engine.cached("k" * 40) is None, "not yet made"
+    gate.set()
+    got = engine.wait("k" * 40, timeout=3)
+    assert got is not None and got["frames"]

@@ -142,6 +142,8 @@ class FaceEngine:
         self._cache_dir = cache_dir
         # One worker: frames are made after the sentence, never instead of it.
         self._pool = ThreadPoolExecutor(max_workers=1, thread_name_prefix="m11-face")
+        #: Frames being made, by key — what `wait` waits on.
+        self._pending: dict[str, Any] = {}
         self.error: str | None = None
 
     # ── the model ────────────────────────────────────────────────────────
@@ -242,8 +244,22 @@ class FaceEngine:
             except Exception:  # noqa: BLE001 - a face is never worth a crash
                 log.exception("M11 face frames failed for %s", key)
 
-        if self.error is None:
-            self._pool.submit(work)
+        if self.error is None and self.cached(key) is None and key not in self._pending:
+            future = self._pool.submit(work)
+            self._pending[key] = future
+            future.add_done_callback(lambda _: self._pending.pop(key, None))
+
+    def wait(self, key: str, timeout: float = 3.0) -> dict | None:
+        """The frames being made for `key`, once made — or None when nothing
+        is being made for it, or it takes longer than `timeout`."""
+        future = self._pending.get(key)
+        if future is None:
+            return None
+        try:
+            future.result(timeout=timeout)
+        except Exception:  # noqa: BLE001 - a timeout or a failed make: no frames
+            return None
+        return self.cached(key)
 
 
 # ── the heads ────────────────────────────────────────────────────────────
