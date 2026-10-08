@@ -64,14 +64,57 @@ def test_every_m06_interviewer_is_cast_and_no_one_else_is():
     assert set(cast.cast) == personas
 
 
+#: The seven the team cast in its blind listening test (2026-10-06).
+FIRST_SEVEN = (
+    "friendly_recruiter",
+    "hr_generalist",
+    "bar_raiser",
+    "professor",
+    "impatient_senior",
+    "methodical_engineer",
+    "startup_founder",
+)
+
+
 def test_the_roster_is_mostly_indian_and_every_interviewer_sounds_different():
     """The team's brief (2026-10-06): a mix of accents, mostly Indian — and
-    FR-11.21, a distinct voice per persona."""
+    FR-11.21, a distinct voice per persona. Since 2026-10-07 the cast is 39
+    for seven voices, so "distinct" holds where it is heard: the first seven
+    each have their own, and M06 never seats two people who share one at
+    the same table (its `Persona.sound`)."""
     cast = tts.Cast.load()
     voices = [cast.voices[k] for k in cast.cast.values()]
-    assert len(set(cast.cast.values())) == len(cast.cast)
+    first = [cast.cast[p] for p in FIRST_SEVEN]
+    assert len(set(first)) == len(first)
+    assert set(cast.cast.values()) == set(cast.voices), "every voice is someone's"
     indian = sum(v.accent == "indian" for v in voices)
     assert indian > len(voices) / 2 and indian < len(voices)
+
+
+def test_the_cast_agrees_with_m06s_persona_files():
+    """The same voice key is in two places: here, and in each M06 persona
+    file (`voice:`), which is what keeps one panel from sounding alike. Read
+    when M06 is checked out beside this repo."""
+    import pathlib
+
+    import yaml
+
+    for parent in pathlib.Path(__file__).resolve().parents:
+        folder = (
+            parent
+            / "Mock_Interview_Engine"
+            / "Backend"
+            / "backend_M06_Mock_Interview_Engine"
+            / "personas"
+        )
+        if folder.exists():
+            break
+    else:
+        pytest.skip("M06 is not checked out beside this repo")
+    cast = tts.Cast.load()
+    for path in sorted(folder.glob("*.yaml")):
+        persona = yaml.safe_load(path.read_text(encoding="utf-8"))
+        assert cast.cast.get(persona["id"]) == persona.get("voice"), persona["id"]
 
 
 def test_a_cast_persona_gets_its_voice():
