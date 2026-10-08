@@ -20,12 +20,12 @@ from ai_core.dependencies import DependencyStatus
 from ai_core.guard import require_role
 from ai_core.identity import Principal, Role
 from ai_core.timeutil import utcnow
-from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request, Response
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
 
-from . import asr, kept, ledger, lexicon, tts, turn
+from . import asr, face, kept, ledger, lexicon, tts, turn
 from .access import enforce_access
 from .dependencies import deps
 from .models import KeptAnswer, LexiconFlag, LineTiming
@@ -296,6 +296,10 @@ def speak(body: SpeakIn, principal: Principal | None = Depends(enforce_access)) 
         ) from None
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc)) from None
+    # The face's frames for this sentence (`face.py`), made off this request
+    # from the audio just made; the browser asks for them by this key.
+    key = e.cache_key(body.text, voice)
+    face.engine().prepare(key, audio)
     return Response(
         content=audio,
         media_type="audio/wav",
@@ -303,8 +307,57 @@ def speak(body: SpeakIn, principal: Principal | None = Depends(enforce_access)) 
             "X-Voice": voice.key,
             "X-Cache": "hit" if cached else "miss",
             "X-Synth-Ms": str(ms),
+            "X-Face": key,
+            "Access-Control-Expose-Headers": "X-Voice, X-Cache, X-Synth-Ms, X-Face",
             "Cache-Control": "private, max-age=86400",
         },
+    )
+
+
+@router.get("/voice/face/{key}", tags=["voice"])
+def face_frames(
+    key: str = Path(pattern=r"^[0-9a-f]{40}$"),
+    principal: Principal | None = Depends(enforce_access),
+) -> dict:
+    """The interviewer's face for one sentence they said (2026-10-08): the 52
+    ARKit blendshapes at 30 frames a second, made from the sentence's own
+    audio. `key` is the `X-Face` its audio came with."""
+    if principal is None:
+        raise HTTPException(status_code=401, detail="Not signed in.")
+    engine = face.engine()
+    frames = engine.cached(key)
+    if frames is not None:
+        return frames
+    audio = tts.engine().audio_by_key(key)
+    if audio is None:
+        raise HTTPException(status_code=404, detail="No sentence was said with that key.")
+    try:
+        return engine.make(key, audio)
+    except face.FaceUnavailable as exc:
+        raise HTTPException(status_code=503, detail=f"No lip sync here: {exc}") from None
+
+
+@router.get("/voice/faces", tags=["voice"])
+def faces() -> dict:
+    """The interviewers who have a face (2026-10-08): a 3D head from one
+    AI-generated portrait each, never a real person's, labelled as AI (spec
+    §15.6). Anyone not listed is drawn instead."""
+    return {
+        "faces": face.heads(),
+        "note": "AI-generated faces: each from an AI portrait, never a real person.",
+    }
+
+
+@router.get("/voice/faces/{persona}.zip", tags=["voice"], response_class=Response)
+def face_head(persona: str = Path(pattern=r"^[a-z][a-z0-9_]{1,40}$")) -> Response:
+    """One interviewer's head: the rig, its Gaussians, its animation."""
+    path = face.head_path(persona)
+    if path is None:
+        raise HTTPException(status_code=404, detail="This interviewer has no face yet.")
+    return Response(
+        content=path.read_bytes(),
+        media_type="application/zip",
+        headers={"Cache-Control": "public, max-age=86400"},
     )
 
 

@@ -442,6 +442,15 @@ class Engine:
             return data
         return None
 
+    def audio_by_key(self, key: str) -> bytes | None:
+        """A sentence's audio by its cache key, wherever it is kept — what
+        the face's frames (`face.py`) are made from."""
+        if key in self._memory:
+            return self._memory[key]
+        for path in CACHE_DIR.glob(f"*/{key}.wav"):
+            return path.read_bytes()
+        return None
+
     def _remember(self, key: str, data: bytes) -> None:
         self._memory[key] = data
         self._memory.move_to_end(key)

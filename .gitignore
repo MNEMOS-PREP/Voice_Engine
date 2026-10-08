@@ -57,3 +57,6 @@ Backend/.kept_audio/
 # The face builder (scripts/build_face.py): LAM checkout, weights and its venv.
 # Gigabytes, rebuilt by the script; never committed.
 .face_builder/
+
+# Built heads (scripts/make_faces.py): 4 MB each, rebuilt from scripts/faces/portraits.json.
+Backend/backend_M11_Voice_Engine/faces/*.zip
