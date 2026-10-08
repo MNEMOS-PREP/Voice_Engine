@@ -23,9 +23,11 @@ exporter changes (tools/generateARKITGLBWithBlender.py: only the base mesh's
 vertices are replaced).
 
 Licences: academic use only. LAM's weights are CC BY-NC 4.0, and FLAME 2023 is
-under MPI's non-commercial licence. See the faces' ATTRIBUTION.md.
+under MPI's non-commercial licence. See the faces' ATTRIBUTION.md
+(Backend/backend_M11_Voice_Engine/faces/).
 
-Setup, once: scripts/face_builder_setup.ps1.
+Setup, once: scripts/faces/README.md (what to download, where it goes, the
+frozen environment).
 """
 
 from __future__ import annotations

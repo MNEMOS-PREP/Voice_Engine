@@ -38,7 +38,7 @@ syncing"* — option B, built.
   stable-diffusion.cpp on this laptop's Iris Xe, Vulkan, weights streamed
   from disk), lifted into ~20,000 Gaussians on a FLAME head by LAM on the
   CPU, placed on the rig from its own FBX. About eight minutes a head; built
-  locally (setup once: `scripts/face_builder_setup.ps1`), gitignored, served
+  locally (setup once: `scripts/faces/README.md`), gitignored, served
   as `/v1/voice/faces/{persona}.zip`. Every portrait is generated, never a
   real person's, and every head is labelled AI. **Academic use only:** LAM's
   code is Apache-2.0 but its weights are CC BY-NC 4.0, and FLAME 2023 is
