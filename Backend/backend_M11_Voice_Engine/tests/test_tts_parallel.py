@@ -18,6 +18,7 @@ fakes that keep the real ones' contract, checked on every call:
 
 from __future__ import annotations
 
+import heapq
 import io
 import threading
 import time
@@ -300,10 +301,10 @@ def test_a_warm_line_waits_for_the_live_one(engine):
     voice = engine.cast.resolve(persona_id="professor")
     warm = [f"Warm sentence {w} with some words." for w in ("one", "two", "three")]
     with engine._jobs:  # both in the queue before the model takes from either
-        engine.plan([(s, voice) for s in warm], "next-question", warm=True)
+        engine.plan([(s, voice) for s in warm], "next-question", priority="warm")
         engine.plan([("Live words now.", voice)], "being-said")
         assert [job.text for job in engine._queue] == ["Live words now."]
-        assert all(job.warm for job in engine._warm) and len(engine._warm) == 3
+        assert all(job.warm for _, _, job in engine._warm) and len(engine._warm) == 3
     engine.speak("Live words now.", voice, line="being-said")
     for text in warm:
         engine.speak(text, voice, line="next-question")
@@ -317,10 +318,10 @@ def test_a_warm_sentence_asked_for_is_made_at_once(engine, monkeypatch):
     now, and becomes live rather than waiting behind anything."""
     voice = engine.cast.resolve(persona_id="professor")
     with engine._jobs:
-        engine.plan([("Expected question here.", voice)], "next", warm=True)
-        job = engine._warm[0]
+        engine.plan([("Expected question here.", voice)], "next", priority="next")
+        job = engine._warm[0][2]
         engine._enqueue(engine.prepare("Expected question here.", voice), voice, "now")
-        assert job.warm is False and job in engine._queue and job not in engine._warm
+        assert job.warm is False and job in engine._queue and not engine._warm
     data, _, _ = engine.speak("Expected question here.", voice, line="now")
     assert seconds(data) > 0
 
@@ -342,7 +343,7 @@ def test_warm_rows_make_way_for_a_live_sentence(engine, monkeypatch):
     monkeypatch.setattr(engine, "_step", step)
     words = ("one", "two", "three")
     warm = [f"A long warm sentence number {w} that takes a while to make." for w in words]
-    engine.plan([(s, voice) for s in warm], "next", warm=True)
+    engine.plan([(s, voice) for s in warm], "next", priority="warm")
     assert started.wait(5), "the warm rows began"
     engine.plan([("Live line.", voice)], "said")
     release.set()
@@ -362,3 +363,102 @@ def test_plan_says_which_sentences_are_made_already(engine):
     engine.speak("Already said once.", voice)
     planned, ready = engine.plan([("Already said once.", voice), ("Something new.", voice)], "l")
     assert ready == [True, False] and planned == 1
+
+
+def test_the_likely_next_line_is_made_before_stock_phrases_in_the_order_asked(engine):
+    """A stock phrase planned at the start must not keep the next question
+    waiting (a live mock heard an 11.5 s silence mid-line, 2026-10-09); and
+    the opening, asked for first, is made first (newest-first left a 19 s
+    silence after it, its question made last)."""
+    voice = engine.cast.resolve(persona_id="professor")
+    with engine._jobs:
+        stock = [("Stock phrase one.", voice), ("Stock phrase two.", voice)]
+        engine.plan(stock, "p", priority="warm")
+        engine.plan([("The opening, said first.", voice)], "q0", priority="next")
+        engine.plan([("Then the first question?", voice)], "q1", priority="next")
+        order = [heapq.heappop(engine._warm)[2].text for _ in range(len(engine._warm))]
+    assert order == [
+        "The opening, said first.",
+        "Then the first question?",
+        "Stock phrase one.",
+        "Stock phrase two.",
+    ]
+
+
+# ── live lines on the faster model (2026-10-09) ──────────────────────────
+
+
+@pytest.fixture
+def hybrid(monkeypatch):
+    """Two fake language models: the main one (made ahead) and the live one."""
+    monkeypatch.setattr(tts, "sample_next", fake_sample)
+    monkeypatch.setattr(tts, "NUM_KV_HEADS", 2)
+    monkeypatch.setattr(tts, "HEAD_DIM", 3)
+    e = tts.Engine(tts.Cast.load(), precision="fake-main")
+    e.live_precision = "fake-live"
+    e._sessions = {
+        "embed_tokens": FakeEmbed(),
+        "language_model": FakeLM(),
+        "language_model_live": FakeLM(),
+        "conditional_decoder": FakeDecoder(),
+    }
+    e._tokenizer = FakeTokenizer()
+    e._rng = np.random.default_rng(0)
+    for key in e.cast.voices:
+        e._conds[key] = (
+            np.zeros((1, PREFIX, HIDDEN), dtype=np.float32),
+            np.zeros((1, 4), dtype=np.int64),
+            np.zeros((1, 192), dtype=np.float32),
+            np.zeros((1, 8, 80), dtype=np.float32),
+        )
+    e._begin()
+    e.state, e.reason = "ready", "fake sessions"
+    return e
+
+
+def test_a_line_said_now_is_made_by_the_live_model_and_kept_under_its_key(hybrid):
+    voice = hybrid.cast.resolve(persona_id="professor")
+    main, live = hybrid._sessions["language_model"], hybrid._sessions["language_model_live"]
+    before = len(main.batches)
+    data, cached, _, key = hybrid.speak_keyed("A follow-up nobody could predict.", voice)
+    assert cached is False and seconds(data) > 0
+    assert len(live.batches) > 0 and len(main.batches) == before, "made by the live model"
+    text = hybrid.prepare("A follow-up nobody could predict.", voice)
+    assert key == hybrid.cache_key(text, voice, "fake-live")
+    assert hybrid.speak_keyed("A follow-up nobody could predict.", voice)[1:] == (True, 0, key)
+
+
+def test_a_line_made_ahead_is_made_by_the_main_model_and_preferred(hybrid):
+    voice = hybrid.cast.resolve(persona_id="professor")
+    main, live = hybrid._sessions["language_model"], hybrid._sessions["language_model_live"]
+    text = "The next question, made ahead."
+    live_before = len(live.batches)
+    hybrid.plan([(text, voice)], "next", priority="next")
+    said = hybrid.prepare(text, voice)
+    # Made ahead means made before it is asked for: wait for it, as the room
+    # does by asking only when the line comes.
+    deadline = time.time() + 5
+    while hybrid.cached_keyed(said, voice) is None and time.time() < deadline:
+        time.sleep(0.01)
+    data, cached, _, key = hybrid.speak_keyed(text, voice)
+    assert key == hybrid.cache_key(said, voice, "fake-main")
+    assert main.batches and len(live.batches) == live_before, "made by the main model alone"
+    # Made both ways (live first, ahead later): the one made ahead is said.
+    other = "Said live first, then made ahead."
+    _, _, _, live_key = hybrid.speak_keyed(other, voice)
+    hybrid._finish(
+        tts._Job(999, "k", hybrid.prepare(other, voice), voice), hybrid.speak(other, voice)[0]
+    )
+    assert hybrid.cached_keyed(hybrid.prepare(other, voice), voice)[1] != live_key
+
+
+def test_a_warm_sentence_wanted_now_is_made_by_the_live_model(hybrid):
+    voice = hybrid.cast.resolve(persona_id="professor")
+    with hybrid._jobs:
+        hybrid.plan([("Expected next question.", voice)], "next", priority="next")
+        job = hybrid._warm[0][2]
+        assert job.fast is False
+        hybrid._enqueue(hybrid.prepare("Expected next question.", voice), voice, "now")
+        assert job.fast is True and job.warm is False
+    hybrid.speak("Expected next question.", voice, line="now")
+    assert job.stored_as == hybrid.cache_key(job.text, voice, "fake-live")

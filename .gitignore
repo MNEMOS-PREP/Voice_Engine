@@ -29,6 +29,8 @@ keys.txt
 
 # The server voice's line cache (tts.py): regenerated on demand.
 .tts_cache/
+# The int8 language model M11 makes from the fp32 one (tts.int8_graph): 344 MB.
+.tts_models/
 
 # ── Interview data ───────────────────────────────────────────────────────
 # Transcripts, session exports and any audio from a session are a real
@@ -60,3 +62,6 @@ Backend/.kept_audio/
 
 # Built heads (scripts/make_faces.py): 4 MB each, rebuilt from scripts/faces/portraits.json.
 Backend/backend_M11_Voice_Engine/faces/*.zip
+# Each head's still (build_face.write_still) and the batch's staging folder: made beside it.
+Backend/backend_M11_Voice_Engine/faces/*.webp
+Backend/backend_M11_Voice_Engine/faces/.staging/

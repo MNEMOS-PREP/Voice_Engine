@@ -243,9 +243,10 @@ class PlanIn(BaseModel):
 
     line: str = Field(min_length=1, max_length=64)
     sentences: list[SpeakIn] = Field(min_length=1, max_length=24)
-    #: "warm": a line the room expects to say (the next question, while the
-    #: student answers) — made only while no live line waits (2026-10-09).
-    priority: Literal["live", "warm"] = "live"
+    #: A line the room expects to say, made only while no live line waits
+    #: (2026-10-09): "next" (the likely next line, while the student answers)
+    #: before "warm" (the panel's stock phrases).
+    priority: Literal["live", "next", "warm"] = "live"
 
 
 class DropIn(BaseModel):
@@ -292,7 +293,7 @@ def speak(body: SpeakIn, principal: Principal | None = Depends(enforce_access)) 
     e = tts.engine()
     voice = e.cast.resolve(persona_id=body.persona_id, voice_id=body.voice_id, voice=body.voice)
     try:
-        audio, cached, ms = e.speak(body.text, voice, line=body.line)
+        audio, cached, ms, key = e.speak_keyed(body.text, voice, line=body.line)
     except tts.EngineUnavailable as exc:
         raise HTTPException(
             status_code=503, detail=f"The interviewer's voice is not ready: {exc}"
@@ -301,9 +302,9 @@ def speak(body: SpeakIn, principal: Principal | None = Depends(enforce_access)) 
         raise HTTPException(status_code=422, detail=str(exc)) from None
     # The face's frames for this sentence (`face.py`), made off this request
     # from the audio just made; the browser asks for them by this key.
-    # Keyed as the audio is: on the text as said (lexicon and notation
-    # applied), not as sent — or a sentence with "O(n)" has no face.
-    key = e.cache_key(e.prepare(body.text, voice), voice)
+    # Keyed as the audio is kept: on the text as said (lexicon and notation
+    # applied), not as sent — or a sentence with "O(n)" has no face — and by
+    # the model that made it, since a sentence may be kept both ways.
     face.engine().prepare(key, audio)
     return Response(
         content=audio,
@@ -397,7 +398,7 @@ def plan_line(
         (s.text, e.cast.resolve(persona_id=s.persona_id, voice_id=s.voice_id, voice=s.voice))
         for s in body.sentences
     ]
-    planned, ready = e.plan(sentences, body.line, warm=body.priority == "warm")
+    planned, ready = e.plan(sentences, body.line, priority=body.priority)
     return {"planned": planned, "ready": ready}
 
 

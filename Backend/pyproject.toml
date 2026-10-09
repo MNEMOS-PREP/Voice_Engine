@@ -34,6 +34,9 @@ tts = [
     "soundfile>=0.12",
     "tokenizers>=0.19",
     "huggingface_hub>=0.23",
+    # The int8 language model is made from the fp32 one with onnxruntime's
+    # quantizer, which reads the graph with `onnx` (2026-10-09).
+    "onnx>=1.16",
 ]
 
 [tool.setuptools.packages.find]

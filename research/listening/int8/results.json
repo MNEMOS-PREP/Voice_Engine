@@ -1,0 +1,758 @@
+[
+  {
+    "precision": "fp32",
+    "voice": "chatterbox-default",
+    "line": 0,
+    "seconds": 4.52,
+    "words_per_s": 4.2,
+    "wer": 0.105,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in OnePass?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "chatterbox-default",
+    "line": 1,
+    "seconds": 5.04,
+    "words_per_s": 3.17,
+    "wer": 0.0,
+    "heard": "Interesting. And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "chatterbox-default",
+    "line": 2,
+    "seconds": 4.92,
+    "words_per_s": 3.25,
+    "wer": 0.062,
+    "heard": "Say the database slows down under load, where would you start looking and why they're first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "dailytalk-0",
+    "line": 0,
+    "seconds": 4.64,
+    "words_per_s": 4.09,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "fp32",
+    "voice": "dailytalk-0",
+    "line": 1,
+    "seconds": 4.28,
+    "words_per_s": 3.74,
+    "wer": 0.0,
+    "heard": "Interesting. And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "dailytalk-0",
+    "line": 2,
+    "seconds": 5.0,
+    "words_per_s": 3.2,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load, where would you start looking and why there first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-002527",
+    "line": 0,
+    "seconds": 6.28,
+    "words_per_s": 3.03,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-002527",
+    "line": 1,
+    "seconds": 6.28,
+    "words_per_s": 2.55,
+    "wer": 0.0,
+    "heard": "interesting and what would change if the list could contain a cycle somewhere in the middle"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-002527",
+    "line": 2,
+    "seconds": 6.2,
+    "words_per_s": 2.58,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load. Where would you start looking and why there first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-012635",
+    "line": 0,
+    "seconds": 5.96,
+    "words_per_s": 3.19,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-012635",
+    "line": 1,
+    "seconds": 5.88,
+    "words_per_s": 2.72,
+    "wer": 0.0,
+    "heard": "Interesting. And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-012635",
+    "line": 2,
+    "seconds": 5.28,
+    "words_per_s": 3.03,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load. Where would you start looking? And why there first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-017689",
+    "line": 0,
+    "seconds": 5.68,
+    "words_per_s": 3.35,
+    "wer": 0.105,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in OnePass?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-017689",
+    "line": 1,
+    "seconds": 5.08,
+    "words_per_s": 3.15,
+    "wer": 0.0,
+    "heard": "Interesting. And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-017689",
+    "line": 2,
+    "seconds": 5.92,
+    "words_per_s": 2.7,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load. Where would you start looking and why there first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-022743",
+    "line": 0,
+    "seconds": 5.08,
+    "words_per_s": 3.74,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-022743",
+    "line": 1,
+    "seconds": 4.68,
+    "words_per_s": 3.42,
+    "wer": 0.0,
+    "heard": "Interesting. And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-022743",
+    "line": 2,
+    "seconds": 4.92,
+    "words_per_s": 3.25,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load, where would you start looking and why there first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-048013",
+    "line": 0,
+    "seconds": 6.0,
+    "words_per_s": 3.17,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-048013",
+    "line": 1,
+    "seconds": 5.4,
+    "words_per_s": 2.96,
+    "wer": 0.0,
+    "heard": "Interesting, and what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-048013",
+    "line": 2,
+    "seconds": 5.68,
+    "words_per_s": 2.82,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load. Where would you start looking and why there first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-063175",
+    "line": 0,
+    "seconds": 5.2,
+    "words_per_s": 3.65,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-063175",
+    "line": 1,
+    "seconds": 4.36,
+    "words_per_s": 3.67,
+    "wer": 0.0,
+    "heard": "Interesting and what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-063175",
+    "line": 2,
+    "seconds": 4.64,
+    "words_per_s": 3.45,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load, where would you start looking and why there first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-083391",
+    "line": 0,
+    "seconds": 6.0,
+    "words_per_s": 3.17,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-083391",
+    "line": 1,
+    "seconds": 5.64,
+    "words_per_s": 2.84,
+    "wer": 0.0,
+    "heard": "Interesting, and what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-083391",
+    "line": 2,
+    "seconds": 6.12,
+    "words_per_s": 2.61,
+    "wer": 0.062,
+    "heard": "Said the database slows down under load, where would you start looking and why there first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-103607",
+    "line": 0,
+    "seconds": 5.04,
+    "words_per_s": 3.77,
+    "wer": 0.053,
+    "heard": "Before we go further, tell me how you would find the middle of a link list in one pass."
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-103607",
+    "line": 1,
+    "seconds": 4.44,
+    "words_per_s": 3.6,
+    "wer": 0.0,
+    "heard": "Interesting. And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-103607",
+    "line": 2,
+    "seconds": 5.48,
+    "words_per_s": 2.92,
+    "wer": 0.062,
+    "heard": "Say the database slows down under load. Where would you start working and why there first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-123823",
+    "line": 0,
+    "seconds": 5.08,
+    "words_per_s": 3.74,
+    "wer": 0.105,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in OnePass?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-123823",
+    "line": 1,
+    "seconds": 5.28,
+    "words_per_s": 3.03,
+    "wer": 0.125,
+    "heard": "Int listing and what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-123823",
+    "line": 2,
+    "seconds": 5.36,
+    "words_per_s": 2.99,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load. Where would you start looking and why there first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-128877",
+    "line": 0,
+    "seconds": 6.4,
+    "words_per_s": 2.97,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-128877",
+    "line": 1,
+    "seconds": 5.04,
+    "words_per_s": 3.17,
+    "wer": 0.0,
+    "heard": "Interesting! And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-128877",
+    "line": 2,
+    "seconds": 5.16,
+    "words_per_s": 3.1,
+    "wer": 0.062,
+    "heard": "Say the database lows down under load, where would you start looking and why there first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-133931",
+    "line": 0,
+    "seconds": 5.08,
+    "words_per_s": 3.74,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-133931",
+    "line": 1,
+    "seconds": 5.56,
+    "words_per_s": 2.88,
+    "wer": 0.0,
+    "heard": "Interesting! And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-133931",
+    "line": 2,
+    "seconds": 5.16,
+    "words_per_s": 3.1,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load. Where would you start looking and why there first?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-144039",
+    "line": 0,
+    "seconds": 5.0,
+    "words_per_s": 3.8,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-144039",
+    "line": 1,
+    "seconds": 4.88,
+    "words_per_s": 3.28,
+    "wer": 0.0,
+    "heard": "Interesting. And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "fp32",
+    "voice": "indictts-144039",
+    "line": 2,
+    "seconds": 5.04,
+    "words_per_s": 3.17,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load, where would you start looking and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "chatterbox-default",
+    "line": 0,
+    "seconds": 5.56,
+    "words_per_s": 3.42,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "int8",
+    "voice": "chatterbox-default",
+    "line": 1,
+    "seconds": 4.4,
+    "words_per_s": 3.64,
+    "wer": 0.0,
+    "heard": "Interesting, and what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "int8",
+    "voice": "chatterbox-default",
+    "line": 2,
+    "seconds": 4.88,
+    "words_per_s": 3.28,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load, where would you start looking, and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "dailytalk-0",
+    "line": 0,
+    "seconds": 4.32,
+    "words_per_s": 4.4,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "int8",
+    "voice": "dailytalk-0",
+    "line": 1,
+    "seconds": 4.24,
+    "words_per_s": 3.77,
+    "wer": 0.0,
+    "heard": "Interesting. And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "int8",
+    "voice": "dailytalk-0",
+    "line": 2,
+    "seconds": 4.6,
+    "words_per_s": 3.48,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load. Where would you start looking and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-002527",
+    "line": 0,
+    "seconds": 6.36,
+    "words_per_s": 2.99,
+    "wer": 0.105,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in OnePass?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-002527",
+    "line": 1,
+    "seconds": 5.32,
+    "words_per_s": 3.01,
+    "wer": 0.0,
+    "heard": "Interesting! And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-002527",
+    "line": 2,
+    "seconds": 6.04,
+    "words_per_s": 2.65,
+    "wer": 0.125,
+    "heard": "Say the database slows down under load. Where would you start looking and why they're forced?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-012635",
+    "line": 0,
+    "seconds": 5.48,
+    "words_per_s": 3.47,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-012635",
+    "line": 1,
+    "seconds": 5.0,
+    "words_per_s": 3.2,
+    "wer": 0.062,
+    "heard": "Interesting. And what would change if the list could contain a saika somewhere in the middle?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-012635",
+    "line": 2,
+    "seconds": 5.76,
+    "words_per_s": 2.78,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load, where would you start looking and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-017689",
+    "line": 0,
+    "seconds": 5.64,
+    "words_per_s": 3.37,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-017689",
+    "line": 1,
+    "seconds": 4.96,
+    "words_per_s": 3.23,
+    "wer": 0.125,
+    "heard": "interesting and what would change if the list could continue cycle somewhere in the middle"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-017689",
+    "line": 2,
+    "seconds": 5.36,
+    "words_per_s": 2.99,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load. Where would you start looking and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-022743",
+    "line": 0,
+    "seconds": 3.88,
+    "words_per_s": 4.9,
+    "wer": 0.105,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in OnePass."
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-022743",
+    "line": 1,
+    "seconds": 4.68,
+    "words_per_s": 3.42,
+    "wer": 0.0,
+    "heard": "Interesting. And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-022743",
+    "line": 2,
+    "seconds": 4.76,
+    "words_per_s": 3.36,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load. Where would you start looking and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-048013",
+    "line": 0,
+    "seconds": 5.2,
+    "words_per_s": 3.65,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-048013",
+    "line": 1,
+    "seconds": 5.0,
+    "words_per_s": 3.2,
+    "wer": 0.0,
+    "heard": "Interesting, and what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-048013",
+    "line": 2,
+    "seconds": 5.6,
+    "words_per_s": 2.86,
+    "wer": 0.125,
+    "heard": "Say the database slows down on the load. Where would you start looking and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-063175",
+    "line": 0,
+    "seconds": 4.36,
+    "words_per_s": 4.36,
+    "wer": 0.105,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in OnePass"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-063175",
+    "line": 1,
+    "seconds": 4.8,
+    "words_per_s": 3.33,
+    "wer": 0.0,
+    "heard": "Interesting and what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-063175",
+    "line": 2,
+    "seconds": 4.92,
+    "words_per_s": 3.25,
+    "wer": 0.125,
+    "heard": "Say the database slows down on the load, where would you start looking and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-083391",
+    "line": 0,
+    "seconds": 6.0,
+    "words_per_s": 3.17,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-083391",
+    "line": 1,
+    "seconds": 4.4,
+    "words_per_s": 3.64,
+    "wer": 0.062,
+    "heard": "Interesting. And what would change if the lease could contain a cycle somewhere in the middle,"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-083391",
+    "line": 2,
+    "seconds": 5.6,
+    "words_per_s": 2.86,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load, where would you start looking and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-103607",
+    "line": 0,
+    "seconds": 4.68,
+    "words_per_s": 4.06,
+    "wer": 0.211,
+    "heard": "Before we go further, Demiho you would find the middle of a linked list in one bus."
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-103607",
+    "line": 1,
+    "seconds": 5.56,
+    "words_per_s": 2.88,
+    "wer": 0.0,
+    "heard": "interesting and what would change if the list could contain a cycle somewhere in the middle"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-103607",
+    "line": 2,
+    "seconds": 5.6,
+    "words_per_s": 2.86,
+    "wer": 0.188,
+    "heard": "Say the database slows down on the load, where will you start looking and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-123823",
+    "line": 0,
+    "seconds": 5.64,
+    "words_per_s": 3.37,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-123823",
+    "line": 1,
+    "seconds": 5.32,
+    "words_per_s": 3.01,
+    "wer": 0.0,
+    "heard": "Interesting! And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-123823",
+    "line": 2,
+    "seconds": 5.12,
+    "words_per_s": 3.12,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load. Where would you start looking and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-128877",
+    "line": 0,
+    "seconds": 5.8,
+    "words_per_s": 3.28,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-128877",
+    "line": 1,
+    "seconds": 6.52,
+    "words_per_s": 2.45,
+    "wer": 0.0,
+    "heard": "Interesting and what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-128877",
+    "line": 2,
+    "seconds": 7.32,
+    "words_per_s": 2.19,
+    "wer": 0.062,
+    "heard": "Say the database lows down under load, where would you start looking and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-133931",
+    "line": 0,
+    "seconds": 6.28,
+    "words_per_s": 3.03,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-133931",
+    "line": 1,
+    "seconds": 5.16,
+    "words_per_s": 3.1,
+    "wer": 0.0,
+    "heard": "Interesting! And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-133931",
+    "line": 2,
+    "seconds": 5.64,
+    "words_per_s": 2.84,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load. Where would you start looking and why there first?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-144039",
+    "line": 0,
+    "seconds": 5.08,
+    "words_per_s": 3.74,
+    "wer": 0.0,
+    "heard": "Before we go further, tell me how you would find the middle of a linked list in one pass."
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-144039",
+    "line": 1,
+    "seconds": 4.92,
+    "words_per_s": 3.25,
+    "wer": 0.0,
+    "heard": "Interesting. And what would change if the list could contain a cycle somewhere in the middle?"
+  },
+  {
+    "precision": "int8",
+    "voice": "indictts-144039",
+    "line": 2,
+    "seconds": 4.6,
+    "words_per_s": 3.48,
+    "wer": 0.0,
+    "heard": "Say the database slows down under load. Where would you start looking and why there first?"
+  }
+]

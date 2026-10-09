@@ -25,7 +25,17 @@ Three things make it usable before that machine exists:
   the room plans those as WARM lines while the student answers: made only
   while nothing is being said, set aside the moment a live line arrives, and
   promoted the moment one is asked for. `plan` says which sentences of a
-  line are made already, so the room knows what it need not wait for.
+  line are made already, so the room knows what it need not wait for. Two
+  levels: `next` (the opening, the next question) before `warm` (the
+  panel's stock phrases), each in the order the room asked — the room asks
+  for what is needed first first, and drops what a newer guess replaced.
+* **Live lines on a faster model** (2026-10-09). What no one could make
+  ahead — a follow-up adapted to the answer — is made the moment it is
+  needed, so it is made by an int8 copy of the language model (`int8_graph`):
+  2.5x faster alone, at the cost of a few more misread words (read back over
+  14 voices, WER 0.033 against fp32's 0.018; research/listening/int8.md).
+  Every line made ahead stays fp32. Each clip is kept under its own
+  precision's key, and a sentence made both ways is said in fp32.
 * **Three sentences at once** (2026-10-07). Speech is a language model choosing
   ~25 tokens per second of audio, one token at a time, and on a CPU each step
   is mostly reading the model's weights: stepping three sentences together
@@ -222,6 +232,41 @@ def sample_next(
 THREADS = int(os.getenv("M11_TTS_THREADS", "4"))
 
 
+#: Where the int8 language model is kept once made: it is not in ResembleAI's
+#: export, so M11 makes it from the fp32 one, once (`int8_graph`).
+INT8_DIR = Path(os.getenv("M11_TTS_INT8_DIR") or HERE.parent / ".tts_models")
+
+
+def int8_graph(fp32_path: str) -> str:
+    """The language model with its weights in int8 (2026-10-09), made once.
+
+    Dynamic quantization — weights int8, activations quantized as they come —
+    runs on the CPU's int8 (VNNI) kernels: on this laptop's i7-1260P a
+    sentence alone is made at 41.5 speech tokens a second against fp32's
+    16.4, faster than speech (25), and three side by side at 56.6 against 35
+    (research/listening/int8.md). ResembleAI's own 8-bit export runs 2 a
+    second here, so this one is M11's."""
+    target = INT8_DIR / "language_model_int8.onnx"
+    done = INT8_DIR / "language_model_int8.done"
+    if target.exists() and done.exists():
+        return str(target)
+    from onnxruntime.quantization import QuantType, quantize_dynamic
+
+    INT8_DIR.mkdir(parents=True, exist_ok=True)
+    log.info("M11 TTS: making the int8 language model (once, ~40 s)")
+    quantize_dynamic(
+        fp32_path,
+        str(target),
+        weight_type=QuantType.QInt8,
+        op_types_to_quantize=["MatMul"],
+        per_channel=True,
+        use_external_data_format=True,
+        extra_options={"MatMulConstBOnly": True},
+    )
+    done.write_text("quantize_dynamic: MatMul weights int8, per channel", encoding="utf-8")
+    return str(target)
+
+
 def session_options(onnxruntime: Any, name: str) -> Any:
     """How each model runs: `THREADS` threads; the token lookup on one, idle
     rather than spinning, so it never takes cores from the language model."""
@@ -292,8 +337,13 @@ class _Job:
         #: The first sentence of a planned line, made alone until its words are
         #: chosen (`plan` decides when that pays).
         self.lead = False
-        #: A line the room expects to say, not one being said (2026-10-09).
+        #: A line the room expects to say, not one being said (2026-10-09),
+        #: and how soon: 1 the likely next line, 2 a stock phrase.
         self.warm = False
+        self.level = 0
+        #: Made by the live (faster) model, and kept under its key.
+        self.fast = False
+        self.stored_as: str | None = None
         self.done = threading.Event()
         self.wav: bytes | None = None
         self.error: str | None = None
@@ -323,6 +373,9 @@ class Engine:
     def __init__(self, cast: Cast, precision: str | None = None) -> None:
         self.cast = cast
         self.precision = precision or os.getenv("M11_TTS_PRECISION", "fp32")
+        #: The model for live lines (2026-10-09); none when it is the same one.
+        live = os.getenv("M11_TTS_LIVE_PRECISION", "int8")
+        self.live_precision = live if live and live != self.precision else None
         self.state = "off"
         self.reason = "not started"
         self._lock = threading.Lock()
@@ -337,13 +390,17 @@ class Engine:
         self._jobs = threading.Condition()
         self._queue: list[_Job] = []
         #: Warm sentences: made only while no live one waits or is being made.
-        self._warm: list[_Job] = []
+        #: (level, seq, job): the likely next line first, in the order asked.
+        self._warm: list[tuple[int, int, _Job]] = []
         self._inflight: dict[str, _Job] = {}
         self._seq = itertools.count()
         # Finished rows wait here in speaking order, not finishing order: a short
         # second sentence must not be decoded before the first. Live before warm.
         self._decode: queue.PriorityQueue[tuple[bool, int, int, _Row]] = queue.PriorityQueue()
         self._prefix: dict[str, dict[str, Any]] = {}
+        self._prefix_live: dict[str, dict[str, Any]] = {}
+        #: Live sentences in the language model right now (its thread's count).
+        self._live_rows = 0
         self._kv: list[tuple[str, Any]] = []
 
     # ── lifecycle ────────────────────────────────────────────────────────
@@ -378,6 +435,8 @@ class Engine:
             t0 = time.perf_counter()
 
             def graph(name: str, dtype: str) -> str:
+                if dtype == "int8":
+                    return int8_graph(graph(name, "fp32"))
                 suffix = "" if dtype == "fp32" else "_quantized" if dtype == "q8" else f"_{dtype}"
                 path = hf_hub_download(MODEL_ID, subfolder="onnx", filename=f"{name}{suffix}.onnx")
                 hf_hub_download(MODEL_ID, subfolder="onnx", filename=f"{name}{suffix}.onnx_data")
@@ -387,6 +446,11 @@ class Engine:
                 dtype = self.precision if name == "language_model" else "fp32"
                 self._sessions[name] = onnxruntime.InferenceSession(
                     graph(name, dtype), session_options(onnxruntime, name)
+                )
+            if self.live_precision:
+                self._sessions["language_model_live"] = onnxruntime.InferenceSession(
+                    graph("language_model", self.live_precision),
+                    session_options(onnxruntime, "language_model"),
                 )
             self._tokenizer = Tokenizer.from_file(hf_hub_download(MODEL_ID, "tokenizer.json"))
             self._rng = np.random.default_rng()
@@ -410,7 +474,8 @@ class Engine:
                     spk_feat[:, -2 * keep :],
                 )
             self._begin()
-            self.state, self.reason = "ready", f"{len(self._conds)} voices, {self.precision}"
+            live = f" (live lines {self.live_precision})" if self._live else ""
+            self.state, self.reason = "ready", f"{len(self._conds)} voices, {self.precision}{live}"
             log.info("M11 TTS ready in %.0fs: %s", time.perf_counter() - t0, self.reason)
         except Exception as exc:  # noqa: BLE001 - a failed load is a state, not a crash
             self.state, self.reason = "failed", f"{type(exc).__name__}: {exc}"
@@ -427,32 +492,47 @@ class Engine:
             for x in lm.get_inputs()
             if "past_key_values" in x.name
         ]
-        # Every sentence starts with its voice's conditioning: run it once.
+        # Every sentence starts with its voice's conditioning: run it once,
+        # through each language model.
         for key, (cond, *_) in self._conds.items():
             n = cond.shape[1]
-            self._prefix[key] = self._run_lm(
-                cond, self._empty(1), np.ones((1, n), np.int64), np.arange(n)[np.newaxis, :]
-            )[1]
+            mask, pos = np.ones((1, n), np.int64), np.arange(n)[np.newaxis, :]
+            self._prefix[key] = self._run_lm(cond, self._empty(1), mask, pos)[1]
+            if self._live:
+                self._prefix_live[key] = self._run_lm(cond, self._empty(1), mask, pos, fast=True)[1]
         threading.Thread(target=self._make_loop, name="m11-tts-make", daemon=True).start()
         threading.Thread(target=self._decode_loop, name="m11-tts-decode", daemon=True).start()
 
     # ── speaking ─────────────────────────────────────────────────────────
 
-    def cache_key(self, text: str, voice: Voice) -> str:
+    @property
+    def _live(self) -> bool:
+        """A second, faster model is loaded for live lines."""
+        return "language_model_live" in self._sessions
+
+    def cache_key(self, text: str, voice: Voice, precision: str | None = None) -> str:
         return hashlib.sha1(
-            f"{ENGINE_VERSION}|{self.precision}|{voice.key}|{text}".encode()
+            f"{ENGINE_VERSION}|{precision or self.precision}|{voice.key}|{text}".encode()
         ).hexdigest()
 
     def cached(self, text: str, voice: Voice) -> bytes | None:
-        key = self.cache_key(text, voice)
-        if key in self._memory:
-            self._memory.move_to_end(key)
-            return self._memory[key]
-        path = CACHE_DIR / voice.key / f"{key}.wav"
-        if path.exists():
-            data = path.read_bytes()
-            self._remember(key, data)
-            return data
+        hit = self.cached_keyed(text, voice)
+        return hit[0] if hit else None
+
+    def cached_keyed(self, text: str, voice: Voice) -> tuple[bytes, str] | None:
+        """The sentence's audio and the key it is kept under — the one made
+        ahead (the main model) before one made live."""
+        precisions = [self.precision, *([self.live_precision] if self.live_precision else [])]
+        for precision in precisions:
+            key = self.cache_key(text, voice, precision)
+            if key in self._memory:
+                self._memory.move_to_end(key)
+                return self._memory[key], key
+            path = CACHE_DIR / voice.key / f"{key}.wav"
+            if path.exists():
+                data = path.read_bytes()
+                self._remember(key, data)
+                return data, key
         return None
 
     def audio_by_key(self, key: str) -> bytes | None:
@@ -479,12 +559,15 @@ class Engine:
         return punc_norm(lexicon.apply(notation.say(text), voice.key))
 
     def plan(
-        self, sentences: list[tuple[str, Voice]], line: str, warm: bool = False
+        self, sentences: list[tuple[str, Voice]], line: str, priority: str = "live"
     ) -> tuple[int, list[bool]]:
         """Start making a line's sentences now, in order, without waiting for
         any of them; `speak` collects each. Returns how many were new, and
-        which of the sentences were made already. A `warm` line is one the
-        room expects to say: made only while no live line waits."""
+        which of the sentences were made already. A `next` or `warm` line is
+        one the room expects to say: made only while no live line waits —
+        `next` (the likely next line) before `warm` (a stock phrase)."""
+        level = {"next": 1, "warm": 2}.get(priority, 0)
+        warm = level > 0
         pieces = [(self.prepare(raw, voice), voice) for raw, voice in sentences]
         ready = [bool(text) and self.cached(text, voice) is not None for text, voice in pieces]
         if not self._prefix or self.state != "ready":
@@ -505,7 +588,7 @@ class Engine:
             lead = len(following) <= len(todo[0][0]) / 2
         made = 0
         for i, (text, voice) in enumerate(todo):
-            made += self._enqueue(text, voice, line, lead=lead and i == 0, warm=warm)[1]
+            made += self._enqueue(text, voice, line, lead=lead and i == 0, level=level)[1]
         return made, ready
 
     def drop(self, lines: list[str]) -> int:
@@ -514,16 +597,22 @@ class Engine:
         wanted = set(lines)
         dropped: list[_Job] = []
         with self._jobs:
-            for waiting in (self._queue, self._warm):
-                gone = []
-                for job in waiting:
-                    job.lines -= wanted
-                    if not job.lines:
-                        gone.append(job)
-                if gone:
-                    waiting[:] = [job for job in waiting if job.lines]
-                    heapq.heapify(waiting)
-                    dropped += gone
+            for job in self._queue:
+                job.lines -= wanted
+                if not job.lines:
+                    dropped.append(job)
+            if dropped:
+                self._queue = [job for job in self._queue if job.lines]
+                heapq.heapify(self._queue)
+            gone = []
+            for _, _, job in self._warm:
+                job.lines -= wanted
+                if not job.lines:
+                    gone.append(job)
+            if gone:
+                self._warm = [entry for entry in self._warm if entry[2].lines]
+                heapq.heapify(self._warm)
+                dropped += gone
             for job in dropped:
                 self._inflight.pop(job.key, None)
         for job in dropped:
@@ -533,18 +622,28 @@ class Engine:
 
     def speak(self, text: str, voice: Voice, line: str | None = None) -> tuple[bytes, bool, int]:
         """(wav, from_cache, ms). Raises EngineUnavailable when it cannot."""
+        data, cached, ms, _ = self.speak_keyed(text, voice, line)
+        return data, cached, ms
+
+    def speak_keyed(
+        self, text: str, voice: Voice, line: str | None = None
+    ) -> tuple[bytes, bool, int, str]:
+        """`speak`, and the key the audio is kept under — what its face's
+        frames are named by, since one sentence may be kept twice (made ahead,
+        and made live)."""
         text = self.prepare(text, voice)
         if not text:
             raise ValueError("nothing to say")
-        hit = self.cached(text, voice)
+        hit = self.cached_keyed(text, voice)
         if hit is not None:
-            return hit, True, 0
+            return hit[0], True, 0, hit[1]
         if self.state != "ready":
             raise EngineUnavailable(self.reason)
         t0 = time.perf_counter()
         if self._prefix:
             job, _ = self._enqueue(text, voice, line or "*")
-            return job.result(), False, round((time.perf_counter() - t0) * 1000)
+            wav = job.result()
+            return wav, False, round((time.perf_counter() - t0) * 1000), job.stored_as or job.key
         # No parallel making (a fake engine in tests): one at a time, here.
         with self._lock:
             hit = self.cached(text, voice)  # made while this request waited
@@ -558,34 +657,47 @@ class Engine:
             (CACHE_DIR / voice.key / f"{key}.wav").write_bytes(data)
         except OSError as exc:
             log.info("M11 TTS cache not written: %s", exc)
-        return data, False, round((time.perf_counter() - t0) * 1000)
+        return data, False, round((time.perf_counter() - t0) * 1000), key
 
     # ── making, in parallel ──────────────────────────────────────────────
 
     def _enqueue(
-        self, text: str, voice: Voice, line: str, lead: bool = False, warm: bool = False
+        self, text: str, voice: Voice, line: str, lead: bool = False, level: int = 0
     ) -> tuple[_Job, bool]:
         """The job for this sentence: the one already planned, or a new one. A
-        warm one asked for live is promoted: it is being waited for now."""
+        warm one asked for live is promoted: it is being waited for now. One
+        asked for again as warm moves up, to the level and recency asked."""
         key = self.cache_key(text, voice)
         with self._jobs:
             job = self._inflight.get(key)
             if job is not None:
                 job.lines.add(line)
-                if job.warm and not warm:
-                    job.warm = False
-                    if job in self._warm:
-                        self._warm.remove(job)
+                waiting = next((entry for entry in self._warm if entry[2] is job), None)
+                if job.warm and level == 0:
+                    job.warm, job.level = False, 0
+                    if waiting is not None:
+                        job.fast = self._live
+                        self._warm.remove(waiting)
                         heapq.heapify(self._warm)
                         heapq.heappush(self._queue, job)
                         self._jobs.notify()
+                elif job.warm and waiting is not None:
+                    self._warm.remove(waiting)
+                    job.level = min(job.level, level)
+                    heapq.heappush(self._warm, (job.level, job.seq, job))
+                    heapq.heapify(self._warm)
                 return job, False
             job = _Job(next(self._seq), key, text, voice)
             job.lead = lead
-            job.warm = warm
+            job.warm, job.level = level > 0, level
+            # Live: the faster model, when there is one (made ahead: the main).
+            job.fast = self._live and level == 0
             job.lines.add(line)
             self._inflight[key] = job
-            heapq.heappush(self._warm if warm else self._queue, job)
+            if job.warm:
+                heapq.heappush(self._warm, (level, job.seq, job))
+            else:
+                heapq.heappush(self._queue, job)
             self._jobs.notify()
             return job, True
 
@@ -597,9 +709,10 @@ class Engine:
         }
 
     def _run_lm(
-        self, embeds: Any, past: dict[str, Any], mask: Any, pos: Any
+        self, embeds: Any, past: dict[str, Any], mask: Any, pos: Any, fast: bool = False
     ) -> tuple[Any, dict[str, Any]]:
-        logits, *present = self._sessions["language_model"].run(
+        name = "language_model_live" if fast and self._live else "language_model"
+        logits, *present = self._sessions[name].run(
             None, dict(inputs_embeds=embeds, attention_mask=mask, position_ids=pos, **past)
         )
         return logits, {name: value for (name, _), value in zip(self._kv, present, strict=True)}
@@ -619,11 +732,21 @@ class Engine:
                     self._jobs.wait()
                 joining = []
                 # A live sentence waiting: warm rows make way (they start again
-                # later) — the student is waiting for this one, not for them.
-                evict = [b for b, row in enumerate(rows) if row.job.warm] if self._queue else []
-                for b in evict:
-                    if not rows[b].job.done.is_set():
-                        heapq.heappush(self._warm, rows[b].job)
+                # later) — the student is waiting for this one, not for them —
+                # and so does a live one still on the slow model (promoted from
+                # warm mid-making): it starts again on the fast one.
+                evict = []
+                if self._queue:
+                    for b, row in enumerate(rows):
+                        job = row.job
+                        if job.warm:
+                            evict.append(b)
+                            if not job.done.is_set():
+                                heapq.heappush(self._warm, (job.level, job.seq, job))
+                        elif self._live and not job.fast:
+                            evict.append(b)
+                            job.fast = True
+                            heapq.heappush(self._queue, job)
                 staying = [row for b, row in enumerate(rows) if b not in evict]
                 # A line's first sentence is made alone: two more rows would
                 # slow each of its steps by ~40%, and it is the one the student
@@ -639,7 +762,11 @@ class Engine:
                 # Warm sentences only while nothing live waits or is being made.
                 if not self._queue and not joining and all(row.job.warm for row in staying):
                     while self._warm and len(staying) + len(joining) < ROWS:
-                        joining.append(heapq.heappop(self._warm))
+                        joining.append(heapq.heappop(self._warm)[2])
+            # What the decoder reads to keep warm work out of a live line's way.
+            self._live_rows = sum(not job.warm for job in joining) + sum(
+                not row.job.warm for b, row in enumerate(rows) if b not in evict
+            )
             try:
                 if evict:
                     kv = self._without(kv, rows, evict)
@@ -669,13 +796,14 @@ class Engine:
 
         if job.done.is_set():
             return kv
-        prefix = self._prefix[job.voice.key]
+        fast = job.fast and self._live
+        prefix = (self._prefix_live if fast else self._prefix)[job.voice.key]
         start = next(iter(prefix.values())).shape[2]
         ids = np.array([self._tokenizer.encode(job.text).ids], dtype=np.int64)
         embeds = self._sessions["embed_tokens"].run(None, {"input_ids": ids})[0]
         n = start + ids.shape[1]
         logits, own = self._run_lm(
-            embeds, prefix, np.ones((1, n), np.int64), np.arange(start, n)[np.newaxis, :]
+            embeds, prefix, np.ones((1, n), np.int64), np.arange(start, n)[np.newaxis, :], fast
         )
         row = _Row(job, length=n, max_new=min(1000, 60 + len(job.text) * 4))
         row.tokens.append(sample_next(logits[:, -1, :], np.array([], dtype=np.int64), self._rng))
@@ -703,7 +831,8 @@ class Engine:
         for b, row in enumerate(rows):
             mask[b, : row.length + 1] = 1
         pos = np.array([[row.length] for row in rows], dtype=np.int64)
-        logits, kv = self._run_lm(embeds, kv, mask, pos)
+        # A batch is all one model: live rows never share it with warm ones.
+        logits, kv = self._run_lm(embeds, kv, mask, pos, rows[0].job.fast)
         finished = []
         for b, row in enumerate(rows):
             row.length += 1
@@ -729,8 +858,15 @@ class Engine:
         import numpy as np
 
         while True:
-            *_, row = self._decode.get()
+            item = self._decode.get()
+            *_, row = item
             job = row.job
+            if job.warm and (self._queue or self._live_rows):
+                # A live sentence is being made: its decoding must not wait
+                # behind a warm one, nor share the CPU with it (2026-10-09).
+                self._decode.put(item)
+                time.sleep(0.05)
+                continue
             try:
                 speech = np.array(row.tokens, dtype=np.int64)
                 if speech.size and speech[-1] == STOP_SPEECH:
@@ -762,10 +898,14 @@ class Engine:
                 self._fail(job, f"{type(exc).__name__}: {exc}")
 
     def _finish(self, job: _Job, data: bytes) -> None:
-        self._remember(job.key, data)
+        # Kept under the key of the model that made it.
+        precision = self.live_precision if job.fast and self._live else self.precision
+        stored = self.cache_key(job.text, job.voice, precision)
+        job.stored_as = stored
+        self._remember(stored, data)
         try:
             (CACHE_DIR / job.voice.key).mkdir(parents=True, exist_ok=True)
-            (CACHE_DIR / job.voice.key / f"{job.key}.wav").write_bytes(data)
+            (CACHE_DIR / job.voice.key / f"{stored}.wav").write_bytes(data)
         except OSError as exc:
             log.info("M11 TTS cache not written: %s", exc)
         with self._jobs:
