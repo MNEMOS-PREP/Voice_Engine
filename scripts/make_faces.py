@@ -13,7 +13,8 @@ A portrait that would make a poor head (mouth open, eyes shut, turned or
 tilted: `build_face.portrait_check`) is made again with the next seed, up to
 four times. `--rebuild` builds every head again into `faces/.staging` and
 moves each into place only when it is whole, so the room never loses a face
-while the batch runs. `--stills` makes the still for heads that have none.
+while the batch runs. `--stills` makes the still for heads that have none,
+from the portrait each head was made from.
 Create `.face_builder/PAUSE` to hold the batch between steps (the voice's
 latency is measured with the CPU to itself); delete it to go on.
 
@@ -33,6 +34,7 @@ import shutil
 import subprocess
 import sys
 import time
+import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -184,10 +186,28 @@ def rejection(persona: str) -> str:
     return found[-1] if found else "see the build log"
 
 
+def built_from(persona: str) -> Path | None:
+    """The portrait the head in place was made from, so its still is the same
+    person: the name the head's meta.json records, the newest copy no newer
+    than the head. A head from before a new spec was made from a portrait the
+    rebuild has since set aside (`portraits_v1/`), not today's."""
+    head = FACES / f"{persona}.zip"
+    with zipfile.ZipFile(head) as packed:
+        meta = next(n for n in packed.namelist() if n.endswith("meta.json"))
+        name = json.loads(packed.read(meta))["portrait"]
+    made = head.stat().st_mtime
+    copies = [
+        folder / name
+        for folder in BUILDER.glob("portraits*")
+        if (folder / name).is_file() and (folder / name).stat().st_mtime <= made
+    ]
+    return max(copies, key=lambda path: path.stat().st_mtime, default=None)
+
+
 def make(persona: str, entry: dict, spec: dict, args: argparse.Namespace) -> bool:
     if args.stills:
         if (FACES / f"{persona}.zip").exists() and not (FACES / f"{persona}.webp").exists():
-            picture = next(iter(sorted(PORTRAITS.glob(f"{persona}.*"))), None)
+            picture = built_from(persona)
             if picture is None:
                 log(f"{persona}: no portrait for a still")
                 return False
