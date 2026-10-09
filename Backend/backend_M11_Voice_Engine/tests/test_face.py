@@ -183,9 +183,29 @@ def test_each_head_has_a_photo_for_before_it_is_ready(client, tmp_path, monkeypa
     assert listed == {"bar_raiser": True, "professor": False}
     photo = client.get("/v1/voice/faces/bar_raiser.webp")
     assert photo.status_code == 200 and photo.headers["content-type"] == "image/webp"
-    assert "max-age" in photo.headers["cache-control"]
+    assert photo.headers["etag"]
     assert client.get("/v1/voice/faces/professor.webp").status_code == 404
     assert client.get("/v1/voice/faces/..%2Fsecret.webp").status_code in (404, 422)
+
+
+def test_a_rebuilt_face_is_not_kept_from_a_browsers_cache(client, tmp_path, monkeypatch):
+    """2026-10-10: a rebuild swaps the head and its photo at the same address.
+    Each use asks M11 again; an unchanged face answers 304, a new one 200."""
+    monkeypatch.setattr(face, "FACES_DIR", tmp_path / "faces")
+    (tmp_path / "faces").mkdir()
+    still = tmp_path / "faces" / "bar_raiser.webp"
+    still.write_bytes(b"RIFF0000WEBPVP8 ")
+    first = client.get("/v1/voice/faces/bar_raiser.webp")
+    assert "no-cache" in first.headers["cache-control"]
+    tag = first.headers["etag"]
+    again = client.get("/v1/voice/faces/bar_raiser.webp", headers={"If-None-Match": tag})
+    assert again.status_code == 304 and not again.content
+    still.write_bytes(b"RIFF1111WEBPVP8 rebuilt")
+    rebuilt = client.get("/v1/voice/faces/bar_raiser.webp", headers={"If-None-Match": tag})
+    assert rebuilt.status_code == 200 and rebuilt.headers["etag"] != tag
+    (tmp_path / "faces" / "bar_raiser.zip").write_bytes(head_zip("bar_raiser"))
+    head = client.get("/v1/voice/faces/bar_raiser.zip")
+    assert "no-cache" in head.headers["cache-control"] and head.headers["etag"]
 
 
 def test_a_sentence_with_notation_keeps_its_face(client, fake_voice, fake_face):

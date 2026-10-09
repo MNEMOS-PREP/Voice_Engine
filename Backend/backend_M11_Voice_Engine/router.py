@@ -11,6 +11,7 @@ every module serves.
 
 from __future__ import annotations
 
+import pathlib
 import uuid
 from datetime import timedelta
 from typing import Any, Literal
@@ -357,30 +358,39 @@ def faces() -> dict:
 
 
 @router.get("/voice/faces/{persona}.zip", tags=["voice"], response_class=Response)
-def face_head(persona: str = Path(pattern=r"^[a-z][a-z0-9_]{1,40}$")) -> Response:
+def face_head(
+    request: Request, persona: str = Path(pattern=r"^[a-z][a-z0-9_]{1,40}$")
+) -> Response:
     """One interviewer's head: the rig, its Gaussians, its animation."""
     path = face.head_path(persona)
     if path is None:
         raise HTTPException(status_code=404, detail="This interviewer has no face yet.")
-    return Response(
-        content=path.read_bytes(),
-        media_type="application/zip",
-        headers={"Cache-Control": "public, max-age=86400"},
-    )
+    return _face_file(request, path, "application/zip")
 
 
 @router.get("/voice/faces/{persona}.webp", tags=["voice"], response_class=Response)
-def face_still(persona: str = Path(pattern=r"^[a-z][a-z0-9_]{1,40}$")) -> Response:
+def face_still(
+    request: Request, persona: str = Path(pattern=r"^[a-z][a-z0-9_]{1,40}$")
+) -> Response:
     """One interviewer's photo: their portrait, background removed (AI-generated,
     never a real person's). What the room shows before the 3D head is ready."""
     path = face.still_path(persona)
     if path is None:
         raise HTTPException(status_code=404, detail="This interviewer has no photo yet.")
-    return Response(
-        content=path.read_bytes(),
-        media_type="image/webp",
-        headers={"Cache-Control": "public, max-age=86400"},
-    )
+    return _face_file(request, path, "image/webp")
+
+
+def _face_file(request: Request, path: pathlib.Path, media_type: str) -> Response:
+    """A head or its photo, checked with M11 on every use (2026-10-10). A
+    rebuild swaps both in place at the same address, and with a day's cache
+    a browser could show yesterday's photo beside today's head. The tag is
+    the file's own time and size, so an unchanged face costs a 304."""
+    stat = path.stat()
+    tag = f'"{stat.st_mtime_ns:x}-{stat.st_size:x}"'
+    headers = {"Cache-Control": "public, no-cache", "ETag": tag}
+    if tag in request.headers.get("if-none-match", ""):
+        return Response(status_code=304, headers=headers)
+    return Response(content=path.read_bytes(), media_type=media_type, headers=headers)
 
 
 @router.post("/voice/plan", status_code=202, tags=["voice"])
