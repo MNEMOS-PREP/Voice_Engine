@@ -1,0 +1,146 @@
+[
+ {
+  "persona": "hr_nisha",
+  "sentence": 0,
+  "whole_end_fall": -7.399711190280776,
+  "whole_seconds": 5.63,
+  "bare_cut_fall": [
+   -6.8000000000000025
+  ],
+  "bare_seconds": 5.55,
+  "bare_wer": 0.0,
+  "comma_cut_fall": [
+   -5.048194991949028
+  ],
+  "comma_seconds": 5.42,
+  "comma_wer": 0.0,
+  "whole_wer": 0.0,
+  "whole_at_cut": 2.4
+ },
+ {
+  "persona": "hr_nisha",
+  "sentence": 1,
+  "whole_end_fall": -6.8997111902807795,
+  "whole_seconds": 5.33,
+  "bare_cut_fall": [
+   -3.4997111902807747
+  ],
+  "bare_seconds": 5.81,
+  "bare_wer": 0.0,
+  "comma_cut_fall": [
+   -4.300000000000001
+  ],
+  "comma_seconds": 5.47,
+  "comma_wer": 0.0,
+  "whole_wer": 0.0,
+  "whole_at_cut": -4.3
+ },
+ {
+  "persona": "hr_nisha",
+  "sentence": 2,
+  "whole_end_fall": -7.200000000000001,
+  "whole_seconds": 7.35,
+  "bare_cut_fall": [
+   -6.100000000000002
+  ],
+  "bare_seconds": 8.18,
+  "bare_wer": 0.0,
+  "comma_cut_fall": [
+   -8.1
+  ],
+  "comma_seconds": 7.5,
+  "comma_wer": 0.0,
+  "whole_wer": 0.0,
+  "whole_at_cut": -5.7
+ },
+ {
+  "persona": "db_neha",
+  "sentence": 0,
+  "whole_end_fall": 1.150072202730933,
+  "whole_seconds": 5.23,
+  "bare_cut_fall": [
+   -1.3481949919490237
+  ],
+  "bare_seconds": 5.78,
+  "bare_wer": 0.0,
+  "comma_cut_fall": [
+   3.3502166069882953
+  ],
+  "comma_seconds": 5.47,
+  "comma_wer": 0.167,
+  "whole_wer": 0.111,
+  "whole_at_cut": -0.3
+ },
+ {
+  "persona": "db_neha",
+  "sentence": 1,
+  "whole_end_fall": -3.899711190280775,
+  "whole_seconds": 5.22,
+  "bare_cut_fall": [
+   -4.599999999999999
+  ],
+  "bare_seconds": 5.59,
+  "bare_wer": 0.0,
+  "comma_cut_fall": [
+   -3.1499277972690676
+  ],
+  "comma_seconds": 5.97,
+  "comma_wer": 0.0,
+  "whole_wer": 0.056,
+  "whole_at_cut": -2.2
+ },
+ {
+  "persona": "db_neha",
+  "sentence": 2,
+  "whole_end_fall": 2.3002888097192233,
+  "whole_seconds": 7.48,
+  "bare_cut_fall": [
+   3.4025991718497615
+  ],
+  "bare_seconds": 7.52,
+  "bare_wer": 0.0,
+  "comma_cut_fall": [
+   -2.6988447803944995
+  ],
+  "comma_seconds": 6.83,
+  "comma_wer": 0.0,
+  "whole_wer": 0.0,
+  "whole_at_cut": -0.1
+ },
+ {
+  "persona": "bar_raiser",
+  "sentence": 0,
+  "whole_end_fall": -1.2000000000000022,
+  "whole_seconds": 4.29,
+  "bare_cut_fall": [
+   -1.199999999999998
+  ],
+  "bare_seconds": 6.27,
+  "bare_wer": 0.056,
+  "comma_cut_fall": [
+   -0.5997111902807732
+  ],
+  "comma_seconds": 5.76,
+  "comma_wer": 0.0,
+  "whole_wer": 0.278,
+  "whole_at_cut": null
+ },
+ {
+  "persona": "bar_raiser",
+  "sentence": 1,
+  "whole_end_fall": -2.9999999999999987,
+  "whole_seconds": 4.24,
+  "bare_cut_fall": [
+   -5.700000000000003
+  ],
+  "bare_seconds": 5.6,
+  "bare_wer": 0.0,
+  "comma_cut_fall": [
+   -2.100000000000004
+  ],
+  "comma_seconds": 5.14,
+  "comma_wer": 0.056,
+  "whole_wer": 0.0,
+  "whole_at_cut": 0.8
+ }
+]

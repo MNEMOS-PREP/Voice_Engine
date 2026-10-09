@@ -16,7 +16,8 @@ moves each into place only when it is whole, so the room never loses a face
 while the batch runs. `--stills` makes the still for heads that have none,
 from the portrait each head was made from.
 Create `.face_builder/PAUSE` to hold the batch between steps (the voice's
-latency is measured with the CPU to itself); delete it to go on.
+latency is measured with the CPU to itself); delete it to go on. The batch
+also holds by itself while an interview is on (M11's `/voice/activity`).
 
 Portraits land in `.face_builder/portraits/` and heads in M11's `faces/`; both
 are rebuilt only when missing (or with `--rebuild`). The prompt and seed
@@ -34,6 +35,7 @@ import shutil
 import subprocess
 import sys
 import time
+import urllib.request
 import zipfile
 from pathlib import Path
 
@@ -49,6 +51,11 @@ PERSONAS = ROOT.parent / "Mock_Interview_Engine" / "Backend" / "backend_M06_Mock
 LOG = BUILDER / "make_faces.log"
 PAUSE = BUILDER / "PAUSE"
 ATTEMPTS = 4
+#: M11, asked whether a student is waiting on the voice.
+M11 = os.getenv("M11_URL", "http://127.0.0.1:8111")
+#: Quiet this long (seconds) and the interview is over, or the student is
+#: reading their notes: a question answered slowly is still under it.
+QUIET_S = 300
 REJECTED = 3  # build_face.py's exit code for a portrait that fails its check
 
 #: Windows' BELOW_NORMAL_PRIORITY_CLASS: the student's own work comes first.
@@ -81,11 +88,31 @@ def seed_for(persona: str, attempt: int = 0) -> int:
     return (base + 7919 * attempt) % 2_000_000_000
 
 
+def interview_on() -> bool:
+    """A student waited on the voice in the last QUIET_S seconds (M11's
+    `/voice/activity`). A mock recorded during a build heard 5 s and 14 s
+    silences (2026-10-10): below-normal priority was not enough, the build
+    still took the CPU the voice needed. M11 not running: nobody is waiting."""
+    try:
+        with urllib.request.urlopen(f"{M11}/v1/voice/activity", timeout=5) as response:
+            ago = json.loads(response.read())["live_seconds_ago"]
+    except (OSError, ValueError, KeyError):
+        return False
+    return ago is not None and ago < QUIET_S
+
+
 def wait_while_paused() -> None:
+    """Between steps: held while `.face_builder/PAUSE` exists, and while an
+    interview is on."""
     if PAUSE.exists():
         log("paused (delete .face_builder/PAUSE to go on)")
         while PAUSE.exists():
             time.sleep(10)
+        log("going on")
+    if interview_on():
+        log("an interview is on: waiting until the voice has been quiet for a while")
+        while interview_on() or PAUSE.exists():
+            time.sleep(15)
         log("going on")
 
 

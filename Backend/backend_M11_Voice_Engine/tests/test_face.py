@@ -239,3 +239,16 @@ def test_frames_still_being_made_are_waited_for(tmp_path):
     gate.set()
     got = engine.wait("k" * 40, timeout=3)
     assert got is not None and got["frames"]
+
+
+def test_background_work_can_tell_when_a_student_is_waiting(client, fake_voice):
+    """2026-10-10: a face built during a mock took the voice's CPU. The
+    builder asks how long since a line was asked for, and waits."""
+    from backend_M11_Voice_Engine import router
+
+    router._live_at = None
+    assert client.get("/v1/voice/activity").json() == {"live_seconds_ago": None}
+    headers = {"X-Role": "student", "X-Candidate-Id": "4d0aa1c0-0000-4000-8000-000000000004"}
+    client.post("/v1/voice/speak", json={"text": "Hello there."}, headers=headers)
+    ago = client.get("/v1/voice/activity").json()["live_seconds_ago"]
+    assert ago is not None and ago < 5

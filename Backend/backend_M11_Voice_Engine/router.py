@@ -12,6 +12,7 @@ every module serves.
 from __future__ import annotations
 
 import pathlib
+import time
 import uuid
 from datetime import timedelta
 from typing import Any, Literal
@@ -291,6 +292,7 @@ def speak(body: SpeakIn, principal: Principal | None = Depends(enforce_access)) 
     if principal is None:
         # Synthesis is the heaviest thing this module does; not for anybody.
         raise HTTPException(status_code=401, detail="Not signed in.")
+    _heard_live()
     e = tts.engine()
     voice = e.cast.resolve(persona_id=body.persona_id, voice_id=body.voice_id, voice=body.voice)
     try:
@@ -344,6 +346,26 @@ def face_frames(
         return engine.make(key, audio)
     except face.FaceUnavailable as exc:
         raise HTTPException(status_code=503, detail=f"No lip sync here: {exc}") from None
+
+
+#: When a student last waited on the voice: a line asked for to be said now,
+#: or made next (monotonic seconds). Background work reads it (`/activity`).
+_live_at: float | None = None
+
+
+def _heard_live() -> None:
+    global _live_at
+    _live_at = time.monotonic()
+
+
+@router.get("/voice/activity", tags=["voice"])
+def activity() -> dict:
+    """How long since a student last waited on the voice (2026-10-10). A mock
+    recorded while a face was being built heard 5 s and 14 s silences: the
+    build took the CPU the voice needed. `scripts/make_faces.py` waits while
+    this is recent. Says nothing about who."""
+    ago = None if _live_at is None else round(time.monotonic() - _live_at, 1)
+    return {"live_seconds_ago": ago}
 
 
 @router.get("/voice/faces", tags=["voice"])
@@ -408,6 +430,8 @@ def plan_line(
         (s.text, e.cast.resolve(persona_id=s.persona_id, voice_id=s.voice_id, voice=s.voice))
         for s in body.sentences
     ]
+    if body.priority != "warm":
+        _heard_live()
     planned, ready = e.plan(sentences, body.line, priority=body.priority)
     return {"planned": planned, "ready": ready}
 
