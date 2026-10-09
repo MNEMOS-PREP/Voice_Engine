@@ -44,21 +44,30 @@ M11 = "http://127.0.0.1:8111"
 WHO = {"X-Role": "student", "X-Candidate-Id": "4d0aa1c0-0000-4000-8000-000000000004"}
 
 sys.path.insert(0, str(HERE))
-from probe_voices import wer  # noqa: E402
+from probe_voices import wer
 
 #: Long questions from the mocks, and where a reader would breathe.
 SENTENCES = (
     [
         "Recall a situation where you were asked a question you didn't know the answer to during an interview.",
-        ["Recall a situation where you were asked a question", "you didn't know the answer to during an interview."],
+        [
+            "Recall a situation where you were asked a question",
+            "you didn't know the answer to during an interview.",
+        ],
     ],
     [
         "Tell me about a time you had to solve a technical problem while thinking aloud with a teammate.",
-        ["Tell me about a time you had to solve a technical problem", "while thinking aloud with a teammate."],
+        [
+            "Tell me about a time you had to solve a technical problem",
+            "while thinking aloud with a teammate.",
+        ],
     ],
     [
         "Why is it important to choose a proper primary key for the Orders table and what could go wrong if you pick a mutable attribute?",
-        ["Why is it important to choose a proper primary key for the Orders table", "and what could go wrong if you pick a mutable attribute?"],
+        [
+            "Why is it important to choose a proper primary key for the Orders table",
+            "and what could go wrong if you pick a mutable attribute?",
+        ],
     ],
 )
 PERSONAS = ("hr_nisha", "db_neha", "bar_raiser", "mgr_sanjay")
@@ -67,7 +76,10 @@ PERSONAS = ("hr_nisha", "db_neha", "bar_raiser", "mgr_sanjay")
 def speak(text: str, persona: str) -> tuple[np.ndarray, int]:
     body = json.dumps({"text": text, "persona_id": persona}).encode()
     request = urllib.request.Request(
-        f"{M11}/v1/voice/speak", data=body, headers={**WHO, "Content-Type": "application/json"}, method="POST"
+        f"{M11}/v1/voice/speak",
+        data=body,
+        headers={**WHO, "Content-Type": "application/json"},
+        method="POST",
     )
     with urllib.request.urlopen(request, timeout=600) as response:
         audio, rate = sf.read(io.BytesIO(response.read()), dtype="float32")
@@ -78,7 +90,10 @@ def heard(audio: np.ndarray, rate: int) -> str:
     buffer = io.BytesIO()
     sf.write(buffer, audio, rate, format="WAV")
     request = urllib.request.Request(
-        f"{M11}/v1/voice/transcribe", data=buffer.getvalue(), headers={**WHO, "Content-Type": "audio/wav"}, method="POST"
+        f"{M11}/v1/voice/transcribe",
+        data=buffer.getvalue(),
+        headers={**WHO, "Content-Type": "audio/wav"},
+        method="POST",
     )
     for attempt in range(4):
         try:
@@ -100,7 +115,9 @@ def fall(audio: np.ndarray, rate: int) -> float | None:
     """Semitones from the piece's median pitch to its last voiced 250 ms."""
     import librosa
 
-    f0, voiced, _ = librosa.pyin(trimmed(audio, rate), fmin=70, fmax=400, sr=rate, frame_length=1024)
+    f0, voiced, _ = librosa.pyin(
+        trimmed(audio, rate), fmin=70, fmax=400, sr=rate, frame_length=1024
+    )
     times = librosa.times_like(f0, sr=rate, hop_length=256)
     pitch = f0[voiced & np.isfinite(f0)]
     if pitch.size < 10:
@@ -127,11 +144,18 @@ def main() -> None:
                 texts = [piece + close for piece in cut[:-1]] + [cut[-1]]
                 clips = [speak(text, persona) for text in texts]
                 joined = np.concatenate(
-                    [np.concatenate([trimmed(a, r), np.zeros(int(0.1 * r), np.float32)]) for a, r in clips]
+                    [
+                        np.concatenate(
+                            [trimmed(a, r), np.zeros(int(0.1 * r), np.float32)]
+                        )
+                        for a, r in clips
+                    ]
                 )
                 sf.write(OUT / f"{persona}_{n}_{style}.wav", joined, rate)
                 row[f"{style}_cut_fall"] = [fall(a, r) for a, r in clips[:-1]]
-                row[f"{style}_seconds"] = round(sum(len(trimmed(a, r)) / r for a, r in clips), 2)
+                row[f"{style}_seconds"] = round(
+                    sum(len(trimmed(a, r)) / r for a, r in clips), 2
+                )
                 row[f"{style}_wer"] = round(wer(whole, heard(joined, rate)), 3)
             row["whole_wer"] = round(wer(whole, heard(audio, rate)), 3)
             rows.append(row)
@@ -139,10 +163,14 @@ def main() -> None:
     (OUT / "results.json").write_text(json.dumps(rows, indent=1), encoding="utf-8")
     for style in ("bare", "comma"):
         falls = [f for row in rows for f in row[f"{style}_cut_fall"] if f is not None]
-        print(f"{style}: cut end {np.mean(falls):+.2f} st (median {np.median(falls):+.2f}); "
-              f"wer {np.mean([row[f'{style}_wer'] for row in rows]):.3f}")
+        print(
+            f"{style}: cut end {np.mean(falls):+.2f} st (median {np.median(falls):+.2f}); "
+            f"wer {np.mean([row[f'{style}_wer'] for row in rows]):.3f}"
+        )
     ends = [row["whole_end_fall"] for row in rows if row["whole_end_fall"] is not None]
-    print(f"a sentence's own end: {np.mean(ends):+.2f} st; whole wer {np.mean([row['whole_wer'] for row in rows]):.3f}")
+    print(
+        f"a sentence's own end: {np.mean(ends):+.2f} st; whole wer {np.mean([row['whole_wer'] for row in rows]):.3f}"
+    )
 
 
 if __name__ == "__main__":
