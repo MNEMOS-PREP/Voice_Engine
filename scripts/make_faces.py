@@ -246,6 +246,10 @@ def make(persona: str, entry: dict, spec: dict, args: argparse.Namespace) -> boo
     if head.exists() and (not args.rebuild or head.stat().st_mtime > SPEC.stat().st_mtime):
         return True
     for attempt in range(ATTEMPTS):
+        # A seed makes the same portrait every time: one the check turned down
+        # before is not made again (cn_divya cost six minutes a run for it).
+        if attempt < ATTEMPTS - 1 and any((PORTRAITS / "rejected").glob(f"{persona}.{attempt}.*")):
+            continue
         wait_while_paused()
         picture = portrait(persona, entry, spec, attempt)
         if picture is None:
