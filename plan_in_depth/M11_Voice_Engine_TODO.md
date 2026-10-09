@@ -21,6 +21,70 @@ Legend: ✅ done · 🟡 partly done · ⬜ not started
 
 ---
 
+### 2026-10-09 — no gaps in a spoken line; faces in the team's look; a photo for each
+
+The user, after a mock: *"I could feel gaps in speech, awkward pauses,
+sometimes if the text is too long … use the smartest ideas"*, and *"no
+noticeable gaps, awkward pauses, or breaks between speakers"*; for faces,
+the team's LAM look (Avatar_Lab), *"ultra-realistic and authentically
+Indian"*, and *"we don't want dummy faces in the interview"*.
+
+**Why there were gaps** (`research/listening/gap_bench.py`, `gaps.md`): on
+this CPU the language model tops out near 27 speech tokens/s with three
+sentences side by side, and speech needs 25. Measured: 2–3 s stalls after
+"Okay.", 10.9 s before a long follow-up's first word, and 0.2–0.5 s of
+silence baked into every join. q4, or more rows, changed none of it.
+
+- ✅ **One track** (Core v0.29.0 `player.ts`, `track.ts`): each clip decoded
+  as it arrives, trimmed to its sound, scheduled on one Web Audio clock with
+  the pause a person leaves (~0.1 s at a comma, ~0.3 s at a full stop,
+  ~0.22 s at a change of speaker, by tempo); a long line holds its first
+  word up to 1.2 s rather than stalling mid-sentence; lip sync on the output
+  clock. Live: every join inside a line 0.11–0.41 s, none over 0.6 s.
+- ✅ **Lines made ahead** (`4884a11`, M06 `49e7e7c`): `/voice/plan` takes
+  priority `next` (the opening, the next question) or `warm` (stock
+  phrases) — made only while nothing live waits, set aside when a live line
+  arrives, promoted when asked for, in the order asked — and says which
+  sentences are `ready`. A warm sentence's decoding waits while a live one
+  is made. M06's `/upcoming` (the questions M05 would choose now, phrases
+  with names in place) and its prefill's would-be line are made while the
+  student reads the plan and answers. `scripts/warm_phrases.ts` makes every
+  interviewer's stock phrases once.
+- ✅ **An int8 model for live lines** (`tts.int8_graph`, `int8.md`): 41.5
+  speech tokens/s alone against fp32's 16.4. It misreads a few more words
+  (14 voices: WER 0.033 against 0.018), so made-ahead lines stay fp32 and
+  only what no one could make ahead (an adapted follow-up) is int8; each
+  clip under its own model's key; `speak_keyed` names the face's frames by
+  the clip returned. A live sentence under warm load: 13.6 s → 7.9 s.
+- ✅ **Not faster here** (`gaps.md`): DirectML on the Iris Xe — the language
+  model 3.8 tokens/s, and with its cache on the GPU onnxruntime-directml
+  crashes; the decoder 0.33–0.46× real time once compiled but recompiling
+  for every new length.
+- ✅ **Faces in the team's look** (`36c04be`, `7223f71`): `portraits.json`
+  is Avatar_Lab's CAST.md prompt word for word; Ananya, Arjun, Sameer and
+  Vikram use the team's own portraits; gender and expression come from the
+  persona's voice_id. `build_face.py` checks each portrait on 68 landmarks
+  (calibrated on the team's ten: mouth closed, eyes open, facing, level) and
+  `make_faces.py` asks for another seed on a fail, rebuilds into a staging
+  folder and swaps each head in whole, and pauses on a file. Each head comes
+  with its still, `/v1/voice/faces/{persona}.webp`. `faces/ATTRIBUTION.md`
+  (academic use only: LAM's weights CC BY-NC, FLAME non-commercial) and
+  `scripts/faces/README.md` (the setup, rebuilt from what this machine ran).
+- ✅ **No drawn faces** (Core `InterviewerPhoto`, M06): each interviewer's
+  photo wherever a face was drawn, the 3D head fading in over it; initials
+  when there is no photo yet. **The asker thinks** (Core `faceDriver`):
+  glances down and aside while the reply is worked out, back to speak.
+- 🟡 **Re-measured once, before the last two fixes** (`flow_check.mjs`): the
+  first line stalled 19 s inside (its question made after later requests —
+  fixed: in the order asked, the opening made ahead first); answers waited
+  7–7.5 s for audio because the line's phrases were still in the room's
+  warm-up (fixed by `warm_phrases.ts`, to be run once). To measure again.
+
+**Next:** run `warm_phrases.ts` once; re-run the live flow (the harness must
+wait for first sound before ending a turn); let the face rebuild finish (5 of
+39 at this checkpoint, ~8 min a head) and look at the room's tiles; the
+nightly latency run (register with `-Register`, the user's call); FR-11.20.
+
 ### 2026-10-08 — Day 13: the faces (spec §15.6, decided); more Indian voices
 
 The user decided §15.6: *"add faces to the interviews with perfect lip
@@ -636,7 +700,7 @@ licence or hardware rules it out.
 
 | | |
 |---|---|
-| Status | **95% — every day of the build order that is M11's own work is done (2026-10-07).** Left: FR-11.20 on a faster machine, the nightly sat once and registered, and the "Later" list (hardware, the user's decisions, real students, M18). The voice client is M11's code in `@ai/core` (v0.28.0, with the faces). |
+| Status | **95% — every day of the build order that is M11's own work is done (2026-10-07).** Left: FR-11.20 on a faster machine, the nightly sat once and registered, and the "Later" list (hardware, the user's decisions, real students, M18). The voice client is M11's code in `@ai/core` (v0.29.0: one gapless track, photos, faces). |
 | Spec | Written, and the source of every row below. |
 | Scope | 22 functional requirements (18 of them P0), 9 acceptance metrics (4 release-blocking), 15 edge cases. |
 
