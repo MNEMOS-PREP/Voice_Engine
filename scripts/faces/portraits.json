@@ -9,7 +9,7 @@
   "model": "FLUX.1-schnell Q4_K_S (city96 GGUF) + t5xxl Q4_K_M + clip_l + ae",
   "size": [768, 1024],
   "steps": 4,
-  "template": "Photorealistic studio headshot of a fictional {describe}, {expression}, mouth closed, looking straight at the camera, eyes fully open, plain light-grey background, soft even lighting from the front, head and shoulders centred, no glasses, no hair covering the face or ears, no hands in frame, no jewellery, no bindi, no head covering or religious symbols. Natural skin texture, sharp focus, 85mm portrait photograph.",
+  "template": "Photorealistic studio headshot of a fictional {describe}, {expression}, mouth closed, looking straight at the camera, eyes fully open, plain light-grey background, soft even lighting from the front, head and shoulders centred, no glasses, no hair covering the face or ears, no hands in frame, unadorned: bare ears, bare neck, a clear bare forehead and uncovered hair. Natural skin texture, sharp focus, 85mm portrait photograph.",
   "expressions": {
     "warm": "relaxed expression with a faint smile",
     "neutral": "calm, neutral-friendly expression",

@@ -243,7 +243,7 @@ def make(persona: str, entry: dict, spec: dict, args: argparse.Namespace) -> boo
         return True
     head = FACES / f"{persona}.zip"
     # A rebuild resumes: a head made after the spec last changed is current.
-    if head.exists() and (not args.rebuild or head.stat().st_mtime > SPEC.stat().st_mtime):
+    if head.exists() and not args.force and (not args.rebuild or head.stat().st_mtime > SPEC.stat().st_mtime):
         return True
     for attempt in range(ATTEMPTS):
         # A seed makes the same portrait every time: one the check turned down
@@ -276,6 +276,7 @@ def main() -> None:
     parser.add_argument("--portraits-only", action="store_true")
     parser.add_argument("--rebuild", action="store_true", help="build every head again, swapping each in when whole")
     parser.add_argument("--stills", action="store_true", help="make the still for heads that have none")
+    parser.add_argument("--force", action="store_true", help="with --rebuild: build these heads again even if current")
     args = parser.parse_args()
     spec = json.loads(SPEC.read_text(encoding="utf-8"))
     PORTRAITS.mkdir(parents=True, exist_ok=True)
