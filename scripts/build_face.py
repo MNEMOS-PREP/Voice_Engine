@@ -223,11 +223,40 @@ CHECK = {
     "eye_open_min": 0.20,  # eye aspect ratio, each eye
     "facing_within": 0.05,  # nose tip off the face's centre, share of its width
     "tilt_max_deg": 4.0,  # the line through the eyes
+    # A mark between the brows (bindi, tilak): the team's rule is no religious
+    # markers (Avatar_Lab CAST.md); when enforced, never accepted, whatever
+    # --accept-any says. Measured and reported only (None) until it separates:
+    # on 2026-10-10 seven marked portraits scored 0.035-0.170 and five clean
+    # ones 0.015-0.050 (shading and brow hair count as "dark").
+    "forehead_mark_max": None,  # marked area in the glabella patch / interocular^2
 }
 
 
-def portrait_check(landmarks: np.ndarray) -> dict:
-    """Mouth, eyes, facing and tilt from 68 landmarks (iBUG order)."""
+def forehead_mark(image_bgr: np.ndarray, landmarks: np.ndarray) -> float:
+    """How much of the patch between the brows, up the forehead, is marked —
+    red (a bindi, a tilak) or dark (a black bindi) against the skin around it
+    (2026-10-10: seven of the first 28 team-look portraits had one, though
+    the prompt said "no bindi" — FLUX at cfg 1.0 draws what it is told not
+    to). In interocular distances squared, so it does not depend on size."""
+    import cv2
+
+    p = np.asarray(landmarks, dtype=np.float64)[:, :2]
+    d = float(np.linalg.norm(p[42] - p[39]))  # inner eye corners
+    left, right = p[21, 0] + 0.05 * d, p[22, 0] - 0.05 * d
+    top, bottom = min(p[19, 1], p[24, 1]) - 0.9 * d, p[27, 1]
+    x0, x1 = int(max(0, min(left, right))), int(min(image_bgr.shape[1], max(left, right)))
+    y0, y1 = int(max(0, top)), int(min(image_bgr.shape[0], bottom))
+    if x1 - x0 < 4 or y1 - y0 < 4:
+        return 0.0
+    lab = cv2.cvtColor(image_bgr[y0:y1, x0:x1], cv2.COLOR_BGR2LAB).astype(np.float64)
+    light, red = lab[..., 0], lab[..., 1]
+    marked = (red - np.median(red) > 20) | (light < np.median(light) - 45)
+    return float(marked.sum()) / (d * d)
+
+
+def portrait_check(landmarks: np.ndarray, image_bgr: np.ndarray | None = None) -> dict:
+    """Mouth, eyes, facing and tilt from 68 landmarks (iBUG order); with the
+    image, a mark on the forehead."""
     p = np.asarray(landmarks, dtype=np.float64)[:, :2]
     face_height = np.linalg.norm(p[8] - p[27])
     mouth = float(np.linalg.norm(p[66] - p[62]) / face_height)
@@ -250,9 +279,14 @@ def portrait_check(landmarks: np.ndarray) -> dict:
         reasons.append(f"not facing the camera ({facing:+.3f})")
     if abs(tilt) > CHECK["tilt_max_deg"]:
         reasons.append(f"head tilted ({tilt:+.1f} deg)")
+    mark = None if image_bgr is None else forehead_mark(image_bgr, landmarks)
+    limit = CHECK["forehead_mark_max"]
+    if mark is not None and limit is not None and mark > limit:
+        reasons.append(f"a mark on the forehead ({mark:.4f})")
     return {
         "ok": not reasons,
         "reasons": reasons,
+        "forehead_mark": None if mark is None else round(mark, 5),
         "mouth_open": round(mouth, 4),
         "eyes_open": [round(v, 4) for v in eyes],
         "facing": round(facing, 4),
@@ -331,12 +365,15 @@ def fit_face(portrait: Path, work: Path, *, check_only: bool = False, accept_any
     normalised[:, :2] = landmarks / 1024
     np.savez(preprocess / "landmark2d" / "landmarks.npz", bounding_box=[], face_landmark_2d=normalised[None, ...])
 
-    verdict = portrait_check(landmarks)
+    verdict = portrait_check(landmarks, image)
     (work / "check.json").write_text(json.dumps(verdict, indent=2), encoding="utf-8")
     log(f"portrait check: {'ok' if verdict['ok'] else '; '.join(verdict['reasons'])}")
     if check_only:
         return None
-    if not verdict["ok"] and not accept_any:
+    # A pose the check dislikes can be accepted on a last try; a mark on the
+    # forehead never (the team's rule, not a matter of quality).
+    marked = [r for r in verdict["reasons"] if r.startswith("a mark on the forehead")]
+    if not verdict["ok"] and (marked or not accept_any):
         raise PortraitRejected(verdict["reasons"])
 
     log("fitting FLAME to the landmarks (650 steps)")
