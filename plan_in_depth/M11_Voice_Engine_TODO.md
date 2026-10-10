@@ -109,16 +109,14 @@ it feel AI-like"*; and the plan page showed initials, not faces.
   ≤ 0.29 s; but the opening still stalled 23.8, 11.4, 11.0 s and answers waited
   9.5 / 10.5 / 4.9 s for audio. **First thing next:** why the opening is not
   made ahead on the plan page (its keys against the room's pieces).
-- 🟡 **Faces in the team's look: 28 of 39** (11 left: oop_sneha … sys_zoya;
-  oop_sneha's portrait made, not built). Seeds already rejected are skipped
-  (`cbc8146`). **Seven carry a bindi or tilak** (db_harish, dl_shreya,
-  dsa_farah, hr_generalist, mgr_lata, ml_deshpande, cn_divya) against the
-  team's rule: the prompt says "no bindi" and FLUX at cfg 1.0 with no
-  negative prompt draws it. `forehead_mark()` is measured in `check.json`
-  (`ef5a779`) but not enforced — marked 0.035–0.170 against clean
-  0.015–0.050. **Next:** a positive prompt ("a clear bare forehead"; the marks
-  not named), a sharper detector (a compact blob, not any dark pixel), then
-  re-roll the seven and finish the eleven.
+- ✅ **Faces in the team's look: 39 of 39** (finished 2026-10-10 15:19).
+  Seven had a bindi or tilak: the prompt named them ("no bindi") and FLUX
+  at cfg 1.0, with no negative prompt, drew them. The prompt now describes
+  the look ("unadorned … a clear bare forehead", `1442e39`) and the seven
+  were redone (`--force --only`); seeds already rejected are skipped
+  (`cbc8146`). Four keep a dot of 2–3 px between the brows (dl_shreya,
+  hr_ritu, db_neha, cn_divya): **accepted by the user** ("tiny dot is fine").
+  `forehead_mark()` stays report-only (`ef5a779`).
 - ⬜ Stream long sentences: decode a sentence's tokens in chunks while the
   model is still choosing the rest (~1 s left context, a crossfade), so it
   keeps its tune and starts at once. The seam test needs M11 stopped (RAM).
