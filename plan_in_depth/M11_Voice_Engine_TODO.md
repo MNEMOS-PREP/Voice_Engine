@@ -21,6 +21,48 @@ Legend: ✅ done · 🟡 partly done · ⬜ not started
 
 ---
 
+### 2026-10-10 — a photo for everyone; where the user's gaps came from; faces checked for marks
+
+The user, after two recorded mocks (`demo_1.mp4`, `demo_2.mp4`): *"when a
+large sentence is followed by a sentence, the gap in audio is huge and makes
+it feel AI-like"*; and the plan page showed initials, not faces.
+
+- ✅ **A photo for all 39** (`df756ca`): only the four team-look heads had a
+  still; `--stills` now makes one from the portrait each head was built
+  from (its `meta.json` names it; the newest copy no newer than the head).
+- ✅ **Faces revalidated, not cached a day** (`2229c50`): ETag from the file's
+  time and size, `no-cache`; a rebuilt head or photo is fetched, an unchanged
+  one is a 304.
+- ✅ **Why `demo_2` stopped 5.3 s and 14.3 s:** clips made during the mock took
+  2–4× as long as the same lengths before it — the stills job shared the CPU.
+  `GET /v1/voice/activity` (seconds since a student last waited on the voice)
+  and `make_faces.py` holds between steps while it is under 5 min (`8913aa2`).
+- ✅ **Cutting long sentences where a reader breathes: measured, refused**
+  (`research/listening/breath.md`): a part made alone ends 3–9 semitones lower
+  than the whole sentence at that point in about half the cases — heard as
+  a string of sentences.
+- ✅ **Core v0.30.0**: a sentence whose later pieces are late waits before its
+  first word, never halfway (`sentenceEnd`, tested).
+- 🟡 **Re-measured live** (warm phrases made, CPU free): joins inside a line
+  ≤ 0.29 s; but the opening still stalled 23.8, 11.4, 11.0 s and answers waited
+  9.5 / 10.5 / 4.9 s for audio. **First thing next:** why the opening is not
+  made ahead on the plan page (its keys against the room's pieces).
+- 🟡 **Faces in the team's look: 28 of 39** (11 left: oop_sneha … sys_zoya;
+  oop_sneha's portrait made, not built). Seeds already rejected are skipped
+  (`cbc8146`). **Seven carry a bindi or tilak** (db_harish, dl_shreya,
+  dsa_farah, hr_generalist, mgr_lata, ml_deshpande, cn_divya) against the
+  team's rule: the prompt says "no bindi" and FLUX at cfg 1.0 with no
+  negative prompt draws it. `forehead_mark()` is measured in `check.json`
+  (`ef5a779`) but not enforced — marked 0.035–0.170 against clean
+  0.015–0.050. **Next:** a positive prompt ("a clear bare forehead"; the marks
+  not named), a sharper detector (a compact blob, not any dark pixel), then
+  re-roll the seven and finish the eleven.
+- ⬜ Stream long sentences: decode a sentence's tokens in chunks while the
+  model is still choosing the rest (~1 s left context, a crossfade), so it
+  keeps its tune and starts at once. The seam test needs M11 stopped (RAM).
+- ⬜ Identifiers read wrong (`emp_id` → "Benite"): the lexicon probe over the
+  bank's identifiers.
+
 ### 2026-10-09 — no gaps in a spoken line; faces in the team's look; a photo for each
 
 The user, after a mock: *"I could feel gaps in speech, awkward pauses,
@@ -700,7 +742,7 @@ licence or hardware rules it out.
 
 | | |
 |---|---|
-| Status | **95% — every day of the build order that is M11's own work is done (2026-10-07).** Left: FR-11.20 on a faster machine, the nightly sat once and registered, and the "Later" list (hardware, the user's decisions, real students, M18). The voice client is M11's code in `@ai/core` (v0.29.0: one gapless track, photos, faces). |
+| Status | **95% — every day of the build order that is M11's own work is done (2026-10-07).** Left: FR-11.20 on a faster machine, the nightly sat once and registered, and the "Later" list (hardware, the user's decisions, real students, M18). The voice client is M11's code in `@ai/core` (v0.30.0: one gapless track, photos, faces; a late sentence waits before its first word). |
 | Spec | Written, and the source of every row below. |
 | Scope | 22 functional requirements (18 of them P0), 9 acceptance metrics (4 release-blocking), 15 edge cases. |
 
