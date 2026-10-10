@@ -21,6 +21,68 @@ Legend: ✅ done · 🟡 partly done · ⬜ not started
 
 ---
 
+### Voice — open problems, their causes, and the plan (2026-10-10, to work on)
+
+What is still wrong with the voice, each with its cause as measured (or
+marked unconfirmed) and the fix the user chose (their notes, 2026-10-10),
+fitted to how M11 works. **The GPU is not for now** (the user's call).
+
+1. ⬜ **Long silences in the opening** — 23.8, 11.4, 11.0 s in a clean live
+   run (CPU free, stock phrases made). *Cause unconfirmed:* the plan page
+   should have made the opening ahead (~25 s of audio, ~18–20 s to make at
+   fp32); suspected (a) what the plan page makes is not what the room asks
+   for — different sentence cuts, the panel's introductions with names in
+   place — so the cache misses; (b) not done in the 25 s the plan was read.
+   *Fix:* compare the plan page's planned pieces with the room's requested
+   pieces key by key; make both go through the same text normalisation and
+   `sentencesOf`, names filled the same way, so every piece made ahead is
+   found. Then the Start button can wait for M11's `ready` on the opening.
+2. ⬜ **The reply after an answer: 9.5 / 10.5 / 4.9 s to first sound**
+   (FR-11.20 wants p95 ≤ 1.2 s; the best here was p50 2.5 s). *Causes:* M06
+   writes the reply with the language model before any audio can start; the
+   reply is made live (int8), and nothing plays until its first sentence is
+   whole; the calibrated pause before speaking (0.3–0.9 s). *Fix:* split the
+   delay by stage from marks the ledger already keeps (`answer_sent_at`,
+   `first_token_at`, `landed_at`, `first_audio_at`, plus M06's own model time):
+   network/model, synthesis to first audio, the pause — then work on the
+   largest.
+3. ⬜ **A gap before a long sentence** (the user's `demo_2`). *Causes:* (A)
+   the CPU shared with a face build — fixed, builds wait during interviews
+   (`8913aa2`); (B) a sentence with no comma is one piece, and one row of
+   three makes ~19 speech tokens/s where speech needs 25, so a long piece
+   made beside others is late. Cutting it was measured and refused (the
+   parts' pitch falls like full stops, `breath.md`). v0.30.0 already moves a
+   wait to the sentence's start (≤ 1.2 s). *Fix:* **stream the sentence** —
+   decode its speech tokens in chunks while the model is still choosing the
+   rest (~1 s of left context, a short look-ahead, a crossfade at each seam),
+   each chunk put on the room's one Web Audio track as it arrives (barge-in
+   stops it as now). Keeps the sentence's own tune; first sound after ~1 s
+   whatever its length. Test the seams first, with M11 stopped (RAM).
+4. ⬜ **Identifiers read wrong** — `emp_id` heard as "Benite", `dept_id` as
+   "deputy". *Cause:* `speakable()` only turns `_` into a space; "emp", "dept"
+   and `Employees(…)` reach the voice as written. *Fix:* the lexicon
+   (EC-11.11) — scan the question bank for identifiers (`snake_case`,
+   `camelCase`, `Table(col, …)`), probe each in the cast voices with
+   read-back, and add the respellings that come back right ("employee I D",
+   "department I D"); a table's columns said as a list. Chatterbox takes
+   text, not SSML or phonemes, so entries are respellings, kept per voice
+   where one voice needs its own.
+5. ⬜ **The browser's 3D heads share the CPU with the voice** — unmeasured.
+   *Fix:* measure the room's CPU with heads on and off during a line; if it
+   matters, draw only the speaker's head at full rate and the others slower
+   (or as their photo), or move the renderer off the main thread.
+6. ⬜ **Small quality costs, accepted for now:** the live int8 model misreads a
+   few more words (WER 0.033 against 0.018), so only lines nobody could make
+   ahead use it; one long whole sentence was misread at 0.28 in one voice;
+   the comma cuts in use since v0.26.0 have not been measured for the
+   full-stop fall the breath cuts showed — measure them with `breath_probe.py`.
+7. ⏸ **A GPU — not yet** (the user, 2026-10-10). The ceiling on this CPU:
+   ~27 speech tokens/s fp32 with three rows; int8 41.5 alone, 56.6 with three;
+   DirectML on the Iris Xe crashed or recompiled per length. FR-11.20 /
+   AC-11.1 stay open until a faster machine.
+
+**Order:** 1 → 2 → 3 → 4 → 5 → 6.
+
 ### 2026-10-10 — a photo for everyone; where the user's gaps came from; faces checked for marks
 
 The user, after two recorded mocks (`demo_1.mp4`, `demo_2.mp4`): *"when a
