@@ -23,6 +23,7 @@ from ai_core.guard import require_role
 from ai_core.identity import Principal, Role
 from ai_core.timeutil import utcnow
 from fastapi import APIRouter, Depends, HTTPException, Path, Query, Request, Response
+from fastapi.responses import StreamingResponse
 from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
@@ -319,6 +320,68 @@ def speak(body: SpeakIn, principal: Principal | None = Depends(enforce_access)) 
             "X-Face": key,
             "Access-Control-Expose-Headers": "X-Voice, X-Cache, X-Synth-Ms, X-Face",
             "Cache-Control": "private, max-age=86400",
+        },
+    )
+
+
+@router.post(
+    "/voice/speak_stream",
+    tags=["voice"],
+    response_class=StreamingResponse,
+    responses={
+        200: {
+            "content": {"audio/L16": {}},
+            "description": "16-bit little-endian PCM, mono, 24 kHz, sent as it is made",
+        }
+    },
+)
+def speak_stream(
+    body: SpeakIn, principal: Principal | None = Depends(enforce_access)
+) -> StreamingResponse:
+    """`speak`, heard while the sentence is still being made: the first second
+    comes when it is chosen, not when the sentence is whole (`stream.py`). Raw
+    PCM, since the length is not known until the end; the rate is in the
+    content type. The same errors as `speak`, all before the first byte."""
+    if principal is None:
+        raise HTTPException(status_code=401, detail="Not signed in.")
+    _heard_live()
+    e = tts.engine()
+    voice = e.cast.resolve(persona_id=body.persona_id, voice_id=body.voice_id, voice=body.voice)
+    pieces = e.speak_stream(body.text, voice, line=body.line)
+    try:
+        first, key = next(pieces, (None, None))
+    except tts.EngineUnavailable as exc:
+        raise HTTPException(
+            status_code=503, detail=f"The interviewer's voice is not ready: {exc}"
+        ) from None
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from None
+    if first is None:
+        raise HTTPException(status_code=503, detail="The interviewer's voice made no sound.")
+
+    def body_bytes():
+        import numpy as np
+
+        def pcm(samples) -> bytes:
+            return (np.clip(samples, -1.0, 1.0) * 32767).astype("<i2").tobytes()
+
+        yield pcm(first)
+        for samples, _ in pieces:
+            yield pcm(samples)
+        # The face's frames, from the whole sentence once it is kept.
+        whole = e.audio_by_key(key)
+        if whole is not None:
+            face.engine().prepare(key, whole)
+
+    return StreamingResponse(
+        body_bytes(),
+        media_type="audio/L16; rate=24000; channels=1",
+        headers={
+            "X-Voice": voice.key,
+            "X-Face": key,
+            "X-Sample-Rate": "24000",
+            "Access-Control-Expose-Headers": "X-Voice, X-Face, X-Sample-Rate",
+            "Cache-Control": "no-store",
         },
     )
 

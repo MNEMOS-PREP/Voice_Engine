@@ -70,7 +70,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from . import lexicon, notation
+from . import lexicon, notation, stream
 
 log = logging.getLogger("uvicorn.error")
 
@@ -246,8 +246,16 @@ def int8_graph(fp32_path: str) -> str:
     16.4, faster than speech (25), and three side by side at 56.6 against 35
     (research/listening/int8.md). ResembleAI's own 8-bit export runs 2 a
     second here, so this one is M11's."""
-    target = INT8_DIR / "language_model_int8.onnx"
-    done = INT8_DIR / "language_model_int8.done"
+    # 7-bit weights (`reduce_range`) unless told otherwise. On a CPU without
+    # VNNI (AVX2 only: e.g. an i5-10300H) onnxruntime's u8s8 int8 kernel
+    # saturates with 8-bit weights, and the model speaks gibberish and never
+    # emits its stop token (found 2026-10-11: a 3-word line ran to its 128-token
+    # cap). The i7-1260P this was tuned on has VNNI and does not need it;
+    # M11_TTS_INT8_REDUCE_RANGE=0 keeps 8-bit there.
+    reduce = os.getenv("M11_TTS_INT8_REDUCE_RANGE", "1").lower() not in ("0", "false", "off")
+    suffix = "_rr" if reduce else ""
+    target = INT8_DIR / f"language_model_int8{suffix}.onnx"
+    done = INT8_DIR / f"language_model_int8{suffix}.done"
     if target.exists() and done.exists():
         return str(target)
     from onnxruntime.quantization import QuantType, quantize_dynamic
@@ -260,10 +268,14 @@ def int8_graph(fp32_path: str) -> str:
         weight_type=QuantType.QInt8,
         op_types_to_quantize=["MatMul"],
         per_channel=True,
+        reduce_range=reduce,
         use_external_data_format=True,
         extra_options={"MatMulConstBOnly": True},
     )
-    done.write_text("quantize_dynamic: MatMul weights int8, per channel", encoding="utf-8")
+    done.write_text(
+        f"quantize_dynamic: MatMul weights int8, per channel, reduce_range={reduce}",
+        encoding="utf-8",
+    )
     return str(target)
 
 
@@ -281,6 +293,25 @@ def session_options(onnxruntime: Any, name: str) -> Any:
     return options
 
 
+#: The DirectML device the decoder runs on, by index; unset keeps it on the CPU.
+#: Measured on the dev laptop (2026-10-11): an NVIDIA GTX 1650 ran it at 0.12-0.19x
+#: real time against 0.45-0.60 on the CPU, with the same sound (log-spectral
+#: distance to the CPU's 0.57, CPU to itself 0.52). The integrated Intel GPU
+#: (device 0) made no output at all. Needs the `onnxruntime-directml` package
+#: in place of `onnxruntime`.
+DECODER_DEVICE = os.getenv("M11_TTS_DECODER_DEVICE", "").strip()
+
+
+def decoder_providers(available: list[str], device: str = "") -> list[Any] | None:
+    """The decoder's execution providers when it is to run on a GPU, or None
+    for the CPU as before. A device that is asked for but not there (the
+    package is the CPU one, or the index is not a number) is the CPU, never a
+    failure: the voice must not depend on a GPU."""
+    if not device.isdigit() or "DmlExecutionProvider" not in available:
+        return None
+    return [("DmlExecutionProvider", {"device_id": int(device)}), "CPUExecutionProvider"]
+
+
 def to_wav(samples: Any, rate: int = SAMPLE_RATE) -> bytes:
     """16-bit PCM WAV, which every browser plays."""
     import numpy as np
@@ -293,6 +324,23 @@ def to_wav(samples: Any, rate: int = SAMPLE_RATE) -> bytes:
         w.setframerate(rate)
         w.writeframes(pcm.tobytes())
     return out.getvalue()
+
+
+def _samples_of(wav: bytes) -> Any:
+    """A 16-bit WAV (`to_wav`'s) as float32 samples."""
+    import numpy as np
+
+    with wave.open(io.BytesIO(wav)) as w:
+        return np.frombuffer(w.readframes(w.getnframes()), dtype="<i2").astype(np.float32) / 32767
+
+
+def _speech_of(tokens: list[int]) -> Any:
+    """The codec tokens among a row's tokens so far, as the decoder is given
+    them (a stop token and anything outside the codec are not speech)."""
+    import numpy as np
+
+    speech = np.array(tokens, dtype=np.int64)
+    return speech[speech < START_SPEECH]
 
 
 def _pad_right(value: Any, width: int) -> Any:
@@ -344,6 +392,8 @@ class _Job:
         #: Made by the live (faster) model, and kept under its key.
         self.fast = False
         self.stored_as: str | None = None
+        #: The row making it now (`speak_stream` reads its tokens as they come).
+        self.row: _Row | None = None
         self.done = threading.Event()
         self.wav: bytes | None = None
         self.error: str | None = None
@@ -402,6 +452,10 @@ class Engine:
         #: Live sentences in the language model right now (its thread's count).
         self._live_rows = 0
         self._kv: list[tuple[str, Any]] = []
+        #: DirectML sessions do not take two Run calls at once (a segfault, seen
+        #: 2026-10-11 with a streamed piece and a whole sentence together): one
+        #: at a time on the GPU. The CPU decoder runs freely, as before.
+        self._decoder_lock = threading.Lock()
 
     # ── lifecycle ────────────────────────────────────────────────────────
 
@@ -444,6 +498,30 @@ class Engine:
 
             for name in ("speech_encoder", "embed_tokens", "language_model", "conditional_decoder"):
                 dtype = self.precision if name == "language_model" else "fp32"
+                providers = (
+                    decoder_providers(onnxruntime.get_available_providers(), DECODER_DEVICE)
+                    if name == "conditional_decoder"
+                    else None
+                )
+                if providers:
+                    try:
+                        options = onnxruntime.SessionOptions()
+                        options.enable_mem_pattern = False  # DirectML's requirement
+                        options.execution_mode = onnxruntime.ExecutionMode.ORT_SEQUENTIAL
+                        # Part of the graph stays on the CPU beside the model's
+                        # threads: few of them, and idle rather than spinning,
+                        # or the two starve each other (measured 2026-10-11:
+                        # a 0.3 s decode took 2.5 s while the model ran).
+                        if DECODER_THREADS > 0:
+                            options.intra_op_num_threads = DECODER_THREADS
+                        options.add_session_config_entry("session.intra_op.allow_spinning", "0")
+                        self._sessions[name] = onnxruntime.InferenceSession(
+                            graph(name, dtype), options, providers=providers
+                        )
+                        log.info("M11 TTS decoder on DirectML device %s", DECODER_DEVICE)
+                        continue
+                    except Exception as exc:  # noqa: BLE001 - the CPU is always there
+                        log.warning("M11 TTS decoder: GPU not used (%s); on the CPU", exc)
                 self._sessions[name] = onnxruntime.InferenceSession(
                     graph(name, dtype), session_options(onnxruntime, name)
                 )
@@ -500,8 +578,47 @@ class Engine:
             self._prefix[key] = self._run_lm(cond, self._empty(1), mask, pos)[1]
             if self._live:
                 self._prefix_live[key] = self._run_lm(cond, self._empty(1), mask, pos, fast=True)[1]
+        self._warm_decoder()
         threading.Thread(target=self._make_loop, name="m11-tts-make", daemon=True).start()
         threading.Thread(target=self._decode_loop, name="m11-tts-decode", daemon=True).start()
+
+    def _run_decoder(self, tokens: Any, spk_emb: Any, spk_feat: Any) -> Any:
+        """The decoder's output for these tokens, one call at a time when it is
+        on a GPU (`_decoder_lock`)."""
+        decoder = self._sessions["conditional_decoder"]
+        feed = dict(speech_tokens=tokens, speaker_embeddings=spk_emb, speaker_features=spk_feat)
+        if "DmlExecutionProvider" in getattr(decoder, "get_providers", lambda: [])():
+            with self._decoder_lock:
+                return decoder.run(None, feed)[0]
+        return decoder.run(None, feed)[0]
+
+    def _warm_decoder(self) -> None:
+        """Run the decoder once on each shape a streamed piece has (the first
+        piece, and a middle one with its context and look-ahead), so a GPU's
+        compile for them is paid here and not in a student's first sentence.
+        Not for the CPU, which has nothing to compile."""
+        import numpy as np
+
+        decoder = self._sessions.get("conditional_decoder")
+        providers = getattr(decoder, "get_providers", lambda: [])()
+        if "DmlExecutionProvider" not in providers:
+            return
+        key = next(iter(self._conds), None)
+        if key is None:
+            return
+        _, prompt, spk_emb, spk_feat = self._conds[key]
+        t0 = time.perf_counter()
+        for n in (stream.CHUNK + stream.LOOK, stream.CONTEXT + stream.CHUNK + stream.LOOK):
+            speech = np.full((1, n), START_SPEECH - 1, dtype=np.int64)
+            tokens = np.concatenate(
+                [prompt, speech, np.full((1, 3), SILENCE_TOKEN, dtype=np.int64)], axis=1
+            )
+            try:
+                self._run_decoder(tokens, spk_emb, spk_feat)
+            except Exception as exc:  # noqa: BLE001 - warm-up is a courtesy
+                log.info("M11 TTS decoder warm-up skipped: %s", exc)
+                return
+        log.info("M11 TTS decoder warmed in %.1fs", time.perf_counter() - t0)
 
     # ── speaking ─────────────────────────────────────────────────────────
 
@@ -659,6 +776,132 @@ class Engine:
             log.info("M11 TTS cache not written: %s", exc)
         return data, False, round((time.perf_counter() - t0) * 1000), key
 
+
+    def speak_stream(self, text: str, voice: Voice, line: str | None = None):
+        """The sentence as float32 pieces, the first one as soon as a second
+        of it is chosen, not when it is whole (`stream.py`). Yields
+        `(samples, key)`: `key` is what the face's frames are named by.
+
+        What was made already is one piece. A sentence still waiting, or one
+        the model has not started, is waited for as `speak` waits; a decoder
+        output that fits no layout (`stream.speech_of`) ends the streaming and
+        the rest comes from the sentence's own whole decoding — never silence,
+        never a sentence made twice for the student. Raises
+        `EngineUnavailable` as `speak` does."""
+        import numpy as np
+
+        text = self.prepare(text, voice)
+        if not text:
+            raise ValueError("nothing to say")
+        hit = self.cached_keyed(text, voice)
+        if hit is not None:
+            yield _samples_of(hit[0]), hit[1]
+            return
+        if self.state != "ready":
+            raise EngineUnavailable(self.reason)
+        if not self._prefix:  # no parallel making (a fake engine): whole
+            data, _, _, key = self.speak_keyed(text, voice, line)
+            yield _samples_of(data), key
+            return
+        job, _ = self._enqueue(text, voice, line or "*")
+        stitch = stream.Stitcher()
+        done = 0  # tokens decoded and passed on
+        row = None
+        streaming = True
+        held: list[Any] = []  # pieces waiting until playing them cannot run dry
+        released = False
+        seen_at = seen_n = None  # when the row was first seen, and its tokens then
+        ratio = 0.0  # decoder seconds per second of speech: best of the pieces so far
+        ratios: list[float] = []
+        total = stream.estimate_tokens(text)
+        while not job.done.is_set():
+            if streaming and job.row is not None and not job.warm:
+                if row is not None and job.row is not row:
+                    # Remade (a warm row that made way): its tokens are another
+                    # draw. What was played stands; the rest is the new whole.
+                    log.warning("M11 TTS stream: %r restarted after %d tokens", text[:40], done)
+                    streaming = False
+                    continue
+                row = job.row
+                speech = _speech_of(list(row.tokens))
+                now = time.perf_counter()
+                if seen_at is None:
+                    seen_at, seen_n = now, len(speech)
+                rate = (len(speech) - seen_n) / (now - seen_at) if now - seen_at > 0.5 else 0.0
+                if not released and not stream.worth_streaming(rate, ratio):
+                    # Too slow, in the model or in the decoder, for a buffer
+                    # to help: stop spending CPU on pieces; the sentence is
+                    # played whole, as `speak` does. Never after playing has
+                    # begun: the buffer was promised, and it is kept.
+                    streaming = False
+                    continue
+                for start, end in stream.spans(done, len(speech)):
+                    t_piece = time.perf_counter()
+                    try:
+                        piece = self._decode_span(voice, speech, start, end)
+                    except Exception as exc:  # noqa: BLE001
+                        log.warning("M11 TTS stream stopped: %s", exc)
+                        streaming = False
+                        break
+                    ratios.append(
+                        (time.perf_counter() - t_piece) / ((end - start) / stream.PLAY_RATE)
+                    )
+                    # What a middle piece costs, not the first: the first has
+                    # no left context and is cheap (0.33 s against 2.5 s for
+                    # the next on the dev laptop, with the model running), so
+                    # judging by it lets playback start and then run dry. The
+                    # best of the middle ones, since a decoder compiles each
+                    # new shape on its first use. None until one is made.
+                    ratio = min(ratios[1:]) if len(ratios) >= 2 else 0.0
+                    out = stitch.push(piece)
+                    done = end
+                    if out.size:
+                        held.append(out)
+                if held and not released and ratio > 0:
+                    # A model slower than speech would make the student hear a
+                    # second, then wait: so wait first, once, for as much as
+                    # the rest of the sentence needs (`stream.ready_to_play`).
+                    total = stream.estimate_tokens(text, len(speech))
+                    released = stream.ready_to_play(
+                        done, stream.throughput(rate, ratio), total
+                    )
+                if held and released:
+                    for out in held:
+                        yield out, job.stored_as or self._key_for(job)
+                    held.clear()
+            job.done.wait(0.03)
+        data = job.result()  # raises EngineUnavailable if it could not be made
+        whole = _samples_of(data)
+        rest = whole[done * stream.SAMPLES_PER_TOKEN :] if done else whole
+        out = stitch.push(rest, last=True) if done else rest
+        key = job.stored_as or self._key_for(job)
+        for piece in held:  # made whole before the buffer rule let them go
+            yield piece, key
+        if out.size:
+            yield np.asarray(out, dtype=np.float32), key
+
+    def _key_for(self, job: _Job) -> str:
+        precision = self.live_precision if job.fast and self._live else self.precision
+        return self.cache_key(job.text, job.voice, precision)
+
+    def _decode_span(self, voice: Voice, speech: Any, start: int, end: int) -> Any:
+        """Samples for tokens [start, end) and `FADE` more, decoded with the
+        tokens either side (`stream.py`)."""
+        import numpy as np
+
+        lo = max(0, start - stream.CONTEXT)
+        hi = min(len(speech), end + stream.LOOK)
+        _, prompt, spk_emb, spk_feat = self._conds[voice.key]
+        tokens = np.concatenate(
+            [prompt, speech[np.newaxis, lo:hi], np.full((1, 3), SILENCE_TOKEN, dtype=np.int64)],
+            axis=1,
+        )
+        wav = self._run_decoder(tokens, spk_emb, spk_feat).squeeze(axis=0)
+        sound = stream.speech_of(wav, prompt.shape[1], hi - lo)
+        s = stream.SAMPLES_PER_TOKEN
+        piece = sound[(start - lo) * s : (end - lo) * s + stream.FADE]
+        return self._watermark(piece)
+
     # ── making, in parallel ──────────────────────────────────────────────
 
     def _enqueue(
@@ -806,6 +1049,7 @@ class Engine:
             embeds, prefix, np.ones((1, n), np.int64), np.arange(start, n)[np.newaxis, :], fast
         )
         row = _Row(job, length=n, max_new=min(1000, 60 + len(job.text) * 4))
+        job.row = row
         row.tokens.append(sample_next(logits[:, -1, :], np.array([], dtype=np.int64), self._rng))
         if row.tokens[-1] == STOP_SPEECH:
             self._decode.put((job.warm, job.seq, id(row), row))
@@ -881,18 +1125,7 @@ class Engine:
                     ],
                     axis=1,
                 )
-                wav = (
-                    self._sessions["conditional_decoder"]
-                    .run(
-                        None,
-                        dict(
-                            speech_tokens=tokens,
-                            speaker_embeddings=spk_emb,
-                            speaker_features=spk_feat,
-                        ),
-                    )[0]
-                    .squeeze(axis=0)
-                )
+                wav = self._run_decoder(tokens, spk_emb, spk_feat).squeeze(axis=0)
                 self._finish(job, to_wav(self._watermark(wav)))
             except Exception as exc:  # noqa: BLE001
                 self._fail(job, f"{type(exc).__name__}: {exc}")

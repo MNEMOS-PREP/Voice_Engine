@@ -231,6 +231,20 @@ def test_a_sentence_two_lines_share_is_not_dropped_with_one_of_them(engine, monk
     assert seconds(engine.speak("Shared words here.", voice, line="b")[0]) > 0
 
 
+# ── the decoder's device ─────────────────────────────────────────────────
+
+
+def test_the_decoder_runs_on_a_gpu_only_when_asked_and_there():
+    both = ["DmlExecutionProvider", "CPUExecutionProvider"]
+    assert tts.decoder_providers(both, "") is None  # not asked: the CPU, as before
+    assert tts.decoder_providers(both, "gpu") is None  # not a device index
+    assert tts.decoder_providers(["CPUExecutionProvider"], "1") is None  # no DirectML
+    assert tts.decoder_providers(both, "1") == [
+        ("DmlExecutionProvider", {"device_id": 1}),
+        "CPUExecutionProvider",
+    ]
+
+
 # ── the routes ───────────────────────────────────────────────────────────
 
 
