@@ -27,7 +27,20 @@ What is still wrong with the voice, each with its cause as measured (or
 marked unconfirmed) and the fix the user chose (their notes, 2026-10-10),
 fitted to how M11 works. **The GPU is not for now** (the user's call).
 
-1. ⬜ **Long silences in the opening** — 23.8, 11.4, 11.0 s in a clean live
+1. ✅ **Done 2026-10-11.** Measured, not guessed: the plan page's pieces
+   and the room's are the same (8 of 8, `sentencesOf` both sides); with M11
+   ready the whole opening is made while the plan is read (all hits, joins
+   0.09–0.34 s, the room driven headless with every voice request logged).
+   It failed when M11 was **still loading**: the plan page asked once and
+   gave up, and the room's first line chose the browser's voice for the
+   whole interview. Core v0.31.0: `prepareLine` waits for M11 (≤ 3 min);
+   the room's first line waits ≤ 15 s, then starts in the browser's voice and
+   moves to M11's from the first line after it is ready (verified live).
+   M11's load cut from ~85 s to **16 s** (`0ec9b1c`: voice encodings kept,
+   prefixes lazy). And the candidate questions are made a piece of each in
+   turn (`prepareLines`, M06 `eaa4779`): an alternative asked no longer
+   waits 4–6 s for its second piece.
+   *Was:* **Long silences in the opening** — 23.8, 11.4, 11.0 s in a clean live
    run (CPU free, stock phrases made). *Cause unconfirmed:* the plan page
    should have made the opening ahead (~25 s of audio, ~18–20 s to make at
    fp32); suspected (a) what the plan page makes is not what the room asks
@@ -37,7 +50,15 @@ fitted to how M11 works. **The GPU is not for now** (the user's call).
    pieces key by key; make both go through the same text normalisation and
    `sentencesOf`, names filled the same way, so every piece made ahead is
    found. Then the Start button can wait for M11's `ready` on the opening.
-2. ⬜ **The reply after an answer: 9.5 / 10.5 / 4.9 s to first sound**
+2. ✅ **Done 2026-10-11.** Split from the ledger: the live run's 9.5 and
+   10.6 s were **M06 8+ s** (answer → line) + voice 1.4–2 s. That night the
+   guard took 6.3 s and the strategist 6.7 s against 1.5 s and 4 s timeouts
+   (`urlopen` bounds each read, not the call); normally 0.3 s and 0.7 s.
+   M06 `cdceaff`: wall-clock deadlines (the guard fails open, the move comes
+   from the rules), every step timed in the log. Now: M06 0.76–0.95 s, a
+   reply heard 2.33 s after the answer. FR-11.20's 1.2 s still needs the
+   faster machine.
+   *Was:* **The reply after an answer: 9.5 / 10.5 / 4.9 s to first sound**
    (FR-11.20 wants p95 ≤ 1.2 s; the best here was p50 2.5 s). *Causes:* M06
    writes the reply with the language model before any audio can start; the
    reply is made live (int8), and nothing plays until its first sentence is
@@ -81,7 +102,7 @@ fitted to how M11 works. **The GPU is not for now** (the user's call).
    DirectML on the Iris Xe crashed or recompiled per length. FR-11.20 /
    AC-11.1 stay open until a faster machine.
 
-**Order:** 1 → 2 → 3 → 4 → 5 → 6.
+**Order:** ~~1~~ → ~~2~~ → 3 → 4 → 5 → 6.
 
 ### 2026-10-10 — a photo for everyone; where the user's gaps came from; faces checked for marks
 
