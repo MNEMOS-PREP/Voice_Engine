@@ -78,6 +78,8 @@ HERE = Path(__file__).resolve().parent
 VOICES_DIR = HERE / "voices"
 CAST_FILE = VOICES_DIR / "cast.json"
 CACHE_DIR = Path(os.getenv("M11_TTS_CACHE") or HERE.parent / ".tts_cache")
+#: Each cast voice's encoding (the speech encoder's outputs), kept between starts.
+COND_CACHE = CACHE_DIR / "conds"
 
 MODEL_ID = "ResembleAI/chatterbox-turbo-ONNX"
 SAMPLE_RATE = 24_000
@@ -399,6 +401,7 @@ class Engine:
         self._decode: queue.PriorityQueue[tuple[bool, int, int, _Row]] = queue.PriorityQueue()
         self._prefix: dict[str, dict[str, Any]] = {}
         self._prefix_live: dict[str, dict[str, Any]] = {}
+        self._parallel = False
         #: Live sentences in the language model right now (its thread's count).
         self._live_rows = 0
         self._kv: list[tuple[str, Any]] = []
@@ -442,7 +445,7 @@ class Engine:
                 hf_hub_download(MODEL_ID, subfolder="onnx", filename=f"{name}{suffix}.onnx_data")
                 return path
 
-            for name in ("speech_encoder", "embed_tokens", "language_model", "conditional_decoder"):
+            for name in ("embed_tokens", "language_model", "conditional_decoder"):
                 dtype = self.precision if name == "language_model" else "fp32"
                 self._sessions[name] = onnxruntime.InferenceSession(
                     graph(name, dtype), session_options(onnxruntime, name)
@@ -454,7 +457,36 @@ class Engine:
                 )
             self._tokenizer = Tokenizer.from_file(hf_hub_download(MODEL_ID, "tokenizer.json"))
             self._rng = np.random.default_rng()
+            t_models = time.perf_counter()
+            encoder = graph("speech_encoder", "fp32")
             for voice in self.cast.voices.values():
+                # A voice's encoding is kept (2026-10-11: encoding all 14 at
+                # each start was 22 s of the 62 before M11 could speak); the
+                # encoder is loaded only for a voice not kept, or changed.
+                kept = COND_CACHE / f"{voice.key}.npz"
+                stat = voice.file.stat()
+                revision = Path(encoder).parent.parent.name
+                made_from = (
+                    ENGINE_VERSION,
+                    revision,
+                    stat.st_size,
+                    stat.st_mtime_ns,
+                    DECODER_PROMPT_S,
+                )
+                meta = "|".join(map(str, made_from))
+                try:
+                    with np.load(kept) as z:
+                        if str(z["meta"]) == meta:
+                            self._conds[voice.key] = tuple(
+                                z[name] for name in ("cond", "prompt", "spk_emb", "spk_feat")
+                            )
+                            continue
+                except (OSError, KeyError, ValueError):
+                    pass
+                if "speech_encoder" not in self._sessions:
+                    self._sessions["speech_encoder"] = onnxruntime.InferenceSession(
+                        encoder, session_options(onnxruntime, "speech_encoder")
+                    )
                 audio, rate = soundfile.read(voice.file, dtype="float32")
                 if rate != SAMPLE_RATE:
                     raise ValueError(
@@ -473,7 +505,23 @@ class Engine:
                     spk_emb,
                     spk_feat[:, -2 * keep :],
                 )
+                try:
+                    COND_CACHE.mkdir(parents=True, exist_ok=True)
+                    c, pr, se, sf = self._conds[voice.key]
+                    np.savez(kept, meta=np.array(meta), cond=c, prompt=pr, spk_emb=se, spk_feat=sf)
+                except OSError as exc:
+                    log.info("M11 voice encoding not kept: %s", exc)
+            t_voices = time.perf_counter()
             self._begin()
+            # Where the load's time goes (2026-10-11: ~85 s, and a mock begun
+            # before it ended opened in the browser's voice).
+            log.info(
+                "M11 TTS load: models %.1fs, %d voices %.1fs (%s)",
+                t_models - t0,
+                len(self._conds),
+                t_voices - t_models,
+                "some encoded" if "speech_encoder" in self._sessions else "all kept",
+            )
             live = f" (live lines {self.live_precision})" if self._live else ""
             self.state, self.reason = "ready", f"{len(self._conds)} voices, {self.precision}{live}"
             log.info("M11 TTS ready in %.0fs: %s", time.perf_counter() - t0, self.reason)
@@ -492,14 +540,12 @@ class Engine:
             for x in lm.get_inputs()
             if "past_key_values" in x.name
         ]
-        # Every sentence starts with its voice's conditioning: run it once,
-        # through each language model.
-        for key, (cond, *_) in self._conds.items():
-            n = cond.shape[1]
-            mask, pos = np.ones((1, n), np.int64), np.arange(n)[np.newaxis, :]
-            self._prefix[key] = self._run_lm(cond, self._empty(1), mask, pos)[1]
-            if self._live:
-                self._prefix_live[key] = self._run_lm(cond, self._empty(1), mask, pos, fast=True)[1]
+        # Every sentence starts with its voice's conditioning, run once
+        # through each language model — by the language model's own thread
+        # (`_prefix_for`): while nobody is waiting yet, or when the voice's
+        # first sentence starts. Run here for every voice it was 14 s of the
+        # 62 before M11 could speak (2026-10-11).
+        self._parallel = True
         threading.Thread(target=self._make_loop, name="m11-tts-make", daemon=True).start()
         threading.Thread(target=self._decode_loop, name="m11-tts-decode", daemon=True).start()
 
@@ -570,7 +616,7 @@ class Engine:
         warm = level > 0
         pieces = [(self.prepare(raw, voice), voice) for raw, voice in sentences]
         ready = [bool(text) and self.cached(text, voice) is not None for text, voice in pieces]
-        if not self._prefix or self.state != "ready":
+        if not self._parallel or self.state != "ready":
             return 0, ready
         todo = [
             (text, voice)
@@ -640,7 +686,7 @@ class Engine:
         if self.state != "ready":
             raise EngineUnavailable(self.reason)
         t0 = time.perf_counter()
-        if self._prefix:
+        if self._parallel:
             job, _ = self._enqueue(text, voice, line or "*")
             wav = job.result()
             return wav, False, round((time.perf_counter() - t0) * 1000), job.stored_as or job.key
@@ -726,6 +772,14 @@ class Engine:
         same logits as alone, checked to the last digit (threads.md)."""
         rows: list[_Row] = []
         kv: dict[str, Any] = {}
+        # Each voice's conditioning while nobody is waiting yet; a voice asked
+        # for sooner is run when its sentence starts.
+        for key in list(self._conds):
+            if self._queue or self._warm:
+                break
+            self._prefix_for(key, False)
+            if self._live:
+                self._prefix_for(key, True)
         while True:
             with self._jobs:
                 while not rows and not self._queue and not self._warm:
@@ -780,6 +834,19 @@ class Engine:
                     self._fail(job, f"{type(exc).__name__}: {exc}")
                 rows, kv = [], {}
 
+    def _prefix_for(self, key: str, fast: bool) -> dict[str, Any]:
+        """A voice's conditioning through a language model: run the first time
+        it is needed, then kept. Only the language model's thread calls it."""
+        import numpy as np
+
+        store = self._prefix_live if fast and self._live else self._prefix
+        if key not in store:
+            cond = self._conds[key][0]
+            n = cond.shape[1]
+            mask, pos = np.ones((1, n), np.int64), np.arange(n)[np.newaxis, :]
+            store[key] = self._run_lm(cond, self._empty(1), mask, pos, fast)[1]
+        return store[key]
+
     def _without(self, kv: dict[str, Any], rows: list[_Row], gone: list[int]) -> dict[str, Any]:
         """Rows taken out of the batch (warm ones, making way); the cache keeps
         the rest, as when rows finish."""
@@ -797,7 +864,7 @@ class Engine:
         if job.done.is_set():
             return kv
         fast = job.fast and self._live
-        prefix = (self._prefix_live if fast else self._prefix)[job.voice.key]
+        prefix = self._prefix_for(job.voice.key, fast)
         start = next(iter(prefix.values())).shape[2]
         ids = np.array([self._tokenizer.encode(job.text).ids], dtype=np.int64)
         embeds = self._sessions["embed_tokens"].run(None, {"input_ids": ids})[0]
