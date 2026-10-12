@@ -67,7 +67,18 @@ fitted to how M11 works. **The GPU is not for now** (the user's call).
    `first_token_at`, `landed_at`, `first_audio_at`, plus M06's own model time):
    network/model, synthesis to first audio, the pause — then work on the
    largest.
-3. ⬜ **A gap before a long sentence** (the user's `demo_2`). *Causes:* (A)
+3. 🟡 **2026-10-12: streaming is in, and on this laptop it cannot help.**
+   abhinav's `stream.py` and `/voice/speak_stream` are merged (`761cbed`):
+   1 s pieces with 1 s of context, crossfaded, played only once the buffer
+   cannot run dry, not streamed when the making is too slow to gain. Timed
+   here on fresh long sentences: it never started early, and took 3–6 s
+   longer than the whole sentence (as abhinav measured: 42.8 s streamed
+   against 31.8 s whole). Live speech is made at ~0.75× real time on this
+   CPU (8.4 s of speech in 11–12 s: ~5 s choosing tokens, ~4 s decoding),
+   with 8-bit or 7-bit int8 alike. A GPU decoder (GTX 1650: 0.12–0.19× real
+   time) would let it stream; the GPU is not for now. Left to try on the
+   CPU: the decoder in int8. The room does not call `speak_stream` yet.
+   *Was:* **A gap before a long sentence** (the user's `demo_2`). *Causes:* (A)
    the CPU shared with a face build — fixed, builds wait during interviews
    (`8913aa2`); (B) a sentence with no comma is one piece, and one row of
    three makes ~19 speech tokens/s where speech needs 25, so a long piece
@@ -79,7 +90,15 @@ fitted to how M11 works. **The GPU is not for now** (the user's call).
    each chunk put on the room's one Web Audio track as it arrives (barge-in
    stops it as now). Keeps the sentence's own tune; first sound after ~1 s
    whatever its length. Test the seams first, with M11 stopped (RAM).
-4. ⬜ **Identifiers read wrong** — `emp_id` heard as "Benite", `dept_id` as
+4. ✅ **Done 2026-10-12.** Core v0.32.0–v0.34.0: identifiers by shape
+   (`Employees(emp_id, …)` "Employees, with employee ID, …", `COUNT(*)`
+   "count star", `OrderID` "Order ID", `log_b a` "log base B of A", `f(n)`
+   "F of N", comparisons in words). And a seam fixed: Core rewrote `O(n)`
+   to "O of n" before M11's probed `notation.py` could make it "order N",
+   so every big-O went out in the form its probe rejected; ported to Core.
+   `research/lexicon/identifiers.py` on all eight voices: 69 of 96 sayings
+   whole; "dept" → "department" earned an entry (8 of 8); "AS PATH" none.
+   *Was:* **Identifiers read wrong** — `emp_id` heard as "Benite", `dept_id` as
    "deputy". *Cause:* `speakable()` only turns `_` into a space; "emp", "dept"
    and `Employees(…)` reach the voice as written. *Fix:* the lexicon
    (EC-11.11) — scan the question bank for identifiers (`snake_case`,
@@ -102,7 +121,16 @@ fitted to how M11 works. **The GPU is not for now** (the user's call).
    DirectML on the Iris Xe crashed or recompiled per length. FR-11.20 /
    AC-11.1 stay open until a faster machine.
 
-**Order:** ~~1~~ → ~~2~~ → 3 → 4 → 5 → 6.
+**Order:** ~~1~~ → ~~2~~ → 3 (int8 decoder, then hardware) → ~~4~~ → 5 → 6.
+
+**2026-10-12 — the team's branches, merged** (`761cbed`, M06 `2bbcba5`):
+int8 with 7-bit weights by default (8-bit spoke gibberish on CPUs without
+VNNI), the opt-in DirectML decoder, streaming, the listening-test cast
+(eight voices kept; `Cast.resolve` now gives a man's voice to a man before
+the accent), and 155 name respellings. Measured before keeping them
+(`research/lexicon/names_ab.py`, 1,240 sayings each way): recognisable as
+written 1,125, respelled 1,023; a respelling fixed 88 name-voice pairs and
+broke 190 — kept wherever it did not break the name (`e9ddcc8`).
 
 ### 2026-10-10 — a photo for everyone; where the user's gaps came from; faces checked for marks
 
