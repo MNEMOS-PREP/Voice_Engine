@@ -78,6 +78,10 @@ fitted to how M11 works. **The GPU is not for now** (the user's call).
    with 8-bit or 7-bit int8 alike. A GPU decoder (GTX 1650: 0.12–0.19× real
    time) would let it stream; the GPU is not for now. Left to try on the
    CPU: the decoder in int8. The room does not call `speak_stream` yet.
+   **Tried 2026-10-12, not adopted** (`research/listening/decoder_int8.md`):
+   the int8 decoder sounds the same but runs at 0.37x real time against
+   fp32's 0.40; 8 threads 0.41. The decoder is ~0.4x real time on this CPU
+   whatever is done: streaming waits for a GPU decoder.
    *Was:* **A gap before a long sentence** (the user's `demo_2`). *Causes:* (A)
    the CPU shared with a face build — fixed, builds wait during interviews
    (`8913aa2`); (B) a sentence with no comma is one piece, and one row of
@@ -107,7 +111,13 @@ fitted to how M11 works. **The GPU is not for now** (the user's call).
    "department I D"); a table's columns said as a list. Chatterbox takes
    text, not SSML or phonemes, so entries are respellings, kept per voice
    where one voice needs its own.
-5. ⬜ **The browser's 3D heads share the CPU with the voice** — unmeasured.
+5. ✅ **Done 2026-10-12** (`research/listening/heads_cpu.md`): measured in
+   the real room, live speech was made at 2.2x real time with two 3D heads
+   open against 1.0x with photos — the renderer drew at 60 frames a second
+   (~1.9 cores, and the integrated GPU's share of the power). Core v0.35.0
+   paces each head: 30 a second while it speaks (lip sync's rate), 15
+   otherwise — 0.4 cores, speech at 1.5x real time.
+   *Was:* **The browser's 3D heads share the CPU with the voice** — unmeasured.
    *Fix:* measure the room's CPU with heads on and off during a line; if it
    matters, draw only the speaker's head at full rate and the others slower
    (or as their photo), or move the renderer off the main thread.
@@ -121,7 +131,7 @@ fitted to how M11 works. **The GPU is not for now** (the user's call).
    DirectML on the Iris Xe crashed or recompiled per length. FR-11.20 /
    AC-11.1 stay open until a faster machine.
 
-**Order:** ~~1~~ → ~~2~~ → 3 (int8 decoder, then hardware) → ~~4~~ → 5 → 6.
+**Order:** ~~1~~ → ~~2~~ → 3 (hardware: a GPU decoder) → ~~4~~ → ~~5~~ → 6.
 
 **2026-10-12 — the team's branches, merged** (`761cbed`, M06 `2bbcba5`):
 int8 with 7-bit weights by default (8-bit spoke gibberish on CPUs without
