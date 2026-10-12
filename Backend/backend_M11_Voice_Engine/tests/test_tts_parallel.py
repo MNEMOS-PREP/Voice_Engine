@@ -126,8 +126,8 @@ def fake_sample(logits, generated, _rng, **_):
     return tts.STOP_SPEECH if generated.size + 1 >= max(1, target) else 100
 
 
-@pytest.fixture
-def engine(monkeypatch):
+def make_engine(monkeypatch):
+    """An engine on fake sessions, three rows at a time (also test_stream.py's)."""
     monkeypatch.setattr(tts, "sample_next", fake_sample)
     monkeypatch.setattr(tts, "NUM_KV_HEADS", 2)
     monkeypatch.setattr(tts, "HEAD_DIM", 3)
@@ -149,6 +149,11 @@ def engine(monkeypatch):
     e._begin()
     e.state, e.reason = "ready", "fake sessions"
     return e
+
+
+@pytest.fixture
+def engine(monkeypatch):
+    return make_engine(monkeypatch)
 
 
 def seconds(data: bytes) -> float:
@@ -229,6 +234,20 @@ def test_a_sentence_two_lines_share_is_not_dropped_with_one_of_them(engine, monk
     assert not shared.done.is_set() and shared.lines == {"b"}
     gate.set()
     assert seconds(engine.speak("Shared words here.", voice, line="b")[0]) > 0
+
+
+# ── the decoder's device ─────────────────────────────────────────────────
+
+
+def test_the_decoder_runs_on_a_gpu_only_when_asked_and_there():
+    both = ["DmlExecutionProvider", "CPUExecutionProvider"]
+    assert tts.decoder_providers(both, "") is None  # not asked: the CPU, as before
+    assert tts.decoder_providers(both, "gpu") is None  # not a device index
+    assert tts.decoder_providers(["CPUExecutionProvider"], "1") is None  # no DirectML
+    assert tts.decoder_providers(both, "1") == [
+        ("DmlExecutionProvider", {"device_id": 1}),
+        "CPUExecutionProvider",
+    ]
 
 
 # ── the routes ───────────────────────────────────────────────────────────

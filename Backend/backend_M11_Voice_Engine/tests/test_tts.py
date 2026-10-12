@@ -85,7 +85,10 @@ def test_the_roster_is_mostly_indian_and_every_interviewer_sounds_different():
     cast = tts.Cast.load()
     voices = [cast.voices[k] for k in cast.cast.values()]
     first = [cast.cast[p] for p in FIRST_SEVEN]
-    assert len(set(first)) == len(first)
+    # 2026-10-11: the team's listening test kept eight voices of fourteen,
+    # and two of the first seven (professor, startup_founder) now share one.
+    # Never at one table: M06 seats no two who share a voice (`Persona.sound`).
+    assert len(set(first)) >= len(first) - 1, "the first seven: at most one shared voice"
     assert set(cast.cast.values()) == set(cast.voices), "every voice is someone's"
     indian = sum(v.accent == "indian" for v in voices)
     assert indian > len(voices) / 2 and indian < len(voices)
@@ -126,23 +129,27 @@ def test_an_uncast_persona_gets_a_voice_that_fits_what_it_asked_for():
     cast = tts.Cast.load()
     indian_higher = cast.resolve(persona_id="new_one", voice_id="en-IN-female-warm")
     assert (indian_higher.accent, indian_higher.register) == ("indian", "higher")
+    # No foreign man in the roster since the 2026-10-11 listening test: a man's
+    # voice still, the accent given up before the register.
     foreign_lower = cast.resolve(persona_id="visitor", voice_id="en-US-male-brisk")
-    assert (foreign_lower.accent, foreign_lower.register) == ("foreign", "lower")
+    assert foreign_lower.register == "lower"
     # The same persona gets the same voice every time.
     assert cast.resolve(persona_id="new_one", voice_id="en-IN-female-warm") == indian_higher
 
 
 def test_an_explicit_voice_wins_and_nonsense_falls_back_to_the_default():
     cast = tts.Cast.load()
-    assert cast.resolve(persona_id="friendly_recruiter", voice="dailytalk-0").key == "dailytalk-0"
+    other = next(k for k in cast.voices if k != cast.cast["friendly_recruiter"])
+    assert cast.resolve(persona_id="friendly_recruiter", voice=other).key == other
     assert cast.resolve(voice_id="a nice voice").key == cast.default
 
 
 def test_a_cast_naming_a_voice_that_does_not_exist_is_refused_at_load(tmp_path):
+    voice = tts.Cast.load().cast["startup_founder"]
     raw = (
         (tts.CAST_FILE)
         .read_text(encoding="utf-8")
-        .replace('"startup_founder": "dailytalk-0"', '"startup_founder": "ghost"')
+        .replace(f'"startup_founder": "{voice}"', '"startup_founder": "ghost"')
     )
     bad = tmp_path / "cast.json"
     bad.write_text(raw, encoding="utf-8")
