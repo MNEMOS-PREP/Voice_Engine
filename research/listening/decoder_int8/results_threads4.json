@@ -1,0 +1,44 @@
+{
+ "rows": [
+  {
+   "sentence": 0,
+   "speech_s": 9.28,
+   "fp32_rtf": 0.416,
+   "int8_rtf": 0.372,
+   "lsd_fp32_fp32": 9.244,
+   "lsd_int8_fp32": 8.855
+  },
+  {
+   "sentence": 1,
+   "speech_s": 8.88,
+   "fp32_rtf": 0.407,
+   "int8_rtf": 0.383,
+   "lsd_fp32_fp32": 8.573,
+   "lsd_int8_fp32": 8.493
+  },
+  {
+   "sentence": 2,
+   "speech_s": 7.4,
+   "fp32_rtf": 0.379,
+   "int8_rtf": 0.331,
+   "lsd_fp32_fp32": 8.681,
+   "lsd_int8_fp32": 8.59
+  },
+  {
+   "sentence": 3,
+   "speech_s": 5.8,
+   "fp32_rtf": 0.398,
+   "int8_rtf": 0.393,
+   "lsd_fp32_fp32": 9.306,
+   "lsd_int8_fp32": 9.281
+  }
+ ],
+ "summary": {
+  "reduce_range": true,
+  "decoder_threads": 4,
+  "fp32_rtf": 0.4,
+  "int8_rtf": 0.37,
+  "lsd_fp32_fp32": 8.951,
+  "lsd_int8_fp32": 8.805
+ }
+}
