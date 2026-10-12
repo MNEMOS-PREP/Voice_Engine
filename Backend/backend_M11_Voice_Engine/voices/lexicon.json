@@ -1556,6 +1556,11 @@
     "indictts-128877",
     "indictts-144039"
    ]
+  },
+  {
+   "term": "dept",
+   "say": "department",
+   "why": "The bank's `dept_id` (Core v0.32.0 says it \"dept ID\") was heard \"debt ID\" or \"depth ID\" in all eight voices; \"department ID\" came back in all eight (research/lexicon/identifiers.py, identifier_respell.py, 2026-10-12). How a person reads the column aloud anyway."
   }
  ]
 }

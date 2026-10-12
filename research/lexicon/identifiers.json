@@ -1,0 +1,642 @@
+[
+ {
+  "said": "Think about how AS PATH is used by BGP to detect loops.",
+  "voice": "chatterbox-default",
+  "heard": "Think about how Aspath is used by BGP to detect loops.",
+  "missed": [
+   "as",
+   "path"
+  ]
+ },
+ {
+  "said": "Think about how AS PATH is used by BGP to detect loops.",
+  "voice": "indictts-002527",
+  "heard": "Think about how a spath is used by BGP to detect loops.",
+  "missed": [
+   "as",
+   "path"
+  ]
+ },
+ {
+  "said": "Think about how AS PATH is used by BGP to detect loops.",
+  "voice": "indictts-012635",
+  "heard": "Think about how Aspath is used by BGP to detect loops.",
+  "missed": [
+   "as",
+   "path"
+  ]
+ },
+ {
+  "said": "Think about how AS PATH is used by BGP to detect loops.",
+  "voice": "indictts-017689",
+  "heard": "Think about how Aspath is used by BGP to detect loops.",
+  "missed": [
+   "as",
+   "path"
+  ]
+ },
+ {
+  "said": "Think about how AS PATH is used by BGP to detect loops.",
+  "voice": "indictts-048013",
+  "heard": "Think about how ASPath is used by BGB to detect loops.",
+  "missed": [
+   "as",
+   "path"
+  ]
+ },
+ {
+  "said": "Think about how AS PATH is used by BGP to detect loops.",
+  "voice": "indictts-123823",
+  "heard": "Think about how SPATH is used by BGP to detect loops.",
+  "missed": [
+   "as",
+   "path"
+  ]
+ },
+ {
+  "said": "Think about how AS PATH is used by BGP to detect loops.",
+  "voice": "indictts-128877",
+  "heard": "Think about how Aspat is used by BGP to detect looks.",
+  "missed": [
+   "as",
+   "path"
+  ]
+ },
+ {
+  "said": "Think about how AS PATH is used by BGP to detect loops.",
+  "voice": "indictts-144039",
+  "heard": "Think about how AusPath is used by BGP to detect loops.",
+  "missed": [
+   "as",
+   "path"
+  ]
+ },
+ {
+  "said": "You have a table Employees, with employee ID, name, dept ID and salary, and a table Departments, with dept ID and dept name.",
+  "voice": "chatterbox-default",
+  "heard": "You have a table, employees with employee ID, name, depth ID and salary, and a table, departments with depth ID and depth name,",
+  "missed": [
+   "dept"
+  ]
+ },
+ {
+  "said": "You have a table Employees, with employee ID, name, dept ID and salary, and a table Departments, with dept ID and dept name.",
+  "voice": "indictts-002527",
+  "heard": "You have a table, employees, with employee ID, name, DAPT ID and salary, and a table, departments, with DAPT ID and DAPT name.",
+  "missed": [
+   "dept"
+  ]
+ },
+ {
+  "said": "You have a table Employees, with employee ID, name, dept ID and salary, and a table Departments, with dept ID and dept name.",
+  "voice": "indictts-012635",
+  "heard": "You have a table, employees with employee ID, name, debt ID and salary, and a table, departments with debt ID and debt name.",
+  "missed": [
+   "dept"
+  ]
+ },
+ {
+  "said": "You have a table Employees, with employee ID, name, dept ID and salary, and a table Departments, with dept ID and dept name.",
+  "voice": "indictts-017689",
+  "heard": "you have a table employees with employee ID name debt ID and salary and a table deplot apartments with debt ID and debt name",
+  "missed": [
+   "dept"
+  ]
+ },
+ {
+  "said": "You have a table Employees, with employee ID, name, dept ID and salary, and a table Departments, with dept ID and dept name.",
+  "voice": "indictts-048013",
+  "heard": "You have a table employees with employee ID, name, debt ID and salary and a table departments with debt ID and debt name.",
+  "missed": [
+   "dept"
+  ]
+ },
+ {
+  "said": "You have a table Employees, with employee ID, name, dept ID and salary, and a table Departments, with dept ID and dept name.",
+  "voice": "indictts-123823",
+  "heard": "You have a table employees with employee ID, name, debt ID and salary and a table departments with debt ID and debt name.",
+  "missed": [
+   "dept"
+  ]
+ },
+ {
+  "said": "You have a table Employees, with employee ID, name, dept ID and salary, and a table Departments, with dept ID and dept name.",
+  "voice": "indictts-128877",
+  "heard": "You have a table, employees with employee ID, name, debt ID and salary and a table, departments with debt ID and debt name.",
+  "missed": [
+   "dept"
+  ]
+ },
+ {
+  "said": "You have a table Employees, with employee ID, name, dept ID and salary, and a table Departments, with dept ID and dept name.",
+  "voice": "indictts-144039",
+  "heard": "You have a table, employees, with employee ID, name, debt ID and salary, and a table, departments, with debt ID and debt name.",
+  "missed": [
+   "dept"
+  ]
+ },
+ {
+  "said": "During a code review you notice a query that selects rows from Orders where order date is within the last 30 days, but the table has an index on order date.",
+  "voice": "chatterbox-default",
+  "heard": "During a code review, you notice a query that selects rows from orders where order date is within the last 30 days, but the table has an index on order date.",
+  "missed": []
+ },
+ {
+  "said": "During a code review you notice a query that selects rows from Orders where order date is within the last 30 days, but the table has an index on order date.",
+  "voice": "indictts-002527",
+  "heard": "During a code review, you notice a query that selects rows from orders where order date is within the last 30 days, but the table has an index on order date.",
+  "missed": []
+ },
+ {
+  "said": "During a code review you notice a query that selects rows from Orders where order date is within the last 30 days, but the table has an index on order date.",
+  "voice": "indictts-012635",
+  "heard": "During a code review, you notice a query that selects rows from orders, where order date is within the last 30 days, but the table has an index on order date,",
+  "missed": []
+ },
+ {
+  "said": "During a code review you notice a query that selects rows from Orders where order date is within the last 30 days, but the table has an index on order date.",
+  "voice": "indictts-017689",
+  "heard": "During a code review, you notice a query that selects rows from orders, where order date is within the last 30 days, but the table has an index on order date.",
+  "missed": []
+ },
+ {
+  "said": "During a code review you notice a query that selects rows from Orders where order date is within the last 30 days, but the table has an index on order date.",
+  "voice": "indictts-048013",
+  "heard": "During a code review, you notice a query that selects draws from orders where order date is within the last 30 days, but the table has an index on order date.",
+  "missed": []
+ },
+ {
+  "said": "During a code review you notice a query that selects rows from Orders where order date is within the last 30 days, but the table has an index on order date.",
+  "voice": "indictts-123823",
+  "heard": "During a code review, you'll notice a query that selects rows from orders where order date is within the last 30 days. But the table has an index on order date.",
+  "missed": []
+ },
+ {
+  "said": "During a code review you notice a query that selects rows from Orders where order date is within the last 30 days, but the table has an index on order date.",
+  "voice": "indictts-128877",
+  "heard": "During a code review, you notice a query that selects rows from orders where order date is within the last 30 days, but the table has an index on order date.",
+  "missed": []
+ },
+ {
+  "said": "During a code review you notice a query that selects rows from Orders where order date is within the last 30 days, but the table has an index on order date.",
+  "voice": "indictts-144039",
+  "heard": "During a code review, you notice a query that Cinex rose from orders, where order date is within the last 30 days. But the table has an index on order date.",
+  "missed": []
+ },
+ {
+  "said": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name, and what join type does this use?",
+  "voice": "chatterbox-default",
+  "heard": "In a table with employees, with a Manager ID column, referencing the same table, how would you retrieve each employee with their manager's name, and what join type does this use?",
+  "missed": []
+ },
+ {
+  "said": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name, and what join type does this use?",
+  "voice": "indictts-002527",
+  "heard": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name and what joint type does this use?",
+  "missed": []
+ },
+ {
+  "said": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name, and what join type does this use?",
+  "voice": "indictts-012635",
+  "heard": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name and what join type does this use?",
+  "missed": []
+ },
+ {
+  "said": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name, and what join type does this use?",
+  "voice": "indictts-017689",
+  "heard": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name and what joint type does this use?",
+  "missed": []
+ },
+ {
+  "said": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name, and what join type does this use?",
+  "voice": "indictts-048013",
+  "heard": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name and what joint type does this use?",
+  "missed": []
+ },
+ {
+  "said": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name, and what join type does this use?",
+  "voice": "indictts-123823",
+  "heard": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name and what join type does this use?",
+  "missed": []
+ },
+ {
+  "said": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name, and what join type does this use?",
+  "voice": "indictts-128877",
+  "heard": "In a table of employees with a manager id column referencing the same table, how would you retrieve each employee with their manager's name and what joint type does this use?",
+  "missed": []
+ },
+ {
+  "said": "In a table of employees with a manager ID column referencing the same table, how would you retrieve each employee with their manager's name, and what join type does this use?",
+  "voice": "indictts-144039",
+  "heard": "In a table of employees, with a Manager ID column referencing the same table, how would you retrieve each employee with their manager's name and what join type does this use?",
+  "missed": []
+ },
+ {
+  "said": "During a nightly batch job you notice the query SELECT dept, count star FROM employees GROUP BY dept HAVING count star greater than 10 runs much slower after a recent index addition.",
+  "voice": "chatterbox-default",
+  "heard": "During a nightly batch job, you notice the query, select depth, count star from employees, group by depth, having count star greater than 10 runs, much slower after a recent index addition.",
+  "missed": []
+ },
+ {
+  "said": "During a nightly batch job you notice the query SELECT dept, count star FROM employees GROUP BY dept HAVING count star greater than 10 runs much slower after a recent index addition.",
+  "voice": "indictts-002527",
+  "heard": "during a nightly bash job you notice the qua c lac d e e e e e e e one d e e e e b day five mining quant is true greater than having count star greater than 10 runs much slower after recent index addition",
+  "missed": []
+ },
+ {
+  "said": "During a nightly batch job you notice the query SELECT dept, count star FROM employees GROUP BY dept HAVING count star greater than 10 runs much slower after a recent index addition.",
+  "voice": "indictts-012635",
+  "heard": "During a nightly batch job, you notice the query select depth count star from employees group by depth having count star greater than 10 runs much slower after recent index addition.",
+  "missed": []
+ },
+ {
+  "said": "During a nightly batch job you notice the query SELECT dept, count star FROM employees GROUP BY dept HAVING count star greater than 10 runs much slower after a recent index addition.",
+  "voice": "indictts-017689",
+  "heard": "During a nightly batch job you notice the query, select debt, count star, from employees, group by debt having, count star greater than 10 runs, much slower after recent index addition.",
+  "missed": []
+ },
+ {
+  "said": "During a nightly batch job you notice the query SELECT dept, count star FROM employees GROUP BY dept HAVING count star greater than 10 runs much slower after a recent index addition.",
+  "voice": "indictts-048013",
+  "heard": "During italy batch job, you'll notice the query select debt, count star from employees group by debt having, count star greater than 10 runs much slower after a recent index addition,",
+  "missed": []
+ },
+ {
+  "said": "During a nightly batch job you notice the query SELECT dept, count star FROM employees GROUP BY dept HAVING count star greater than 10 runs much slower after a recent index addition.",
+  "voice": "indictts-123823",
+  "heard": "During the nightly batch job you notice the query. Select Depth. Count star from employees group by Depth. Heaving. Count star greater than 10 runs, much slower after a recent index addition.",
+  "missed": []
+ },
+ {
+  "said": "During a nightly batch job you notice the query SELECT dept, count star FROM employees GROUP BY dept HAVING count star greater than 10 runs much slower after a recent index addition.",
+  "voice": "indictts-128877",
+  "heard": "During a nightly batch job, you notice the query select date count star from employees group by debt, having count star greater than 10 runs, much slower after a recent index addition.",
+  "missed": []
+ },
+ {
+  "said": "During a nightly batch job you notice the query SELECT dept, count star FROM employees GROUP BY dept HAVING count star greater than 10 runs much slower after a recent index addition.",
+  "voice": "indictts-144039",
+  "heard": "During a nightly batch job, you notice the query and select depth count star from employees grouped by depth, having count star, greater than 10 runs, much slower after a recent index addition.",
+  "missed": []
+ },
+ {
+  "said": "You have a table storing orders with columns Order ID, Customer Name, Customer Address, Product ID, Product Name, Product Price.",
+  "voice": "chatterbox-default",
+  "heard": "You have a table storing orders with columns Order ID, Customer Name, Customer Address, Product ID, Product Name, Product Price.",
+  "missed": []
+ },
+ {
+  "said": "You have a table storing orders with columns Order ID, Customer Name, Customer Address, Product ID, Product Name, Product Price.",
+  "voice": "indictts-002527",
+  "heard": "You have a table storing orders with columns. Order ID, customer name, customer address, product ID, product name, product price,",
+  "missed": []
+ },
+ {
+  "said": "You have a table storing orders with columns Order ID, Customer Name, Customer Address, Product ID, Product Name, Product Price.",
+  "voice": "indictts-012635",
+  "heard": "You have a table store in orders with columns. Order ID, customer name, customer address, product ID, product name, product price.",
+  "missed": []
+ },
+ {
+  "said": "You have a table storing orders with columns Order ID, Customer Name, Customer Address, Product ID, Product Name, Product Price.",
+  "voice": "indictts-017689",
+  "heard": "You have a table storing orders with columns, Order ID, Customer Name, Customer Address, Product ID, Product Name, Product Price.",
+  "missed": []
+ },
+ {
+  "said": "You have a table storing orders with columns Order ID, Customer Name, Customer Address, Product ID, Product Name, Product Price.",
+  "voice": "indictts-048013",
+  "heard": "You have a table storing orders with columns, order ID, customer name, customer address, product ID, product name, product price.",
+  "missed": []
+ },
+ {
+  "said": "You have a table storing orders with columns Order ID, Customer Name, Customer Address, Product ID, Product Name, Product Price.",
+  "voice": "indictts-123823",
+  "heard": "You have a table storing orders with columns, Order ID, Customer Name, Customer Address, Draw Doft ID, Product Name, Product Price,",
+  "missed": []
+ },
+ {
+  "said": "You have a table storing orders with columns Order ID, Customer Name, Customer Address, Product ID, Product Name, Product Price.",
+  "voice": "indictts-128877",
+  "heard": "You have a table storing orders with columns, Order ID, Customer Name, Customer Address, Product ID, Product Name, Product Price.",
+  "missed": []
+ },
+ {
+  "said": "You have a table storing orders with columns Order ID, Customer Name, Customer Address, Product ID, Product Name, Product Price.",
+  "voice": "indictts-144039",
+  "heard": "You have a table storing orders with columns Order ID, Customer Name, Customer Address, Product ID, Product Name, Product Price.",
+  "missed": []
+ },
+ {
+  "said": "You notice a query that filters on two columns, (status, created at), is running slowly on a large table.",
+  "voice": "chatterbox-default",
+  "heard": "You notice a query that filters on two columns. Status, created at, is running slowly on a large table.",
+  "missed": []
+ },
+ {
+  "said": "You notice a query that filters on two columns, (status, created at), is running slowly on a large table.",
+  "voice": "indictts-002527",
+  "heard": "You notice a query that filters on two columns. Status created at is running slowly on a large table.",
+  "missed": []
+ },
+ {
+  "said": "You notice a query that filters on two columns, (status, created at), is running slowly on a large table.",
+  "voice": "indictts-012635",
+  "heard": "You notice a query that filters on two columns. Status, Created at, is running slowly on a large table",
+  "missed": []
+ },
+ {
+  "said": "You notice a query that filters on two columns, (status, created at), is running slowly on a large table.",
+  "voice": "indictts-017689",
+  "heard": "You notice a query that photos on two columns. Status, created at, is running slowly on a large table.",
+  "missed": []
+ },
+ {
+  "said": "You notice a query that filters on two columns, (status, created at), is running slowly on a large table.",
+  "voice": "indictts-048013",
+  "heard": "You notice a query that filters on two columns. Status, created at, is running slowly on a large table.",
+  "missed": []
+ },
+ {
+  "said": "You notice a query that filters on two columns, (status, created at), is running slowly on a large table.",
+  "voice": "indictts-123823",
+  "heard": "You notice a query that filters on two columns. Status created at is running slowly on a large table.",
+  "missed": []
+ },
+ {
+  "said": "You notice a query that filters on two columns, (status, created at), is running slowly on a large table.",
+  "voice": "indictts-128877",
+  "heard": "You notice a query that filters on two columns, status created at is running slowly on a large table.",
+  "missed": []
+ },
+ {
+  "said": "You notice a query that filters on two columns, (status, created at), is running slowly on a large table.",
+  "voice": "indictts-144039",
+  "heard": "You notice a query that filters on two columns. Status created at is running slowly on a large table.",
+  "missed": []
+ },
+ {
+  "said": "Compare f of n with n to the power log base b a to pick the correct Master case.",
+  "voice": "chatterbox-default",
+  "heard": "Compare F with N to the power log base BA to pick the correct master case.",
+  "missed": [
+   "b"
+  ]
+ },
+ {
+  "said": "Compare f of n with n to the power log base b a to pick the correct Master case.",
+  "voice": "indictts-002527",
+  "heard": "compare f of n with n to the power law base ba to pick the correct mass to case",
+  "missed": [
+   "log",
+   "b"
+  ]
+ },
+ {
+  "said": "Compare f of n with n to the power log base b a to pick the correct Master case.",
+  "voice": "indictts-012635",
+  "heard": "Compare f with n to the power log base ba to pick the correct master case.",
+  "missed": [
+   "b"
+  ]
+ },
+ {
+  "said": "Compare f of n with n to the power log base b a to pick the correct Master case.",
+  "voice": "indictts-017689",
+  "heard": "Compare f of n with n to the power log base ba to pick the correct master case.",
+  "missed": [
+   "b"
+  ]
+ },
+ {
+  "said": "Compare f of n with n to the power log base b a to pick the correct Master case.",
+  "voice": "indictts-048013",
+  "heard": "Compare f of n with n to the power log base Ba to pick the correct master case.",
+  "missed": [
+   "b"
+  ]
+ },
+ {
+  "said": "Compare f of n with n to the power log base b a to pick the correct Master case.",
+  "voice": "indictts-123823",
+  "heard": "Compare f with n to the power log base b a to pick the correct master case.",
+  "missed": []
+ },
+ {
+  "said": "Compare f of n with n to the power log base b a to pick the correct Master case.",
+  "voice": "indictts-128877",
+  "heard": "Compare F of N with N to the power law of base BA to pick the correct master case.",
+  "missed": [
+   "log",
+   "b"
+  ]
+ },
+ {
+  "said": "Compare f of n with n to the power log base b a to pick the correct Master case.",
+  "voice": "indictts-144039",
+  "heard": "Compare F with N to the power log base BA to pick the correct master case.",
+  "missed": [
+   "b"
+  ]
+ },
+ {
+  "said": "Identify a and b in the recurrence and compute n to the power log base b a.",
+  "voice": "chatterbox-default",
+  "heard": "Identify A and B in the recurrence and compute N to the power log base BA.",
+  "missed": []
+ },
+ {
+  "said": "Identify a and b in the recurrence and compute n to the power log base b a.",
+  "voice": "indictts-002527",
+  "heard": "Identify A and B in their recurrence and compute n to the power log base BA.",
+  "missed": []
+ },
+ {
+  "said": "Identify a and b in the recurrence and compute n to the power log base b a.",
+  "voice": "indictts-012635",
+  "heard": "Identify A and B in the recurrence and compute N to the power log base BA.",
+  "missed": []
+ },
+ {
+  "said": "Identify a and b in the recurrence and compute n to the power log base b a.",
+  "voice": "indictts-017689",
+  "heard": "Identify Ndmb in the recurrence and compute N to the power log base BA.",
+  "missed": [
+   "b"
+  ]
+ },
+ {
+  "said": "Identify a and b in the recurrence and compute n to the power log base b a.",
+  "voice": "indictts-048013",
+  "heard": "Identify A and B in the recurrence and compute N to the power log base B A.",
+  "missed": []
+ },
+ {
+  "said": "Identify a and b in the recurrence and compute n to the power log base b a.",
+  "voice": "indictts-123823",
+  "heard": "Identify R and B in the recurrence and compute n to the power log base B A.",
+  "missed": []
+ },
+ {
+  "said": "Identify a and b in the recurrence and compute n to the power log base b a.",
+  "voice": "indictts-128877",
+  "heard": "Identify R and B in the recurrence and compute N to the power log base B A.",
+  "missed": []
+ },
+ {
+  "said": "Identify a and b in the recurrence and compute n to the power log base b a.",
+  "voice": "indictts-144039",
+  "heard": "Identify A and B in the recurrence and compute N to the power law base BA.",
+  "missed": [
+   "log"
+  ]
+ },
+ {
+  "said": "In production you notice a Null Pointer Exception coming from a getter method; what could encapsulation misuse be causing this?",
+  "voice": "chatterbox-default",
+  "heard": "In production you notice a null pointer exception coming from a getter method. What could encapsulation misuse be causing this?",
+  "missed": []
+ },
+ {
+  "said": "In production you notice a Null Pointer Exception coming from a getter method; what could encapsulation misuse be causing this?",
+  "voice": "indictts-002527",
+  "heard": "In production, you notice a null pointer exception coming from a getter method. What could encapsulation misuse be causing this?",
+  "missed": []
+ },
+ {
+  "said": "In production you notice a Null Pointer Exception coming from a getter method; what could encapsulation misuse be causing this?",
+  "voice": "indictts-012635",
+  "heard": "In production, you notice a null pointer exception coming from a getter method. What could encapsulation misuse be causing this?",
+  "missed": []
+ },
+ {
+  "said": "In production you notice a Null Pointer Exception coming from a getter method; what could encapsulation misuse be causing this?",
+  "voice": "indictts-017689",
+  "heard": "In production you notice a null pointer exception coming from a getter method. What could encapsulation misuse be causing this?",
+  "missed": []
+ },
+ {
+  "said": "In production you notice a Null Pointer Exception coming from a getter method; what could encapsulation misuse be causing this?",
+  "voice": "indictts-048013",
+  "heard": "In production you notice a null pointer exception coming from a getter method. What could encapsulation misuse be causing this?",
+  "missed": []
+ },
+ {
+  "said": "In production you notice a Null Pointer Exception coming from a getter method; what could encapsulation misuse be causing this?",
+  "voice": "indictts-123823",
+  "heard": "Introduction, you notice a null pointer exception coming from a getter method. What could encapsulation misuse be causing this?",
+  "missed": []
+ },
+ {
+  "said": "In production you notice a Null Pointer Exception coming from a getter method; what could encapsulation misuse be causing this?",
+  "voice": "indictts-128877",
+  "heard": "In production, you notice a null pointer exception coming from a getter method. What could encapsulation misuse be causing this?",
+  "missed": []
+ },
+ {
+  "said": "In production you notice a Null Pointer Exception coming from a getter method; what could encapsulation misuse be causing this?",
+  "voice": "indictts-144039",
+  "heard": "In production, you notice a null pointer exception coming from a getter method. What could encapsulation misuse be causing this?",
+  "missed": []
+ },
+ {
+  "said": "Your team is adding a new Hybrid Vehicle class that should inherit from both Electric Vehicle and Gasoline Vehicle.",
+  "voice": "chatterbox-default",
+  "heard": "Your team is adding a new hybrid vehicle class that should inherit from both electric vehicle and gasoline vehicle.",
+  "missed": []
+ },
+ {
+  "said": "Your team is adding a new Hybrid Vehicle class that should inherit from both Electric Vehicle and Gasoline Vehicle.",
+  "voice": "indictts-002527",
+  "heard": "your team is adding a new hybrid vehicle class that should inherit from both electric vehicle and gasoline vehicle",
+  "missed": []
+ },
+ {
+  "said": "Your team is adding a new Hybrid Vehicle class that should inherit from both Electric Vehicle and Gasoline Vehicle.",
+  "voice": "indictts-012635",
+  "heard": "Your team is adding a new hybrid vehicle class that should inherit from both electric vehicle and gasoline vehicle.",
+  "missed": []
+ },
+ {
+  "said": "Your team is adding a new Hybrid Vehicle class that should inherit from both Electric Vehicle and Gasoline Vehicle.",
+  "voice": "indictts-017689",
+  "heard": "Your team is adding a new hybrid vehicle class that should inherit from both electric vehicle and gasoline vehicle.",
+  "missed": []
+ },
+ {
+  "said": "Your team is adding a new Hybrid Vehicle class that should inherit from both Electric Vehicle and Gasoline Vehicle.",
+  "voice": "indictts-048013",
+  "heard": "Your team is adding a new hybrid vehicle class that should inherit from both electric vehicle and gasoline vehicle.",
+  "missed": []
+ },
+ {
+  "said": "Your team is adding a new Hybrid Vehicle class that should inherit from both Electric Vehicle and Gasoline Vehicle.",
+  "voice": "indictts-123823",
+  "heard": "Your team is adding a new hybrid vehicle class that should inherit from both electric vehicle and gasoline vehicle.",
+  "missed": []
+ },
+ {
+  "said": "Your team is adding a new Hybrid Vehicle class that should inherit from both Electric Vehicle and Gasoline Vehicle.",
+  "voice": "indictts-128877",
+  "heard": "Your team is adding a new hybrid vehicle class that should inherit from both electric vehicle and gasoline vehicle.",
+  "missed": []
+ },
+ {
+  "said": "Your team is adding a new Hybrid Vehicle class that should inherit from both Electric Vehicle and Gasoline Vehicle.",
+  "voice": "indictts-144039",
+  "heard": "Your team is adding a new hybrid vehicle class that should inherit from both electric vehicle and gasoline vehicle.",
+  "missed": []
+ },
+ {
+  "said": "In a large Java service you notice that a Null Pointer Exception is bubbling up and crashing the thread.",
+  "voice": "chatterbox-default",
+  "heard": "In a large Java service, you notice that a null pointer exception is bubbling up and crashing the thread.",
+  "missed": []
+ },
+ {
+  "said": "In a large Java service you notice that a Null Pointer Exception is bubbling up and crashing the thread.",
+  "voice": "indictts-002527",
+  "heard": "In a large Java service, you notice that a null pointer exception is bubbling up and crashing the thread.",
+  "missed": []
+ },
+ {
+  "said": "In a large Java service you notice that a Null Pointer Exception is bubbling up and crashing the thread.",
+  "voice": "indictts-012635",
+  "heard": "In a large Java service, you notice that a null pointer exception is bubbling up and crashing the thread.",
+  "missed": []
+ },
+ {
+  "said": "In a large Java service you notice that a Null Pointer Exception is bubbling up and crashing the thread.",
+  "voice": "indictts-017689",
+  "heard": "In a large Java service, you notice that a null pointer exception is bubbling up and crashing the thread.",
+  "missed": []
+ },
+ {
+  "said": "In a large Java service you notice that a Null Pointer Exception is bubbling up and crashing the thread.",
+  "voice": "indictts-048013",
+  "heard": "In a large Java service, you notice that a no pointer exception is bubbling up and crashing the thread.",
+  "missed": [
+   "null"
+  ]
+ },
+ {
+  "said": "In a large Java service you notice that a Null Pointer Exception is bubbling up and crashing the thread.",
+  "voice": "indictts-123823",
+  "heard": "In a large Java service, you notice that a null pointer exception is bubbling up and clashing the thread.",
+  "missed": []
+ },
+ {
+  "said": "In a large Java service you notice that a Null Pointer Exception is bubbling up and crashing the thread.",
+  "voice": "indictts-128877",
+  "heard": "In a large Java service, you notice that a null pointer exception is bubbling up and clashing the thread.",
+  "missed": []
+ },
+ {
+  "said": "In a large Java service you notice that a Null Pointer Exception is bubbling up and crashing the thread.",
+  "voice": "indictts-144039",
+  "heard": "In a large Java service, you notice that a no pointer exception is bubbling up and crashing the thread.",
+  "missed": [
+   "null"
+  ]
+ }
+]
