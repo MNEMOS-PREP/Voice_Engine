@@ -1,788 +1,1561 @@
 {
-  "about": "How the interviewers' voices say words they get wrong (EC-11.11). An entry is here only because the voice said the term and Whisper did not hear it back, and its respelling WAS heard back (research/lexicon/probe.py). `exact`: only that casing (an acronym). Names (2026-10-11): an Indian name read with English letter rules comes back right from Whisper and still sounds foreign, so the read-back test cannot judge them; they are respelled by ear.",
-  "entries": [
-    {
-      "term": "Raghavan",
-      "say": "Raghaavan",
-      "voices": [
-        "indictts-063175"
-      ],
-      "why": "In 'Doctor Raghavan, over to you.' this voice was heard as 'Aghwawan'; 'Raghaavan' came back right. The other six voices say 'Raghavan' as written and each respelling made some of them worse, so this one is for this voice only (research/lexicon/handover.json)."
-    },
-    {
-      "term": "Aditi",
-      "say": "Uh-dih-tee",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Ananya",
-      "say": "Uh-nun-yaa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Arjun",
-      "say": "Ar-jun",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Arvind",
-      "say": "Ar-vind",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Deepak",
-      "say": "Dee-puck",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Divya",
-      "say": "Div-yaa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Farah",
-      "say": "Fuh-raa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Harish",
-      "say": "Huh-rish",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Imran",
-      "say": "Im-raan",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Isha",
-      "say": "Ee-shaa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Kabir",
-      "say": "Kuh-beer",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Karan",
-      "say": "Kuh-run",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Karthik",
-      "say": "Kar-tick",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Kavya",
-      "say": "Kaav-yaa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Lata",
-      "say": "Luh-taa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Manoj",
-      "say": "Muh-noj",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Meera",
-      "say": "Mee-raa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Neha",
-      "say": "Nay-haa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Nikhil",
-      "say": "Nick-hill",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Nisha",
-      "say": "Nee-shaa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Pooja",
-      "say": "Poo-jaa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Priya",
-      "say": "Pree-yaa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Rahul",
-      "say": "Rah-hool",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Ritu",
-      "say": "Ree-too",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Rohit",
-      "say": "Row-hit",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Sameer",
-      "say": "Suh-meer",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Sanjay",
-      "say": "Sun-jay",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Shreya",
-      "say": "Shray-yaa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Sneha",
-      "say": "Snay-haa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Sunita",
-      "say": "Soo-nee-taa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Suresh",
-      "say": "Soo-raysh",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Tanvir",
-      "say": "Tun-veer",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Varun",
-      "say": "Vuh-run",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Vikram",
-      "say": "Vik-rum",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Zoya",
-      "say": "Zoh-yaa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Deshpande",
-      "say": "Daysh-paan-day",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Narayan",
-      "say": "Naa-raa-yun",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Murthy",
-      "say": "Moor-thee",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Aarav",
-      "say": "Aa-rav",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Aditya",
-      "say": "Uh-dit-yuh",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Ajay",
-      "say": "Uh-jay",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Akash",
-      "say": "Aa-kaash",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Amit",
-      "say": "Uh-mit",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Anand",
-      "say": "Aa-nund",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Anil",
-      "say": "Uh-nil",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Ankit",
-      "say": "Un-kit",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Anuj",
-      "say": "Uh-nooj",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Arun",
-      "say": "Uh-run",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Ashok",
-      "say": "Uh-shok",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Ashwin",
-      "say": "Ush-win",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Avinash",
-      "say": "Uh-vih-nash",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Chetan",
-      "say": "Chay-tun",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Dinesh",
-      "say": "Dih-naysh",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Gaurav",
-      "say": "Gow-rav",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Gopal",
-      "say": "Go-paal",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Govind",
-      "say": "Go-vind",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Hari",
-      "say": "Huh-ree",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Hemant",
-      "say": "Hay-munt",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Jatin",
-      "say": "Juh-tin",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Kiran",
-      "say": "Kih-run",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Krishna",
-      "say": "Krish-naa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Kunal",
-      "say": "Koo-naal",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Lokesh",
-      "say": "Lo-kaysh",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Mahesh",
-      "say": "Muh-haysh",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Mohan",
-      "say": "Mo-hun",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Mohit",
-      "say": "Mo-hit",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Mukesh",
-      "say": "Moo-kaysh",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Naveen",
-      "say": "Nuh-veen",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Nitin",
-      "say": "Nih-tin",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Pankaj",
-      "say": "Pun-kuj",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Prakash",
-      "say": "Pruh-kaash",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Pranav",
-      "say": "Pruh-nuv",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Pratik",
-      "say": "Pruh-teek",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Rajesh",
-      "say": "Raa-jaysh",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Rakesh",
-      "say": "Raa-kaysh",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Ramesh",
-      "say": "Raa-maysh",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Ravi",
-      "say": "Raa-vee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Rishi",
-      "say": "Rih-shee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Rohan",
-      "say": "Ro-hun",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Sachin",
-      "say": "Sutch-in",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Sandeep",
-      "say": "Sun-deep",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Shyam",
-      "say": "Shaam",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Siddharth",
-      "say": "Sid-daart",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Sunil",
-      "say": "Soo-nil",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Surya",
-      "say": "Soor-yaa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Tarun",
-      "say": "Tuh-run",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Tushar",
-      "say": "Too-shaar",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Uday",
-      "say": "Oo-die",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Vijay",
-      "say": "Vih-jay",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Vinay",
-      "say": "Vih-nay",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Vishal",
-      "say": "Vih-shaal",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Vivek",
-      "say": "Vih-vake",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Yash",
-      "say": "Yush",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Aanya",
-      "say": "Aan-yaa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Aishwarya",
-      "say": "Eye-shwar-yaa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Akanksha",
-      "say": "Aa-kaank-shaa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Anjali",
-      "say": "Un-juh-lee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Anita",
-      "say": "Uh-nee-taa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Anushka",
-      "say": "Uh-nush-kaa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Archana",
-      "say": "Ar-chuh-naa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Bhavna",
-      "say": "Bhaav-naa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Chitra",
-      "say": "Chit-raa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Deepa",
-      "say": "Dee-paa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Deepika",
-      "say": "Dee-pee-kaa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Gayatri",
-      "say": "Guy-uh-tree",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Geeta",
-      "say": "Gee-taa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Jaya",
-      "say": "Juh-yaa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Kajal",
-      "say": "Kaa-jal",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Kalpana",
-      "say": "Kul-puh-naa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Komal",
-      "say": "Ko-mul",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Kriti",
-      "say": "Kri-tee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Lakshmi",
-      "say": "Luck-shmee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Madhuri",
-      "say": "Muh-dhoo-ree",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Mansi",
-      "say": "Mun-see",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Mythili",
-      "say": "My-thih-lee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Nandini",
-      "say": "Nun-dih-nee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Neelam",
-      "say": "Nee-lum",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Nidhi",
-      "say": "Nih-dhee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Pallavi",
-      "say": "Pul-luh-vee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Preeti",
-      "say": "Pree-tee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Radha",
-      "say": "Raa-dhaa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Rashmi",
-      "say": "Rush-mee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Rekha",
-      "say": "Ray-khaa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Rupali",
-      "say": "Roo-paa-lee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Sakshi",
-      "say": "Saak-shee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Sangeeta",
-      "say": "Sun-gee-taa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Savita",
-      "say": "Suh-vee-taa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Shalini",
-      "say": "Shaa-lih-nee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Shruti",
-      "say": "Shroo-tee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Sonali",
-      "say": "So-naa-lee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Swati",
-      "say": "Swaa-tee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Tanya",
-      "say": "Taan-yaa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Uma",
-      "say": "Oo-maa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Vandana",
-      "say": "Vun-duh-naa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Vidya",
-      "say": "Vid-yaa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Yamini",
-      "say": "Yaa-mih-nee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Sharma",
-      "say": "Shar-maa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Verma",
-      "say": "Ver-maa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Gupta",
-      "say": "Gup-taa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Iyer",
-      "say": "Eye-yer",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Reddy",
-      "say": "Red-dee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Patel",
-      "say": "Puh-tel",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Kumar",
-      "say": "Koo-maar",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Joshi",
-      "say": "Jo-shee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Mehta",
-      "say": "Meh-taa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Kapoor",
-      "say": "Kuh-poor",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Banerjee",
-      "say": "Bun-er-jee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Chatterjee",
-      "say": "Chat-er-jee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Mukherjee",
-      "say": "Moo-ker-jee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Menon",
-      "say": "May-nun",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Pillai",
-      "say": "Pil-lie",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Khan",
-      "say": "Khaan",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Ahmed",
-      "say": "Ah-med",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Kulkarni",
-      "say": "Kool-kar-nee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    },
-    {
-      "term": "Agarwal",
-      "say": "Uh-gar-wal",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
-    }
-  ]
+ "about": "How the interviewers' voices say words they get wrong (EC-11.11). An entry is here only because the voice said the term and Whisper did not hear it back, and its respelling WAS heard back (research/lexicon/probe.py). `exact`: only that casing (an acronym). Names (2026-10-11): an Indian name read with English letter rules comes back right from Whisper and still sounds foreign, so the read-back test cannot judge them; they are respelled by ear.",
+ "entries": [
+  {
+   "term": "Raghavan",
+   "say": "Raghaavan",
+   "voices": [
+    "indictts-063175"
+   ],
+   "why": "In 'Doctor Raghavan, over to you.' this voice was heard as 'Aghwawan'; 'Raghaavan' came back right. The other six voices say 'Raghavan' as written and each respelling made some of them worse, so this one is for this voice only (research/lexicon/handover.json)."
+  },
+  {
+   "term": "Aditi",
+   "say": "Uh-dih-tee",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Ananya",
+   "say": "Uh-nun-yaa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Arjun",
+   "say": "Ar-jun",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689, indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Arvind",
+   "say": "Ar-vind",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-048013: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Deepak",
+   "say": "Dee-puck",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-048013: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Divya",
+   "say": "Div-yaa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-048013: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Farah",
+   "say": "Fuh-raa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in chatterbox-default, indictts-002527: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Harish",
+   "say": "Huh-rish",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689, indictts-123823, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Imran",
+   "say": "Im-raan",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Isha",
+   "say": "Ee-shaa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Kabir",
+   "say": "Kuh-beer",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in chatterbox-default: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Karan",
+   "say": "Kuh-run",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-048013, indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Karthik",
+   "say": "Kar-tick",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-017689: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Kavya",
+   "say": "Kaav-yaa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Lata",
+   "say": "Luh-taa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689, indictts-123823, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Manoj",
+   "say": "Muh-noj",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in chatterbox-default, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Meera",
+   "say": "Mee-raa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-048013, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Neha",
+   "say": "Nay-haa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Nikhil",
+   "say": "Nick-hill",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Nisha",
+   "say": "Nee-shaa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Pooja",
+   "say": "Poo-jaa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Priya",
+   "say": "Pree-yaa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Rahul",
+   "say": "Rah-hool",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Ritu",
+   "say": "Ree-too",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Rohit",
+   "say": "Row-hit",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-048013, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Sameer",
+   "say": "Suh-meer",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Sanjay",
+   "say": "Sun-jay",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Shreya",
+   "say": "Shray-yaa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Sneha",
+   "say": "Snay-haa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Sunita",
+   "say": "Soo-nee-taa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Suresh",
+   "say": "Soo-raysh",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Tanvir",
+   "say": "Tun-veer",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Varun",
+   "say": "Vuh-run",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877"
+   ]
+  },
+  {
+   "term": "Vikram",
+   "say": "Vik-rum",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Zoya",
+   "say": "Zoh-yaa",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Deshpande",
+   "say": "Daysh-paan-day",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Narayan",
+   "say": "Naa-raa-yun",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Murthy",
+   "say": "Moor-thee",
+   "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-012635, indictts-017689, indictts-048013, indictts-123823, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Aarav",
+   "say": "Aa-rav",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in chatterbox-default, indictts-002527, indictts-128877, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823"
+   ]
+  },
+  {
+   "term": "Aditya",
+   "say": "Uh-dit-yuh",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Ajay",
+   "say": "Uh-jay",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Akash",
+   "say": "Aa-kaash",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635, indictts-017689, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877"
+   ]
+  },
+  {
+   "term": "Amit",
+   "say": "Uh-mit",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-017689, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Anand",
+   "say": "Aa-nund",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Anil",
+   "say": "Uh-nil",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Ankit",
+   "say": "Un-kit",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Anuj",
+   "say": "Uh-nooj",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in chatterbox-default, indictts-017689: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Arun",
+   "say": "Uh-run",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-048013: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Ashok",
+   "say": "Uh-shok",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Ashwin",
+   "say": "Ush-win",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635, indictts-017689, indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Avinash",
+   "say": "Uh-vih-nash",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Chetan",
+   "say": "Chay-tun",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Dinesh",
+   "say": "Dih-naysh",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Gaurav",
+   "say": "Gow-rav",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Gopal",
+   "say": "Go-paal",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877"
+   ]
+  },
+  {
+   "term": "Govind",
+   "say": "Go-vind",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Hari",
+   "say": "Huh-ree",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Hemant",
+   "say": "Hay-munt",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Jatin",
+   "say": "Juh-tin",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Kiran",
+   "say": "Kih-run",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Krishna",
+   "say": "Krish-naa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Kunal",
+   "say": "Koo-naal",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Lokesh",
+   "say": "Lo-kaysh",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in chatterbox-default, indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Mahesh",
+   "say": "Muh-haysh",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Mohan",
+   "say": "Mo-hun",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Mohit",
+   "say": "Mo-hit",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in chatterbox-default, indictts-017689, indictts-123823, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Mukesh",
+   "say": "Moo-kaysh",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Naveen",
+   "say": "Nuh-veen",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-012635, indictts-128877, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823"
+   ]
+  },
+  {
+   "term": "Nitin",
+   "say": "Nih-tin",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Pankaj",
+   "say": "Pun-kuj",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877"
+   ]
+  },
+  {
+   "term": "Prakash",
+   "say": "Pruh-kaash",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Pranav",
+   "say": "Pruh-nuv",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877"
+   ]
+  },
+  {
+   "term": "Pratik",
+   "say": "Pruh-teek",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Rajesh",
+   "say": "Raa-jaysh",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Rakesh",
+   "say": "Raa-kaysh",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in chatterbox-default, indictts-002527, indictts-017689: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Ramesh",
+   "say": "Raa-maysh",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Ravi",
+   "say": "Raa-vee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Rishi",
+   "say": "Rih-shee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Rohan",
+   "say": "Ro-hun",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877"
+   ]
+  },
+  {
+   "term": "Sachin",
+   "say": "Sutch-in",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Sandeep",
+   "say": "Sun-deep",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Shyam",
+   "say": "Shaam",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Siddharth",
+   "say": "Sid-daart",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Sunil",
+   "say": "Soo-nil",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Surya",
+   "say": "Soor-yaa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877"
+   ]
+  },
+  {
+   "term": "Tarun",
+   "say": "Tuh-run",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Tushar",
+   "say": "Too-shaar",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Uday",
+   "say": "Oo-die",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Vijay",
+   "say": "Vih-jay",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Vinay",
+   "say": "Vih-nay",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-017689, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877"
+   ]
+  },
+  {
+   "term": "Vishal",
+   "say": "Vih-shaal",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Vivek",
+   "say": "Vih-vake",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in chatterbox-default, indictts-012635, indictts-017689, indictts-048013, indictts-128877, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "indictts-002527",
+    "indictts-123823"
+   ]
+  },
+  {
+   "term": "Yash",
+   "say": "Yush",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Aanya",
+   "say": "Aan-yaa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635, indictts-017689: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Aishwarya",
+   "say": "Eye-shwar-yaa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-048013: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Akanksha",
+   "say": "Aa-kaank-shaa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-012635, indictts-123823, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877"
+   ]
+  },
+  {
+   "term": "Anjali",
+   "say": "Un-juh-lee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Anita",
+   "say": "Uh-nee-taa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689, indictts-123823, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Anushka",
+   "say": "Uh-nush-kaa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-048013, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-123823",
+    "indictts-128877"
+   ]
+  },
+  {
+   "term": "Archana",
+   "say": "Ar-chuh-naa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635, indictts-017689, indictts-123823, indictts-128877, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-048013"
+   ]
+  },
+  {
+   "term": "Bhavna",
+   "say": "Bhaav-naa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Chitra",
+   "say": "Chit-raa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-012635: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Deepa",
+   "say": "Dee-paa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Deepika",
+   "say": "Dee-pee-kaa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Gayatri",
+   "say": "Guy-uh-tree",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Geeta",
+   "say": "Gee-taa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-012635, indictts-017689, indictts-048013, indictts-123823, indictts-128877, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default"
+   ]
+  },
+  {
+   "term": "Jaya",
+   "say": "Juh-yaa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-012635: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Kajal",
+   "say": "Kaa-jal",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Kalpana",
+   "say": "Kul-puh-naa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689, indictts-048013, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Komal",
+   "say": "Ko-mul",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Kriti",
+   "say": "Kri-tee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Lakshmi",
+   "say": "Luck-shmee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Madhuri",
+   "say": "Muh-dhoo-ree",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-012635, indictts-017689, indictts-048013: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Mansi",
+   "say": "Mun-see",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Mythili",
+   "say": "My-thih-lee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-128877, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823"
+   ]
+  },
+  {
+   "term": "Nandini",
+   "say": "Nun-dih-nee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Neelam",
+   "say": "Nee-lum",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Nidhi",
+   "say": "Nih-dhee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Pallavi",
+   "say": "Pul-luh-vee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877"
+   ]
+  },
+  {
+   "term": "Preeti",
+   "say": "Pree-tee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635, indictts-123823, indictts-128877, indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-017689",
+    "indictts-048013"
+   ]
+  },
+  {
+   "term": "Radha",
+   "say": "Raa-dhaa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Rashmi",
+   "say": "Rush-mee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Rekha",
+   "say": "Ray-khaa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in chatterbox-default: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Rupali",
+   "say": "Roo-paa-lee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Sakshi",
+   "say": "Saak-shee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Savita",
+   "say": "Suh-vee-taa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Shalini",
+   "say": "Shaa-lih-nee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Shruti",
+   "say": "Shroo-tee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Sonali",
+   "say": "So-naa-lee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Swati",
+   "say": "Swaa-tee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-048013: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Tanya",
+   "say": "Taan-yaa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Uma",
+   "say": "Oo-maa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Vandana",
+   "say": "Vun-duh-naa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Vidya",
+   "say": "Vid-yaa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Yamini",
+   "say": "Yaa-mih-nee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Sharma",
+   "say": "Shar-maa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Verma",
+   "say": "Ver-maa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-048013, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Gupta",
+   "say": "Gup-taa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Iyer",
+   "say": "Eye-yer",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635, indictts-048013: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-017689",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Reddy",
+   "say": "Red-dee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-017689: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Patel",
+   "say": "Puh-tel",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-048013: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Kumar",
+   "say": "Koo-maar",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Joshi",
+   "say": "Jo-shee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Mehta",
+   "say": "Meh-taa",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689, indictts-128877: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Kapoor",
+   "say": "Kuh-poor",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Banerjee",
+   "say": "Bun-er-jee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Chatterjee",
+   "say": "Chat-er-jee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Mukherjee",
+   "say": "Moo-ker-jee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-017689: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Menon",
+   "say": "May-nun",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-002527, indictts-012635: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Pillai",
+   "say": "Pil-lie",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Khan",
+   "say": "Khaan",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+  },
+  {
+   "term": "Ahmed",
+   "say": "Ah-med",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  },
+  {
+   "term": "Kulkarni",
+   "say": "Kool-kar-nee",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-144039: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-012635",
+    "indictts-017689",
+    "indictts-048013",
+    "indictts-123823",
+    "indictts-128877"
+   ]
+  },
+  {
+   "term": "Agarwal",
+   "say": "Uh-gar-wal",
+   "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear). Not in indictts-012635, indictts-017689, indictts-123823: there the respelling was heard wrong and the name as written right (research/lexicon/names_ab.py).",
+   "voices": [
+    "chatterbox-default",
+    "indictts-002527",
+    "indictts-048013",
+    "indictts-128877",
+    "indictts-144039"
+   ]
+  }
+ ]
 }
