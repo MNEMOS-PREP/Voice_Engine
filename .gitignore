@@ -65,3 +65,6 @@ Backend/backend_M11_Voice_Engine/faces/*.zip
 # Each head's still (build_face.write_still) and the batch's staging folder: made beside it.
 Backend/backend_M11_Voice_Engine/faces/*.webp
 Backend/backend_M11_Voice_Engine/faces/.staging/
+# Backdrops that may not go in git (a pack someone bought): served on this
+# machine only (backdrops.py).
+Backend/backend_M11_Voice_Engine/backdrops/local/

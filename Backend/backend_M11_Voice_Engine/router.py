@@ -28,7 +28,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 from sqlmodel import Session, select
 
-from . import asr, face, kept, ledger, lexicon, tts, turn
+from . import asr, backdrops, face, kept, ledger, lexicon, tts, turn
 from .access import enforce_access
 from .dependencies import deps
 from .models import KeptAnswer, LexiconFlag, LineTiming
@@ -462,6 +462,28 @@ def face_still(
     path = face.still_path(persona)
     if path is None:
         raise HTTPException(status_code=404, detail="This interviewer has no photo yet.")
+    return _face_file(request, path, "image/webp")
+
+
+@router.get("/voice/backdrops", tags=["voice"])
+def backdrop_list() -> dict:
+    """The rooms an interviewer may sit in (2026-10-21): photographs with open
+    licences (`backdrops/CREDITS.md`). The browser picks one per interviewer
+    per interview; with none here it paints a room instead."""
+    return {
+        "backdrops": [
+            {"name": name, "url": f"/v1/voice/backdrops/{name}.webp"}
+            for name in backdrops.names()
+        ],
+    }
+
+
+@router.get("/voice/backdrops/{name}.webp", tags=["voice"], response_class=Response)
+def backdrop(request: Request, name: str = Path(pattern=r"^[a-z0-9][a-z0-9_-]{1,60}$")) -> Response:
+    """One room behind an interviewer."""
+    path = backdrops.path_of(name)
+    if path is None:
+        raise HTTPException(status_code=404, detail="No such backdrop.")
     return _face_file(request, path, "image/webp")
 
 
