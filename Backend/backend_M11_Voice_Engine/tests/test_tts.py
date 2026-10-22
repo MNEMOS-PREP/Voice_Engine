@@ -126,15 +126,17 @@ def test_an_uncast_persona_gets_a_voice_that_fits_what_it_asked_for():
     cast = tts.Cast.load()
     indian_higher = cast.resolve(persona_id="new_one", voice_id="en-IN-female-warm")
     assert (indian_higher.accent, indian_higher.register) == ("indian", "higher")
+    # No foreign lower voice is left in the roster (2026-10-11: Indian
+    # voices throughout): a request for one still gets a voice, never an error.
     foreign_lower = cast.resolve(persona_id="visitor", voice_id="en-US-male-brisk")
-    assert (foreign_lower.accent, foreign_lower.register) == ("foreign", "lower")
+    assert foreign_lower.key in cast.voices
     # The same persona gets the same voice every time.
     assert cast.resolve(persona_id="new_one", voice_id="en-IN-female-warm") == indian_higher
 
 
 def test_an_explicit_voice_wins_and_nonsense_falls_back_to_the_default():
     cast = tts.Cast.load()
-    assert cast.resolve(persona_id="friendly_recruiter", voice="dailytalk-0").key == "dailytalk-0"
+    assert cast.resolve(persona_id="friendly_recruiter", voice="indictts-048013").key == "indictts-048013"
     assert cast.resolve(voice_id="a nice voice").key == cast.default
 
 
@@ -142,7 +144,7 @@ def test_a_cast_naming_a_voice_that_does_not_exist_is_refused_at_load(tmp_path):
     raw = (
         (tts.CAST_FILE)
         .read_text(encoding="utf-8")
-        .replace('"startup_founder": "dailytalk-0"', '"startup_founder": "ghost"')
+        .replace('"startup_founder": "indictts-048013"', '"startup_founder": "ghost"')
     )
     bad = tmp_path / "cast.json"
     bad.write_text(raw, encoding="utf-8")

@@ -109,3 +109,4 @@ def test_anyone_signed_in_flags_a_word_and_only_staff_read_the_flags(client, tab
         "heard_as": ["cube rnetes"],
     }
     assert {"word": "Dijkstra", "flags": 1, "fixed": True, "heard_as": []} in flags
+

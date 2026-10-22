@@ -1,18 +1,18 @@
 {
-  "about": "How the interviewers' voices say words they get wrong (EC-11.11). An entry is here only because the voice said the term and Whisper did not hear it back, and its respelling WAS heard back (research/lexicon/probe.py). `exact`: only that casing (an acronym). Names (2026-10-11): an Indian name read with English letter rules comes back right from Whisper and still sounds foreign, so the read-back test cannot judge them; they are respelled by ear.",
+  "about": "How the interviewers' voices say words they get wrong (EC-11.11). An entry is here only because the voice said the term and Whisper did not hear it back, and its respelling WAS heard back (research/lexicon/probe.py). `exact`: only that casing (an acronym). Names (2026-10-11): an Indian name read with English letter rules comes back right from Whisper and still sounds foreign, so the read-back test cannot judge them; they are respelled by ear. Names (2026-10-11, second pass): 151 common Indian names were said by an Indian voice and read back; where a respelling came back better than the plain name it replaced it. Names not listed go through lexicon.respell_names.",
   "entries": [
     {
       "term": "Raghavan",
-      "say": "Raghaavan",
+      "say": "Ra-gha-van",
       "voices": [
         "indictts-063175"
       ],
-      "why": "In 'Doctor Raghavan, over to you.' this voice was heard as 'Aghwawan'; 'Raghaavan' came back right. The other six voices say 'Raghavan' as written and each respelling made some of them worse, so this one is for this voice only (research/lexicon/handover.json)."
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Aditi",
-      "say": "Uh-dih-tee",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ah-dee-tee",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Ananya",
@@ -41,18 +41,18 @@
     },
     {
       "term": "Farah",
-      "say": "Fuh-raa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Faa-rah",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Harish",
-      "say": "Huh-rish",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ha-rish",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Imran",
-      "say": "Im-raan",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Im-ran",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Isha",
@@ -61,18 +61,18 @@
     },
     {
       "term": "Kabir",
-      "say": "Kuh-beer",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ka-bir",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Karan",
-      "say": "Kuh-run",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ka-ran",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Karthik",
-      "say": "Kar-tick",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Kar-thik",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Kavya",
@@ -81,13 +81,13 @@
     },
     {
       "term": "Lata",
-      "say": "Luh-taa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "La-ta",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Manoj",
-      "say": "Muh-noj",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Mah-noj",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Meera",
@@ -96,8 +96,8 @@
     },
     {
       "term": "Neha",
-      "say": "Nay-haa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ne-ha",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Nikhil",
@@ -116,8 +116,8 @@
     },
     {
       "term": "Priya",
-      "say": "Pree-yaa",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Pri-yaa",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Rahul",
@@ -127,7 +127,7 @@
     {
       "term": "Ritu",
       "say": "Ree-too",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Rohit",
@@ -136,8 +136,8 @@
     },
     {
       "term": "Sameer",
-      "say": "Suh-meer",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Saa-meer",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Sanjay",
@@ -161,23 +161,23 @@
     },
     {
       "term": "Suresh",
-      "say": "Soo-raysh",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Su-resh",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Tanvir",
-      "say": "Tun-veer",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Tuhn-vir",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Varun",
-      "say": "Vuh-run",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Va-run",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Vikram",
-      "say": "Vik-rum",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Vi-kram",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Zoya",
@@ -191,13 +191,13 @@
     },
     {
       "term": "Narayan",
-      "say": "Naa-raa-yun",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Na-ra-yan",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Murthy",
-      "say": "Moor-thee",
-      "why": "an interviewer's own name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Mur-thy",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Aarav",
@@ -206,8 +206,8 @@
     },
     {
       "term": "Aditya",
-      "say": "Uh-dit-yuh",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ah-dee-tya",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Ajay",
@@ -226,13 +226,13 @@
     },
     {
       "term": "Anand",
-      "say": "Aa-nund",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "A-nand",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Anil",
-      "say": "Uh-nil",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "A-nil",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Ankit",
@@ -276,8 +276,8 @@
     },
     {
       "term": "Gaurav",
-      "say": "Gow-rav",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Gau-rav",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Gopal",
@@ -306,8 +306,8 @@
     },
     {
       "term": "Kiran",
-      "say": "Kih-run",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ki-ran",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Krishna",
@@ -326,8 +326,8 @@
     },
     {
       "term": "Mahesh",
-      "say": "Muh-haysh",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ma-hesh",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Mohan",
@@ -336,8 +336,8 @@
     },
     {
       "term": "Mohit",
-      "say": "Mo-hit",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Moh-hit",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Mukesh",
@@ -346,8 +346,8 @@
     },
     {
       "term": "Naveen",
-      "say": "Nuh-veen",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Nah-veen",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Nitin",
@@ -366,8 +366,8 @@
     },
     {
       "term": "Pranav",
-      "say": "Pruh-nuv",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Praa-nav",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Pratik",
@@ -376,13 +376,13 @@
     },
     {
       "term": "Rajesh",
-      "say": "Raa-jaysh",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Raa-jesh",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Rakesh",
-      "say": "Raa-kaysh",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ra-kesh",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Ramesh",
@@ -391,8 +391,8 @@
     },
     {
       "term": "Ravi",
-      "say": "Raa-vee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ra-vi",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Rishi",
@@ -421,8 +421,8 @@
     },
     {
       "term": "Siddharth",
-      "say": "Sid-daart",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Sid-dharth",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Sunil",
@@ -446,8 +446,8 @@
     },
     {
       "term": "Uday",
-      "say": "Oo-die",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "U-day",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Vijay",
@@ -461,8 +461,8 @@
     },
     {
       "term": "Vishal",
-      "say": "Vih-shaal",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Vi-shal",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Vivek",
@@ -491,8 +491,8 @@
     },
     {
       "term": "Anjali",
-      "say": "Un-juh-lee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "An-ja-li",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Anita",
@@ -586,8 +586,8 @@
     },
     {
       "term": "Nandini",
-      "say": "Nun-dih-nee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Nan-di-ni",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Neelam",
@@ -651,8 +651,8 @@
     },
     {
       "term": "Shruti",
-      "say": "Shroo-tee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Shru-ti",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Sonali",
@@ -666,8 +666,8 @@
     },
     {
       "term": "Tanya",
-      "say": "Taan-yaa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ta-nya",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Uma",
@@ -691,13 +691,13 @@
     },
     {
       "term": "Sharma",
-      "say": "Shar-maa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Shar-ma",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Verma",
-      "say": "Ver-maa",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ver-mah",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Gupta",
@@ -711,13 +711,13 @@
     },
     {
       "term": "Reddy",
-      "say": "Red-dee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Reddy",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Patel",
-      "say": "Puh-tel",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Pa-tel",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Kumar",
@@ -736,13 +736,13 @@
     },
     {
       "term": "Kapoor",
-      "say": "Kuh-poor",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Ka-poor",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Banerjee",
-      "say": "Bun-er-jee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Bah-ner-jee",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Chatterjee",
@@ -751,13 +751,13 @@
     },
     {
       "term": "Mukherjee",
-      "say": "Moo-ker-jee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Mu-kher-jee",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Menon",
-      "say": "May-nun",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Me-non",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Pillai",
@@ -776,13 +776,193 @@
     },
     {
       "term": "Kulkarni",
-      "say": "Kool-kar-nee",
-      "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+      "say": "Kul-kar-ni",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     },
     {
       "term": "Agarwal",
       "say": "Uh-gar-wal",
       "why": "a common Indian name: said as English letter rules would, it came out wrong (Rohit as 'Roh-heet'); respelled so any voice says it the Indian-English way (2026-10-11, chosen by ear)."
+    },
+    {
+      "term": "Abhinav",
+      "say": "Aa-bhi-nav",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Ankita",
+      "say": "An-ki-taa",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Anshul",
+      "say": "An-shul",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Arnav",
+      "say": "Ar-nav",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Ayush",
+      "say": "A-yush",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Bhattacharya",
+      "say": "Bhuht-tah-chahr-ya",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Chaitanya",
+      "say": "Chai-ta-nya",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Chaudhary",
+      "say": "Chow-dhah-ree",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Dhruv",
+      "say": "Dhruv",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Harsh",
+      "say": "Harsh",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Harshad",
+      "say": "Har-shad",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Harshita",
+      "say": "Har-shi-taa",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Hrithik",
+      "say": "Hri-thik",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Ishaan",
+      "say": "Ee-shaahn",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Jagannathan",
+      "say": "Jah-gan-nah-than",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Jayant",
+      "say": "Jah-yant",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Jhanvi",
+      "say": "Jhan-vi",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Khanna",
+      "say": "Khan-naa",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Khushi",
+      "say": "Khu-shi",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Manish",
+      "say": "Ma-nish",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Mishra",
+      "say": "Mee-shrah",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Nair",
+      "say": "Nair",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Parthasarathy",
+      "say": "Par-tha-sa-ra-thy",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Rathore",
+      "say": "Raa-tho-re",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Rishabh",
+      "say": "Ri-shabh",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Shivakumar",
+      "say": "Shi-vaa-ku-mar",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Sourav",
+      "say": "Sou-rav",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Srinivas",
+      "say": "Sree-nee-vas",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Srivastava",
+      "say": "Sri-vas-ta-va",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Subramanian",
+      "say": "Su-bra-ma-nian",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Vaidyanathan",
+      "say": "Vai-dya-na-than",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Vedant",
+      "say": "Vay-duhnt",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Venkatesh",
+      "say": "Ven-kah-tesh",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Vrinda",
+      "say": "Vrin-da",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Yuvraj",
+      "say": "Yu-vraj",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
+    },
+    {
+      "term": "Zubin",
+      "say": "Zu-bin",
+      "why": "2026-10-11 name sweep: read back by Whisper (base) in an Indian voice; this respelling came back right (or closer) where the plain name did not."
     }
   ]
 }
