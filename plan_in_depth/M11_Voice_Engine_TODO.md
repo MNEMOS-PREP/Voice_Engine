@@ -21,6 +21,19 @@ Legend: ✅ done · 🟡 partly done · ⬜ not started
 
 ---
 
+### 2026-10-23 — the "um"s and "uh"s, kept (`7043463`)
+
+- ✅ **Whisper keeps filled pauses now.** On the question alone as its prompt
+  it wrote down none of 53, so M06's delivery notes never had any to count.
+  The prompt now ends on a line written the way people talk
+  (`asr.SPOKEN_STYLE`): it kept 65 of 97 across two sets of clips, invented
+  none on clean speech, and wrote the other words more accurately (WER 10.5%
+  → 6.5%). Hindi detection was unchanged (16 of 16).
+  `research/fillers` (DisfluencySpeech, Apache-2.0; one key, paced). M06
+  names them in its notes since `11ec08c`.
+- ⬜ **Still owed:** the same measure on real Indian-English interview
+  answers, from consenting students; "er", "ah" and "hmm" were not measured.
+
 ### Voice — open problems, their causes, and the plan (2026-10-10, to work on)
 
 What is still wrong with the voice, each with its cause as measured (or
