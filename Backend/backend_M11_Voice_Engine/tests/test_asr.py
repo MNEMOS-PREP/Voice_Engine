@@ -90,11 +90,21 @@ def test_text_whisper_invents_over_silence_is_dropped():
 
 
 def test_the_question_is_the_recognisers_prompt():
-    assert asr.prompt_for(None) is None
-    assert asr.prompt_for("  ") is None
     prompt = asr.prompt_for("Explain   Dijkstra's\nalgorithm.")
-    assert prompt == "Interview question: Explain Dijkstra's algorithm."
-    assert len(asr.prompt_for("x " * 900)) <= len("Interview question: ") + 400
+    assert prompt.startswith("Interview question: Explain Dijkstra's algorithm. ")
+    long = asr.prompt_for("x " * 900)
+    assert len(long) <= len("Interview question: ") + 400 + 1 + len(asr.SPOKEN_STYLE)
+
+
+def test_the_prompt_is_written_the_way_people_talk_so_fillers_are_kept():
+    """research/fillers (2026-10-23): on the question alone Whisper wrote 0 of
+    53 "um"s and "uh"s; ending the prompt on a line with them kept 65 of 97
+    and invented none. With no question, the line is the whole prompt."""
+    assert asr.prompt_for("Explain Dijkstra's algorithm.").endswith(asr.SPOKEN_STYLE)
+    words = asr.SPOKEN_STYLE.lower().replace(",", " ").replace(".", " ").split()
+    assert "um" in words and "uh" in words
+    assert asr.prompt_for(None) == asr.SPOKEN_STYLE
+    assert asr.prompt_for("  ") == asr.SPOKEN_STYLE
 
 
 def test_no_key_means_no_recognition_and_says_so():

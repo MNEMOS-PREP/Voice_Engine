@@ -20,6 +20,10 @@ What this adds over the browser's recognition, and why it matters here:
 - **Accuracy on technical Indian English** — "Dijkstra", "hash map", "B-tree":
   the question being answered is passed as Whisper's prompt, which biases the
   vocabulary toward the words the answer is likely to use.
+- **The "um"s and "uh"s, kept** (2026-10-23, `research/fillers`): Whisper
+  writes clean text unless its prompt is written the way people talk, so the
+  prompt ends on such a line (`SPOKEN_STYLE`). M06 counts them for its
+  delivery notes; about two in three are kept, and none are invented.
 
 Whisper's known failure is inventing text over silence ("Thank you."); a
 segment that is probably not speech AND unlikely as text is dropped, the
@@ -188,12 +192,24 @@ def _multipart(
     return body, boundary
 
 
-def prompt_for(context: str | None) -> str | None:
-    """The question being answered, as Whisper's prompt: it biases the words
-    toward the ones the answer is likely to use. Whisper reads ~224 tokens."""
+#: A line written the way people talk, after the question. Whisper continues
+#: its prompt's style: on the question alone it left out every "um" and "uh"
+#: (0 of 53), and with this line it kept 65 of 97, invented none on clean
+#: speech, and wrote the rest of the words more accurately (WER 10.5% →
+#: 6.5%); Hindi was still detected as Hindi (`research/fillers`, 2026-10-23).
+#: M06's delivery notes count them, so a student who says "um" every few
+#: words is told — which the question alone had made impossible.
+SPOKEN_STYLE = "Um, so, uh, let me think. Uh, okay, um, here's what I did."
+
+
+def prompt_for(context: str | None) -> str:
+    """The question being answered, then a line in the way people talk, as
+    Whisper's prompt: the question biases the words toward the ones the
+    answer is likely to use, and the line keeps the fillers it would drop.
+    Whisper reads ~224 tokens."""
     if not context or not context.strip():
-        return None
-    return "Interview question: " + " ".join(context.split())[:400]
+        return SPOKEN_STYLE
+    return "Interview question: " + " ".join(context.split())[:400] + " " + SPOKEN_STYLE
 
 
 def transcribe(
