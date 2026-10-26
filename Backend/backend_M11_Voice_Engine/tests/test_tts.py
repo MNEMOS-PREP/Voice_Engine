@@ -223,6 +223,22 @@ def test_a_line_said_once_is_never_made_again():
     assert fresh.speak("Let's think about this carefully.", voice)[1] is True and fresh.made == []
 
 
+def test_a_line_made_while_the_request_waited_is_said_with_its_key(monkeypatch):
+    """Not in the cache when asked, there by the time the lock is held (made
+    by the request before it): said from the cache, with the key it is kept
+    under — `speak` takes four values from `speak_keyed`, and this path gave
+    three (a ValueError, not a line)."""
+    engine = FakeEngine()
+    voice = engine.cast.resolve(persona_id="professor")
+    said = engine.prepare("Made while you waited.", voice)
+    key = engine.cache_key(said, voice)
+    hits = iter([None, (b"RIFF made", key)])
+    monkeypatch.setattr(engine, "cached_keyed", lambda text, v: next(hits))
+    monkeypatch.setattr(engine, "cached", lambda text, v: b"RIFF made")
+    assert engine.speak("Made while you waited.", voice) == (b"RIFF made", True, 0)
+    assert engine.made == []
+
+
 def test_a_cached_line_plays_even_while_the_model_is_loading():
     ready = FakeEngine()
     voice = ready.cast.resolve(persona_id="professor")

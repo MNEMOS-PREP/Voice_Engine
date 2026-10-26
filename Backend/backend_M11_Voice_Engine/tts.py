@@ -822,9 +822,9 @@ class Engine:
             return wav, False, round((time.perf_counter() - t0) * 1000), job.stored_as or job.key
         # No parallel making (a fake engine in tests): one at a time, here.
         with self._lock:
-            hit = self.cached(text, voice)  # made while this request waited
+            hit = self.cached_keyed(text, voice)  # made while this request waited
             if hit is not None:
-                return hit, True, 0
+                return hit[0], True, 0, hit[1]
             data = to_wav(self._synthesize(text, voice))
         key = self.cache_key(text, voice)
         self._remember(key, data)

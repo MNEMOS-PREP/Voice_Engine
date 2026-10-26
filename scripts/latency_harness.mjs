@@ -103,12 +103,25 @@ async function answerFor(question, n) {
   }
 }
 
+/** A voice nobody on this panel has spoken in: M11's roster, less the voices
+ *  the room has played. Asked of M11, not named here — "dailytalk-0" was
+ *  retired (2026-10-11) and an unknown voice is quietly the default one,
+ *  which two panelists speak in. */
+let studentVoice = null;
+async function voiceForStudent() {
+  if (studentVoice) return studentVoice;
+  const roster = (await (await fetch(`${M11}/v1/voice/cast`, { headers: WHO })).json()).voices.map((v) => v.key);
+  const panel = new Set(((await ev("window.__speak")) ?? []).map((s) => s.voice));
+  studentVoice = roster.find((key) => !panel.has(key)) ?? roster.at(-1);
+  return studentVoice;
+}
+
 /** A student's sentence, in a voice nobody on the panel has. */
 async function voiced(sentence) {
   const r = await fetch(`${M11}/v1/voice/speak`, {
     method: "POST",
     headers: { "Content-Type": "application/json", ...WHO },
-    body: JSON.stringify({ text: sentence.slice(0, 390), voice: "dailytalk-0" }),
+    body: JSON.stringify({ text: sentence.slice(0, 390), voice: await voiceForStudent() }),
   });
   if (!r.ok) throw new Error(`M11 could not voice the student (${r.status})`);
   return Buffer.from(await r.arrayBuffer()).toString("base64");
