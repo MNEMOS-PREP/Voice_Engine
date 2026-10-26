@@ -21,6 +21,30 @@ Legend: ✅ done · 🟡 partly done · ⬜ not started
 
 ---
 
+### 2026-10-26 — abhinav's last voice commit merged, and a crash fixed (`c65ec7b`, `28db005`)
+
+- ✅ **Merged c32cf3e with parts held back.** Taken: sampling temperature
+  0.8 → 0.5 (his read-back of 151 names: 73 exact at 0.5 against 62 at 0.8).
+  Held back: `startup_founder` → `indictts-048013`, a higher-register voice four
+  women speak in, for a persona authored `en-IN-male-casual` — and M06's persona
+  file still names `indictts-012635`, which the parity test reads; and his
+  `voices/lexicon.json`, which applies the team's respellings in every voice
+  again (measured 10-12: 190 name-voice pairs broken against 88 fixed) and adds
+  36 unheard names. It is kept whole as
+  `research/lexicon/team_lexicon_2026-10-22.json`.
+- ⬜ **Next for names:** `names_ab.py run plain`, `run respelled`, then
+  `decide research/lexicon/team_lexicon_2026-10-22.json` — at temperature 0.5,
+  which the 10-12 scopes were not measured at.
+- ✅ **`speak` could raise instead of speaking.** With no parallel making, a
+  sentence made while its request waited for the lock came back as three values
+  where `speak` takes four: a `ValueError`, not the line.
+- ✅ **The latency harness's student voice** was `dailytalk-0`, retired on
+  10-11, so it was quietly the default voice two panelists speak in. It now
+  takes a roster voice the room has not played.
+- 🟡 `test_a_line_made_ahead_is_made_by_the_main_model_and_preferred` failed
+  once under a loaded CPU (its 5 s wait ran out and the live model raced the
+  main one); it passes alone. A timing test, not a product defect. 147 tests.
+
 ### 2026-10-23 — the "um"s and "uh"s, kept (`7043463`)
 
 - ✅ **Whisper keeps filled pauses now.** On the question alone as its prompt
