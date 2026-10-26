@@ -200,13 +200,18 @@ def sample_next(
     generated: Any,
     rng: Any,
     *,
-    temperature: float = 0.8,
+    temperature: float = 0.5,
     top_k: int = 1000,
     top_p: float = 0.95,
     repetition_penalty: float = 1.2,
 ) -> int:
     """The next speech token, as the PyTorch model samples it — not the model
-    card's greedy argmax, which was measured speaking slower (onnx_speed.py)."""
+    card's greedy argmax, which was measured speaking slower (onnx_speed.py).
+
+    Temperature 0.5, not the model card's 0.8 (2026-10-11): 151 common Indian
+    names said at each and read back by Whisper, 73 came back exactly at 0.5
+    against 62 at 0.8 (107 against 91 within a letter or two). Below this the
+    prosody flattens."""
     import numpy as np
 
     scores = logits.astype(np.float64).reshape(-1).copy()

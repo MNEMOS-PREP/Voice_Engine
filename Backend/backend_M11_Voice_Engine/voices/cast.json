@@ -8,7 +8,8 @@
     "Every voice carries its source, licence and the credit its licence asks for.",
     "2026-10-06: foreign voices picked by the team - the Chatterbox voice and DailyTalk speaker 0.",
     "2026-10-07: 32 more interviewers (M06 personas, 3-4 per track), each cast in one of the seven voices; M06 reads the same key from its persona file (`voice:`) so a panel never seats two people who sound the same.",
-    "2026-10-08: seven more IndicTTS voices (Indian voices 7-13); a foreign accent is now the rare one - Priya and Kabir, as the team cast them - and everyone else speaks in an Indian voice."
+    "2026-10-08: seven more IndicTTS voices (Indian voices 7-13); a foreign accent is now the rare one - Priya and Kabir, as the team cast them - and everyone else speaks in an Indian voice.",
+    "2026-10-11: five voices retired (not heard as Indian, or foreign): indictts-022743, -063175, -083391, -133931 and dailytalk-0; their personas moved to the seven that were heard as Indian."
   ],
   "default": "chatterbox-default",
   "cast": {
