@@ -57,6 +57,10 @@
     "startup_founder": {"describe": "Indian man in his early 30s, from Mumbai, wheatish skin, short textured black hair, light stubble, wearing a grey crew-neck t-shirt under a casual navy blazer"},
     "sys_arvind": {"describe": "Indian man in his early 40s, Malayali features, medium-brown skin, short black hair, a neatly trimmed black beard, wearing a light-blue shirt and a charcoal blazer"},
     "sys_pooja": {"describe": "Indian woman in her late 20s, Central Indian features, wheatish skin, long straight black hair in a low ponytail, wearing a pale-yellow blouse under a light-grey blazer"},
-    "sys_zoya": {"describe": "Indian woman in her late 30s, from Lucknow, fair-wheatish skin, shoulder-length dark-brown hair worn behind the ears, wearing a black blazer over a white blouse"}
+    "sys_zoya": {"describe": "Indian woman in her late 30s, from Lucknow, fair-wheatish skin, shoulder-length dark-brown hair worn behind the ears, wearing a black blazer over a white blouse"},
+    "counsel_kabir": {"voice_id": "en-IN-male-casual", "describe": "Indian man in his late 20s, North Indian (Delhi) features, wheatish skin, short slightly tousled black hair, light stubble, wearing a plain olive-green crew-neck sweater"},
+    "counsel_tara": {"voice_id": "en-IN-female-warm", "describe": "Indian woman in her late 20s, Maharashtrian features, medium-brown skin, shoulder-length dark hair worn behind her ears, wearing a plain soft-blue cotton top with a round neck"},
+    "counsel_sunita": {"voice_id": "en-IN-female-warm", "describe": "Indian woman in her early 50s, South Indian (Tamil) features, medium-dark skin, dark hair with a few grey strands pulled back neatly, wearing a plain maroon cotton blouse with a round neck"},
+    "counsel_prakash": {"voice_id": "en-IN-male-measured", "describe": "Indian man in his mid 50s, from Kerala, medium-brown skin, short salt-and-pepper hair, a neatly trimmed grey moustache, wearing a plain light-cream half-sleeve shirt"}
   }
 }
