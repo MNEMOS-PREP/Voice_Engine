@@ -75,7 +75,8 @@ def test_every_m06_interviewer_is_cast_and_no_one_else_is():
 @pytest.mark.skipif(not M16_COUNSELORS.exists(), reason="M16 is not checked out next door")
 def test_every_m16_counselor_is_cast_and_no_one_else_is():
     """The same rule for M16's counselors, read from M16's own file."""
-    counselors = {c["id"] for c in json.loads(M16_COUNSELORS.read_text(encoding="utf-8"))["counselors"]}
+    listed = json.loads(M16_COUNSELORS.read_text(encoding="utf-8"))["counselors"]
+    counselors = {c["id"] for c in listed}
     cast = tts.Cast.load()
     assert {p for p in cast.cast if p.startswith(COUNSELOR)} == counselors
 
