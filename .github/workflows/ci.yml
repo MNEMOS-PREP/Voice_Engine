@@ -51,11 +51,15 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           # ruff pinned so a new release's rules never turn main red on their own.
-          python -m pip install -e ".[dev]" "ruff==0.17.1"
+          python -m pip install -e ".[dev,tts]" "ruff==0.17.1"
       - name: Lint
         run: ruff check .
       - name: Test
         run: python -m pytest -q
+        # The suite fakes every model (the real voice is 2.5 GB). Offline, a test
+        # that loads a real one by mistake fails at once instead of downloading it.
+        env:
+          HF_HUB_OFFLINE: "1"
 
   frontend:
     name: Frontend · typecheck + test + build
