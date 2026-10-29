@@ -124,17 +124,27 @@ def run(args: list[str], cwd: Path, log_to: Path) -> int:
         return process.wait()
 
 
-def voice_of(persona: str) -> tuple[str, str]:
-    """(kind, manner) from the persona file's `voice_id` (`en-IN-female-warm`)."""
+VOICE_ID = r"[a-z]{2}-[A-Z]{2}-([a-z]+)-([a-z]+)"
+
+
+def voice_of(persona: str, entry: dict) -> tuple[str, str]:
+    """(kind, manner) from the `voice_id` (`en-IN-female-warm`): the entry's own,
+    for a face that is not an M06 interviewer (M16's counselors), else the
+    persona file's."""
+    if entry.get("voice_id"):
+        match = re.fullmatch(VOICE_ID, entry["voice_id"])
+        if not match:
+            raise SystemExit(f"{persona}: voice_id {entry['voice_id']!r} is not like en-IN-female-warm")
+        return match.group(1), match.group(2)
     text = (PERSONAS / f"{persona}.yaml").read_text(encoding="utf-8")
-    match = re.search(r"(?m)^voice_id:\s*[a-z]{2}-[A-Z]{2}-([a-z]+)-([a-z]+)\s*$", text)
+    match = re.search(rf"(?m)^voice_id:\s*{VOICE_ID}\s*$", text)
     if not match:
         raise SystemExit(f"{persona}: its persona file has no voice_id to read the face's kind from")
     return match.group(1), match.group(2)
 
 
 def prompt_for(persona: str, entry: dict, spec: dict) -> str:
-    kind, manner = voice_of(persona)
+    kind, manner = voice_of(persona, entry)
     describe = entry["describe"]
     says = "woman" if re.search(r"\bwoman\b", describe) else "man" if re.search(r"\bman\b", describe) else None
     if says != {"female": "woman", "male": "man"}.get(kind):

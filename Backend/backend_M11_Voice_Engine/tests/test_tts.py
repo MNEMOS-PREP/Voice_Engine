@@ -8,6 +8,7 @@ the cache, what a caller gets when the voice is not ready — is the real code.
 from __future__ import annotations
 
 import io
+import json
 import pathlib
 import uuid
 import wave
@@ -23,6 +24,13 @@ M06_PERSONAS = (
     pathlib.Path(__file__).resolve().parents[4]
     / "Mock_Interview_Engine/Backend/backend_M06_Mock_Interview_Engine/personas"
 )
+#: M16's counselors (2026-10-29): the people who talk a student through a
+#: report. Theirs is the `counsel_` part of the cast.
+M16_COUNSELORS = (
+    pathlib.Path(__file__).resolve().parents[4]
+    / "Counselor/Backend/backend_M16_Counselor/counselors.json"
+)
+COUNSELOR = "counsel_"
 
 
 class FakeEngine(tts.Engine):
@@ -61,7 +69,16 @@ def test_every_m06_interviewer_is_cast_and_no_one_else_is():
     not here would speak in a voice nobody chose."""
     personas = {p.stem for p in M06_PERSONAS.glob("*.yaml")}
     cast = tts.Cast.load()
-    assert set(cast.cast) == personas
+    assert {p for p in cast.cast if not p.startswith(COUNSELOR)} == personas
+
+
+@pytest.mark.skipif(not M16_COUNSELORS.exists(), reason="M16 is not checked out next door")
+def test_every_m16_counselor_is_cast_and_no_one_else_is():
+    """The same rule for M16's counselors, read from M16's own file."""
+    listed = json.loads(M16_COUNSELORS.read_text(encoding="utf-8"))["counselors"]
+    counselors = {c["id"] for c in listed}
+    cast = tts.Cast.load()
+    assert {p for p in cast.cast if p.startswith(COUNSELOR)} == counselors
 
 
 #: The seven the team cast in its blind listening test (2026-10-06).
