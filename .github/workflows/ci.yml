@@ -42,6 +42,12 @@ jobs:
           repository: MNEMOS-PREP/Mock_Interview_Engine
           ref: main  # not the default branch: some repos default to `todo`, the plan
           path: Mock_Interview_Engine
+      # Beside it: M16's counselors, who are voiced here too. Same rule.
+      - uses: actions/checkout@v4
+        with:
+          repository: MNEMOS-PREP/Counselor
+          ref: main  # its default branch is `todo`, the plan
+          path: Counselor
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
